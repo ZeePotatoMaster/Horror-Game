@@ -173,6 +173,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac4735f03a9a2bb4cba1371b5e1839ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serverBtn: {fileID: 1979851870}
+  hostBtn: {fileID: 1236191424}
+  clientBtn: {fileID: 1961108040}
 --- !u!1 &426157584
 GameObject:
   m_ObjectHideFlags: 0
@@ -595,10 +598,10 @@ MonoBehaviour:
   NetworkConfig:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 771730078}
-    PlayerPrefab: {fileID: 7924438431897874403, guid: 471705809a909b14ba13bf4788fd8463, type: 3}
+    PlayerPrefab: {fileID: 1379570201347889758, guid: 88b76a70b8f9ab94da9009ca192c1453, type: 3}
     Prefabs:
       NetworkPrefabsLists:
-      - {fileID: 11400000, guid: 09fd9dbf754bcb647afee6213a276460, type: 2}
+      - {fileID: 11400000, guid: 0d5735c2fa1007b43a146bfb2b93c9b9, type: 2}
     TickRate: 30
     ClientConnectionBufferTimeout: 10
     ConnectionApproval: 0
@@ -616,7 +619,7 @@ MonoBehaviour:
     EnableNetworkLogs: 1
     OldPrefabList: []
   RunInBackground: 1
-  LogLevel: 1
+  LogLevel: 0
 --- !u!4 &771730080
 Transform:
   m_ObjectHideFlags: 0
@@ -642,7 +645,6 @@ GameObject:
   m_Component:
   - component: {fileID: 963194228}
   - component: {fileID: 963194227}
-  - component: {fileID: 963194226}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -650,14 +652,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &963194226
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 963194225}
-  m_Enabled: 1
 --- !u!20 &963194227
 Camera:
   m_ObjectHideFlags: 0
@@ -1085,7 +1079,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1412389029}
   m_CullTransparentMesh: 1
---- !u!1 &1647574500
+--- !u!1 &1425755861
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1093,9 +1087,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1647574503}
-  - component: {fileID: 1647574502}
-  - component: {fileID: 1647574501}
+  - component: {fileID: 1425755864}
+  - component: {fileID: 1425755863}
+  - component: {fileID: 1425755862}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -1103,13 +1097,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1647574501
+--- !u!114 &1425755862
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1647574500}
+  m_GameObject: {fileID: 1425755861}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
@@ -1123,13 +1117,13 @@ MonoBehaviour:
   m_InputActionsPerSecond: 10
   m_RepeatDelay: 0.5
   m_ForceModuleActive: 0
---- !u!114 &1647574502
+--- !u!114 &1425755863
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1647574500}
+  m_GameObject: {fileID: 1425755861}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
@@ -1138,13 +1132,13 @@ MonoBehaviour:
   m_FirstSelected: {fileID: 0}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
---- !u!4 &1647574503
+--- !u!4 &1425755864
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1647574500}
+  m_GameObject: {fileID: 1425755861}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -1506,4 +1500,4 @@ SceneRoots:
   - {fileID: 771730080}
   - {fileID: 1044558233}
   - {fileID: 1807386755}
-  - {fileID: 1647574503}
+  - {fileID: 1425755864}
