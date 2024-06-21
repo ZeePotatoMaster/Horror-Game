@@ -11,12 +11,12 @@ public class PlayerBase : NetworkBehaviour
 {
 
     //movement vars
-    public float walkingSpeed = 7.5f;
-    public float jumpSpeed = 8.0f;
-    public float gravity = 20.0f;
-    public Camera playerCamera;
-    public float lookSpeed = 2.0f;
-    public float lookXLimit = 90.0f;
+    [SerializeField] private float walkingSpeed = 7.5f;
+    [SerializeField] private float jumpSpeed = 8.0f;
+    [SerializeField] private float gravity = 20.0f;
+    [SerializeField] private Camera playerCamera;
+    [SerializeField] private float lookSpeed = 2.0f;
+    [SerializeField] private float lookXLimit = 90.0f;
 
     private CharacterController characterController;
     [HideInInspector]
@@ -26,19 +26,20 @@ public class PlayerBase : NetworkBehaviour
     public float currentSpeed;
 
     //headbob stuff
-    [HideInInspector]
-    public bool canUseHeadBob = true;
-    public float walkBobSpeed = 14f;
-    public float walkBobAmount = 0.5f;
+    [SerializeField] private bool canUseHeadBob = true;
+    [SerializeField] private float walkBobSpeed = 14f;
+    [SerializeField] private float walkBobAmount = 0.5f;
     private float defaultYPos = 0;
     private float timer;
 
-    [HideInInspector]
-    public bool canMove = true;
+    [SerializeField] private bool canMove = true;
 
     private Vector2 movementInput = Vector2.zero;
     private Vector2 lookInput = Vector2.zero;
     private bool jumped = false;
+
+    //listener (to disable for multiplayer)
+    [SerializeField] private AudioListener listener;
 
     // Start is called before the first frame update
     void Start()
@@ -46,6 +47,7 @@ public class PlayerBase : NetworkBehaviour
         if (!IsOwner)
         {
             playerCamera.enabled = false;
+            listener.enabled = false;
             return;
         }
 
