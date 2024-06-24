@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using Unity.Netcode;
+using Unity.VisualScripting;
 
 [RequireComponent(typeof(CharacterController))]
 
@@ -14,16 +15,14 @@ public class PlayerBase : NetworkBehaviour
     [SerializeField] private float walkingSpeed = 7.5f;
     [SerializeField] private float jumpSpeed = 8.0f;
     [SerializeField] private float gravity = 20.0f;
-    [SerializeField] private Camera playerCamera;
+    public Camera playerCamera;
     [SerializeField] private float lookSpeed = 2.0f;
     [SerializeField] private float lookXLimit = 90.0f;
 
     private CharacterController characterController;
-    [HideInInspector]
-    public Vector3 moveDirection = Vector3.zero;
+    [HideInInspector] public Vector3 moveDirection = Vector3.zero;
     private float rotationX = 0;
-    [HideInInspector]
-    public float currentSpeed;
+    [HideInInspector] public float currentSpeed;
 
     //headbob stuff
     [SerializeField] private bool canUseHeadBob = true;
@@ -37,6 +36,17 @@ public class PlayerBase : NetworkBehaviour
     private Vector2 movementInput = Vector2.zero;
     private Vector2 lookInput = Vector2.zero;
     private bool jumped = false;
+    [HideInInspector] public bool attacked = false;
+    [HideInInspector] public bool reloaded = false; 
+
+    //looting
+    private bool interacted = false;
+    private float lootTimer = 0f;
+    private bool isLooting = false;
+    [HideInInspector]
+    public bool lootCompleted = false;
+
+    private GameObject lootImage;
 
     //listener (to disable for multiplayer)
     [SerializeField] private AudioListener listener;
@@ -61,6 +71,9 @@ public class PlayerBase : NetworkBehaviour
 
         //headbob default camera pos
         defaultYPos = playerCamera.transform.localPosition.y;
+
+        GameObject canvas = GameObject.Find("Canvas");
+        lootImage = canvas.transform.Find("LootIcon").gameObject;
     }
 
     //player inputs
@@ -69,12 +82,25 @@ public class PlayerBase : NetworkBehaviour
         movementInput = context.ReadValue<Vector2>();
     }
 
+    public void OnAttack(InputAction.CallbackContext context) {
+        attacked = context.action.triggered;
+    }
+
+    public void OnReload(InputAction.CallbackContext context) {
+        reloaded = context.action.triggered;
+    }
+
     public void OnJump(InputAction.CallbackContext context) {
         jumped = context.action.triggered;
     }
 
     public void OnLook(InputAction.CallbackContext context) {
         lookInput = context.ReadValue<Vector2>();
+    }
+    
+    public void OnInteract(InputAction.CallbackContext context) {
+        context.action.performed += context => interacted = true;
+        context.action.canceled += context => interacted = false;
     }
 
     // Update is called once per frame
@@ -122,6 +148,9 @@ public class PlayerBase : NetworkBehaviour
 
         if (canUseHeadBob && canMove) HandleHeadBob();
 
+        //loot
+        if (interacted == true) Loot();
+        if (isLooting && interacted == false) EndLoot();
     }
 
     void HandleHeadBob()
@@ -133,6 +162,45 @@ public class PlayerBase : NetworkBehaviour
             timer += Time.deltaTime * walkBobSpeed;
             playerCamera.transform.localPosition = new Vector3(playerCamera.transform.localPosition.x, defaultYPos + Mathf.Sin(timer) * walkBobAmount, playerCamera.transform.localPosition.z);
         }
+    }
+
+    private void Loot()
+    {
+        RaycastHit looty;
+        if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out looty))
+        {
+            float dist = Vector3.Distance(looty.transform.position, transform.position);
+            if (dist < 2.5)
+            {
+                if (looty.transform.GetComponent<Item>() != null)
+                {
+                    float lootTime = looty.transform.GetComponent<Item>().lootTime;
+
+                    isLooting = true;
+
+                    lootTimer += Time.deltaTime;
+                    lootImage.GetComponent<Image>().fillAmount = lootTimer/lootTime;
+
+                    if (lootTimer >= lootTime)
+                    {
+                        looty.transform.GetComponent<Item>().OnPickup();
+                        EndLoot();
+                    }
+                }
+            }
+
+            else if (dist >= 2.5 && isLooting)
+            {
+                EndLoot();
+            }
+        }
+    }
+
+    private void EndLoot()
+    {
+        lootTimer = 0;
+        lootImage.GetComponent<Image>().fillAmount = 0f;
+        isLooting = false;
     }
 
 
