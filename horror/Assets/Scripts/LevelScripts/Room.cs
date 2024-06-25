@@ -9,4 +9,69 @@ public class Room : ScriptableObject
     public GameObject eastConnector;
     public GameObject southConnector;
     public GameObject westConnector;
+
+    public bool northConnectorUsed = false;
+    public bool eastConnectorUsed = false;
+    public bool southConnectorUsed = false;
+    public bool westConnectorUsed = false;
+
+    public bool hasNorthConnector() {
+
+        if (northConnector != null) {
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool hasEastConnector() {
+
+        if (eastConnector != null) {
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool hasSouthConnector() {
+
+        if (southConnector != null) {
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool hasWestConnector() {
+
+        if (westConnector != null) {
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public void setNorthConnectorStatus(bool status) {
+
+        northConnectorUsed = status;
+    }
+
+    public void setEastConnectorStatus(bool status) {
+
+        eastConnectorUsed = status;
+    }
+
+    public void setSouthConnectorStatus(bool status) {
+
+        southConnectorUsed = status;
+    }
+    
+    public void setWestConnectorStatus(bool status) {
+
+        westConnectorUsed = status;
+    }
 }

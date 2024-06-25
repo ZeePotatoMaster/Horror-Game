@@ -278,9 +278,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parentLevel: {fileID: 434614241}
   LevelUUID: 
-  roomPrefab: {fileID: 8086148395983141204, guid: eb12ba1e5cc655846bb06dd74873d7b9, type: 3}
   roomCount: 0
   roomUpperLimit: 0
+  roomPrefabs:
+  - {fileID: 8086148395983141204, guid: eb12ba1e5cc655846bb06dd74873d7b9, type: 3}
 --- !u!4 &1277359197
 Transform:
   m_ObjectHideFlags: 0
