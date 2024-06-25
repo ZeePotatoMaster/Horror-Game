@@ -109,6 +109,8 @@ public class GenerateLevel : MonoBehaviour
 
                 roomCount++;
 
+                //if you remove this line it will default back to just placing the first room and its adjacents and nothing from those adjacents
+
                 placeRooms(newRoom);
             }
         }
@@ -136,6 +138,8 @@ public class GenerateLevel : MonoBehaviour
                 }
 
                 roomCount++;
+
+                //if you remove this line it will default back to just placing the first room and its adjacents and nothing from those adjacents
 
                 placeRooms(newRoom);
             }
@@ -165,6 +169,8 @@ public class GenerateLevel : MonoBehaviour
 
                 roomCount++;
 
+                //if you remove this line it will default back to just placing the first room and its adjacents and nothing from those adjacents
+
                 placeRooms(newRoom);
             }
         }
@@ -192,6 +198,8 @@ public class GenerateLevel : MonoBehaviour
                 }
 
                 roomCount++;
+
+                //if you remove this line it will default back to just placing the first room and its adjacents and nothing from those adjacents
 
                 placeRooms(newRoom);
             }
