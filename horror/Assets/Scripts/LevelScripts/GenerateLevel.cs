@@ -71,11 +71,11 @@ public class GenerateLevel : MonoBehaviour
 
         if (previousRoom != null) {
 
-            GameObject clonedConnector = Instantiate(newRoom.northConnector, previousRoom.northConnector.transform);
+            GameObject clonedConnector = Instantiate(newRoom.northConnector, newRoom.northConnector.transform.position, newRoom.northConnector.transform.rotation);
 
             newRoom.roomObject.transform.SetParent(clonedConnector.transform);
 
-            clonedConnector.transform.position = previousRoom.roomObject.transform.position;
+            clonedConnector.transform.position = previousRoom.southConnector.transform.position;
         }
 
         roomCount++;
