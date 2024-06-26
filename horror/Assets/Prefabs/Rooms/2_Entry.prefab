@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 7916636022504943711}
   - component: {fileID: 626709812613921927}
   - component: {fileID: 1086104640432992991}
-  - component: {fileID: 2120482040192704128}
   m_Layer: 0
   m_Name: SouthConnector
   m_TagString: Untagged
@@ -84,27 +83,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &2120482040192704128
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3945689488492639958}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5576638444577443398
 GameObject:
   m_ObjectHideFlags: 0
@@ -536,7 +514,6 @@ GameObject:
   - component: {fileID: 8748678996451590662}
   - component: {fileID: 7234445229724131708}
   - component: {fileID: 7317485590125128666}
-  - component: {fileID: 3103173099835427169}
   m_Layer: 0
   m_Name: NorthConnector
   m_TagString: Untagged
@@ -609,27 +586,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &3103173099835427169
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6795086825742193799}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7552581427094202977
 GameObject:
   m_ObjectHideFlags: 0
@@ -748,7 +704,7 @@ GameObject:
   - component: {fileID: 2000300082939886424}
   - component: {fileID: 2311155829528145884}
   m_Layer: 0
-  m_Name: Wall (1)
+  m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

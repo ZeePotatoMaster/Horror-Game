@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 5309548003827800693}
   - component: {fileID: 1046377816693453057}
   - component: {fileID: 2571018448924260442}
-  - component: {fileID: 7666172708673181570}
   m_Layer: 0
   m_Name: EastConnector
   m_TagString: Untagged
@@ -84,27 +83,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &7666172708673181570
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 159404144571008201}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &325869201863995284
 GameObject:
   m_ObjectHideFlags: 0
@@ -536,7 +514,6 @@ GameObject:
   - component: {fileID: 6096741493694097137}
   - component: {fileID: 1618033213337982997}
   - component: {fileID: 579637447692489774}
-  - component: {fileID: 4412926149968994481}
   m_Layer: 0
   m_Name: WestConnector
   m_TagString: Untagged
@@ -609,27 +586,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &4412926149968994481
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2806701292560122097}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3219797663372685445
 GameObject:
   m_ObjectHideFlags: 0
@@ -851,7 +807,6 @@ GameObject:
   - component: {fileID: 3306465246772805862}
   - component: {fileID: 8992398493829066215}
   - component: {fileID: 8452401642622455485}
-  - component: {fileID: 8667787405620244227}
   m_Layer: 0
   m_Name: SouthConnector
   m_TagString: Untagged
@@ -924,27 +879,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &8667787405620244227
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5476958332634605735}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5591673714842549408
 GameObject:
   m_ObjectHideFlags: 0
@@ -1271,7 +1205,6 @@ GameObject:
   - component: {fileID: 9065401966994220851}
   - component: {fileID: 6856465153757025128}
   - component: {fileID: 8932129823550231666}
-  - component: {fileID: 7194457087084365019}
   m_Layer: 0
   m_Name: NorthConnector
   m_TagString: Untagged
@@ -1344,27 +1277,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &7194457087084365019
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7550393324271896240}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8086148395983141204
 GameObject:
   m_ObjectHideFlags: 0

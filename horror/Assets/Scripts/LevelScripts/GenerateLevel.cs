@@ -85,73 +85,17 @@ public class GenerateLevel : MonoBehaviour
 
     void checkConnectors(Room previousRoom) {
 
-        if (previousRoom.hasSouthConnector() && !previousRoom.southConnectorUsed) {
+        GameObject clonedConnector = null;
 
-            if (roomCount < roomUpperLimit) {
+        //determine what direction connectors are connecting and instantiate new room from that
 
-                GameObject clonedConnector = null;
-
-                Room newRoom = createRoomVar();
-
-                if (newRoom.hasNorthConnector() && !newRoom.northConnectorUsed) {
-
-                    instantiateRoom(previousRoom, newRoom, 0.0f, "north", "south", clonedConnector);
-                } else if (newRoom.hasEastConnector() && !newRoom.eastConnectorUsed) {
-
-                    instantiateRoom(previousRoom, newRoom, 90.0f, "east", "south", clonedConnector);
-                } else if (newRoom.hasSouthConnector() && !newRoom.southConnectorUsed) {
-
-                    instantiateRoom(previousRoom, newRoom, -180.0f, "south", "south", clonedConnector);
-                } else if (newRoom.hasWestConnector() && !newRoom.westConnectorUsed) {
-
-                    instantiateRoom(previousRoom, newRoom, -90.0f, "west", "south", clonedConnector);
-                }
-
-                roomCount++;
-
-                //if you remove this line it will default back to just placing the first room and its adjacents and nothing from those adjacents
-
-                placeRooms(newRoom);
-            }
-        }
-        
-        if (previousRoom.hasEastConnector() && !previousRoom.eastConnectorUsed) {
-
-            if (roomCount < roomUpperLimit) {
-
-                GameObject clonedConnector = null;
-
-                Room newRoom = createRoomVar();
-
-                if (newRoom.hasNorthConnector() && !newRoom.northConnectorUsed) {
-
-                    instantiateRoom(previousRoom, newRoom, -90.0f, "north", "east", clonedConnector);
-                } else if (newRoom.hasEastConnector() && !newRoom.eastConnectorUsed) {
-
-                    instantiateRoom(previousRoom, newRoom, -180.0f, "east", "east", clonedConnector);
-                } else if (newRoom.hasSouthConnector() && !newRoom.southConnectorUsed) {
-
-                    instantiateRoom(previousRoom, newRoom, 90.0f, "south", "east", clonedConnector);
-                } else if (newRoom.hasWestConnector() && !newRoom.westConnectorUsed) {
-
-                    instantiateRoom(previousRoom, newRoom, 0.0f, "west", "east", clonedConnector);
-                }
-
-                roomCount++;
-
-                //if you remove this line it will default back to just placing the first room and its adjacents and nothing from those adjacents
-
-                placeRooms(newRoom);
-            }
-        }
-        
         if (previousRoom.hasNorthConnector() && !previousRoom.northConnectorUsed) {
 
             if (roomCount < roomUpperLimit) {
 
-                GameObject clonedConnector = null;
-
                 Room newRoom = createRoomVar();
+
+                roomCount++;
 
                 if (newRoom.hasNorthConnector() && !newRoom.northConnectorUsed) {
 
@@ -166,12 +110,54 @@ public class GenerateLevel : MonoBehaviour
 
                     instantiateRoom(previousRoom, newRoom, 90.0f, "west", "north", clonedConnector);
                 }
+            }
+        }
+        
+        if (previousRoom.hasEastConnector() && !previousRoom.eastConnectorUsed) {
+
+            if (roomCount < roomUpperLimit) {
+
+                Room newRoom = createRoomVar();
 
                 roomCount++;
 
-                //if you remove this line it will default back to just placing the first room and its adjacents and nothing from those adjacents
+                if (newRoom.hasNorthConnector() && !newRoom.northConnectorUsed) {
 
-                placeRooms(newRoom);
+                    instantiateRoom(previousRoom, newRoom, -90.0f, "north", "east", clonedConnector);
+                } else if (newRoom.hasEastConnector() && !newRoom.eastConnectorUsed) {
+
+                    instantiateRoom(previousRoom, newRoom, -180.0f, "east", "east", clonedConnector);
+                } else if (newRoom.hasSouthConnector() && !newRoom.southConnectorUsed) {
+
+                    instantiateRoom(previousRoom, newRoom, 90.0f, "south", "east", clonedConnector);
+                } else if (newRoom.hasWestConnector() && !newRoom.westConnectorUsed) {
+
+                    instantiateRoom(previousRoom, newRoom, 0.0f, "west", "east", clonedConnector);
+                }
+            }
+        }
+
+        if (previousRoom.hasSouthConnector() && !previousRoom.southConnectorUsed) {
+
+            if (roomCount < roomUpperLimit) {
+
+                Room newRoom = createRoomVar();
+
+                roomCount++;
+
+                if (newRoom.hasNorthConnector() && !newRoom.northConnectorUsed) {
+
+                    instantiateRoom(previousRoom, newRoom, 0.0f, "north", "south", clonedConnector);
+                } else if (newRoom.hasEastConnector() && !newRoom.eastConnectorUsed) {
+
+                    instantiateRoom(previousRoom, newRoom, 90.0f, "east", "south", clonedConnector);
+                } else if (newRoom.hasSouthConnector() && !newRoom.southConnectorUsed) {
+
+                    instantiateRoom(previousRoom, newRoom, -180.0f, "south", "south", clonedConnector);
+                } else if (newRoom.hasWestConnector() && !newRoom.westConnectorUsed) {
+
+                    instantiateRoom(previousRoom, newRoom, -90.0f, "west", "south", clonedConnector);
+                }
             }
         }
         
@@ -179,9 +165,9 @@ public class GenerateLevel : MonoBehaviour
 
             if (roomCount < roomUpperLimit) {
 
-                GameObject clonedConnector = null;
-
                 Room newRoom = createRoomVar();
+
+                roomCount++;
 
                 if (newRoom.hasNorthConnector() && !newRoom.northConnectorUsed) {
 
@@ -196,12 +182,6 @@ public class GenerateLevel : MonoBehaviour
 
                     instantiateRoom(previousRoom, newRoom, -180.0f, "west", "west", clonedConnector);
                 }
-
-                roomCount++;
-
-                //if you remove this line it will default back to just placing the first room and its adjacents and nothing from those adjacents
-
-                placeRooms(newRoom);
             }
         }
     }
@@ -279,11 +259,19 @@ public class GenerateLevel : MonoBehaviour
             previousRoom.setWestConnectorStatus(true);
         }
 
+        //rotate and store rotation in room object (storing it in room object does nothing for now but maybe as a solution)
+
         clonedConnector.transform.Rotate(0.0f, rotation, 0.0f);
+
+        newRoom.rotation = rotation;
 
         newRoom.roomObject.transform.SetParent(parentLevel.transform);
 
         Destroy(clonedConnector);
+
+        //remove this line to make it only generate the first room and adjacent
+
+        placeRooms(newRoom);
     }
 
     //set the room object variables and other necessary data

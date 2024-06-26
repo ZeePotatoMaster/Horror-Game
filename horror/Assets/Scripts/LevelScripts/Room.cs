@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Room : ScriptableObject
 {
+
+    public float rotation = 0f;
+
     public GameObject roomObject;
     public GameObject northConnector;
     public GameObject eastConnector;
