@@ -187,6 +187,11 @@ public class PlayerBase : NetworkBehaviour
                         EndLoot();
                     }
                 }
+
+                else if (looty.transform.GetComponent<Roles>() != null)
+                {
+                    looty.transform.GetComponent<Roles>().AssignRoles();
+                }
             }
 
             else if (dist >= 2.5 && isLooting)
