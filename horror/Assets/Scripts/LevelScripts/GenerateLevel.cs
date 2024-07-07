@@ -8,6 +8,7 @@ public class GenerateLevel : MonoBehaviour
     public string LevelUUID;
     public GameObject parentLevel;
     public List<LevelLayout> layouts;
+    public LevelLayout chosenLayout;
 
     void Start() {
         LevelUUID = System.Guid.NewGuid().ToString();
@@ -20,9 +21,7 @@ public class GenerateLevel : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.G)) {
 
             destroyLevel();
-            //createLevel();
-
-            LevelLayout chosenLayout = layouts[Random.Range(0, layouts.Count)];
+            createLevel();
         }
     }
 
@@ -33,4 +32,11 @@ public class GenerateLevel : MonoBehaviour
             Destroy(child.gameObject); 
         }
     } 
+
+    void createLevel() {
+
+        chosenLayout = layouts[Random.Range(0, layouts.Count)];
+
+        chosenLayout.placeRooms(parentLevel);
+    }
 }
