@@ -43,8 +43,8 @@ public class PlayerBase : NetworkBehaviour
     private bool interacted = false;
     private float lootTimer = 0f;
     private bool isLooting = false;
-    [HideInInspector]
-    public bool lootCompleted = false;
+    private bool canLoot = true;
+    [HideInInspector] public Transform lootObject;
 
     private GameObject lootImage;
 
@@ -149,8 +149,10 @@ public class PlayerBase : NetworkBehaviour
         if (canUseHeadBob && canMove) HandleHeadBob();
 
         //loot
-        if (interacted == true) Loot();
-        if (isLooting && interacted == false) EndLoot();
+        if (interacted && canLoot) Loot();
+        if (isLooting && !interacted) EndLoot();
+        if (!canLoot && !interacted) EndLoot();
+        if (lootObject != null && !interacted) lootObject = null;
     }
 
     void HandleHeadBob()
@@ -172,6 +174,8 @@ public class PlayerBase : NetworkBehaviour
             float dist = Vector3.Distance(looty.transform.position, transform.position);
             if (dist < 2.5)
             {
+                lootObject = looty.transform;
+
                 if (looty.transform.GetComponent<Item>() != null)
                 {
                     float lootTime = looty.transform.GetComponent<Item>().lootTime;
@@ -192,12 +196,30 @@ public class PlayerBase : NetworkBehaviour
                 {
                     looty.transform.GetComponent<Roles>().AssignRoles();
                 }
+
+                else {
+                    Debug.Log("can';t");
+                    canLoot = false;
+                    return;
+                }
             }
 
             else if (dist >= 2.5 && isLooting)
             {
                 EndLoot();
             }
+            else
+            {
+                Debug.Log("can';t");
+                canLoot = false;
+                return;
+            }
+        }
+        else
+        {
+            if (isLooting) EndLoot();
+            Debug.Log("can';t");
+            canLoot = false;
         }
     }
 
@@ -206,6 +228,8 @@ public class PlayerBase : NetworkBehaviour
         lootTimer = 0;
         lootImage.GetComponent<Image>().fillAmount = 0f;
         isLooting = false;
+        canLoot = true;
+        lootObject = null;
     }
 
 
