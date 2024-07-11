@@ -51,6 +51,11 @@ public class PlayerBase : NetworkBehaviour
     //listener (to disable for multiplayer)
     [SerializeField] private AudioListener listener;
 
+    //inventory
+    private bool swappedWeapons;
+    private int swapDirection = 0;
+    private InventoryManager inventoryManager;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -74,6 +79,8 @@ public class PlayerBase : NetworkBehaviour
 
         GameObject canvas = GameObject.Find("Canvas");
         lootImage = canvas.transform.Find("LootIcon").gameObject;
+
+        inventoryManager = GameObject.Find("InventoryManager").GetComponent<InventoryManager>();
     }
 
     //player inputs
@@ -101,6 +108,24 @@ public class PlayerBase : NetworkBehaviour
     public void OnInteract(InputAction.CallbackContext context) {
         context.action.performed += context => interacted = true;
         context.action.canceled += context => interacted = false;
+    }
+
+    public void OnWeaponChange(InputAction.CallbackContext context) {
+        Debug.Log(context.ReadValue<float>());
+        if (context.ReadValue<float>() > 0)
+        {
+            swapDirection = 1;
+        }
+
+        else if (context.ReadValue<float>() == -120)
+        {
+            swapDirection = -1;
+        }
+
+        else if (context.ReadValue<float>() == 0)
+        {
+            swappedWeapons = true;
+        }
     }
 
     // Update is called once per frame
@@ -153,6 +178,13 @@ public class PlayerBase : NetworkBehaviour
         if (isLooting && !interacted) EndLoot();
         if (!canLoot && !interacted) EndLoot();
         if (lootObject != null && !interacted) lootObject = null;
+
+        //inventory
+        if (swappedWeapons) {
+            inventoryManager.ChangeSelectedSlot(swapDirection);
+            swapDirection = 0;
+            swappedWeapons = false;
+        } 
     }
 
     void HandleHeadBob()
@@ -176,9 +208,9 @@ public class PlayerBase : NetworkBehaviour
             {
                 lootObject = looty.transform;
 
-                if (looty.transform.GetComponent<Item>() != null)
+                if (looty.transform.GetComponent<WorldItem>() != null)
                 {
-                    float lootTime = looty.transform.GetComponent<Item>().lootTime;
+                    float lootTime = looty.transform.GetComponent<WorldItem>().lootTime;
 
                     isLooting = true;
 
@@ -187,7 +219,7 @@ public class PlayerBase : NetworkBehaviour
 
                     if (lootTimer >= lootTime)
                     {
-                        looty.transform.GetComponent<Item>().OnPickup();
+                        looty.transform.GetComponent<WorldItem>().OnPickup();
                         EndLoot();
                     }
                 }

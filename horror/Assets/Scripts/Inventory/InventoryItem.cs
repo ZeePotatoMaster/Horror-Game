@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -7,5 +8,5 @@ using UnityEngine.Tilemaps;
 public class InventoryItem : ScriptableObject
 {
     public Sprite image;
-    public bool stackable = false;
+    public NetworkObject itemObject;
 }

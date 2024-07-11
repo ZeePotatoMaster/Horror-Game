@@ -354,6 +354,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 431e77ac-d206-44e1-9500-4eb7f6b2a16a
     m_ActionName: Player/Interact[/Keyboard/e]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3995117877680334081}
+        m_TargetAssemblyTypeName: PlayerBase, Assembly-CSharp
+        m_MethodName: OnWeaponChange
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: cec20bfe-e0a9-4a7c-9eba-793271b44908
+    m_ActionName: Player/Scroll[/Mouse/scroll/y]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -371,7 +387,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2314525534
+  GlobalObjectIdHash: 4246135252
   InScenePlacedSourceGlobalObjectIdHash: 3246169823
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -406,7 +422,7 @@ MonoBehaviour:
   canMove: 1
   attacked: 0
   reloaded: 0
-  lootCompleted: 0
+  lootObject: {fileID: 0}
   listener: {fileID: 4042649721395348440}
 --- !u!114 &5752599715425855077
 MonoBehaviour:

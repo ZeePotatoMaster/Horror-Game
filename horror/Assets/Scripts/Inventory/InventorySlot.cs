@@ -5,11 +5,12 @@ using UnityEngine;
 
 public class InventorySlot : MonoBehaviour
 {
-    private Image image;
-    public Color selectColor, notSelectColor;
+    [SerializeField] private Image image;
+    [SerializeField] private Color selectColor, notSelectColor;
+    private InventoryManager inventoryManager;
 
     private void Awake() {
-        image = GetComponent<Image>();
+        inventoryManager = GameObject.Find("InventoryManager").GetComponent<InventoryManager>();
     }
 
     public void Select() {

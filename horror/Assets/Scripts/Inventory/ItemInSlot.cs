@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ItemInSlot : MonoBehaviour
 {
-    [HideInInspector] public InventoryItem item;
+    private InventoryItem item;
     private Image image;
 
     private void Awake() {

@@ -79,12 +79,12 @@ public class Gun : NetworkBehaviour
 
     void OnEnable(){
         if (!IsOwner) return;
-        UI.gameObject.SetActive(true);
+        if (UI != null) UI.gameObject.SetActive(true);
     }
 
     void OnDisable(){
         if (!IsOwner) return;
-        UI.gameObject.SetActive(false);
+        if (UI != null) UI.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
