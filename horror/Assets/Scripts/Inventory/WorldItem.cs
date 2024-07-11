@@ -7,36 +7,29 @@ public class WorldItem : NetworkBehaviour
 {
     public float lootTime = 1f;
     [SerializeField] private InventoryItem item;
-    private InventoryManager inventoryManager;
-    private NetworkObject itemObject;
 
-    private void Awake() {
-        inventoryManager = GameObject.Find("InventoryManager").GetComponent<InventoryManager>();
-    }
-
-    public void OnPickup(){
+    public void OnPickup(InventoryManager inventoryManager){
         int canPickup = inventoryManager.AddItem(item);
         if (canPickup == -1) return;
 
-        OnPickupServerRpc(NetworkManager.LocalClient.ClientId);
-        inventoryManager.AddItemObject(canPickup, itemObject);
-        Debug.Log(itemObject);
-        DestroyServerRpc();
+        OnPickupServerRpc(NetworkManager.LocalClient.ClientId, canPickup);
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void OnPickupServerRpc(ulong id) 
+    private void OnPickupServerRpc(ulong id, int slot) 
     {
-        itemObject = Instantiate(item.itemObject);
+        NetworkObject itemObject = Instantiate(item.itemObject);
         itemObject.SpawnWithOwnership(id);
         GameObject g_camera = NetworkManager.ConnectedClients[id].PlayerObject.gameObject;
         itemObject.transform.SetParent(g_camera.transform, false);
-        itemObject.gameObject.SetActive(false);
+        AddItemClientRpc(itemObject, slot, new ClientRpcParams { Send = new ClientRpcSendParams {TargetClientIds = new List<ulong> {id}}});
+        Debug.Log(itemObject + " was given to " + id);
+        this.GetComponent<NetworkObject>().Despawn(true);
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    private void DestroyServerRpc()
+    [ClientRpc]
+    private void AddItemClientRpc(NetworkObjectReference reference, int slot, ClientRpcParams clientRpcParams)
     {
-        this.GetComponent<NetworkObject>().Despawn(true);
+        if (reference.TryGet(out NetworkObject item)) NetworkManager.LocalClient.PlayerObject.gameObject.GetComponent<InventoryManager>().AddItemObject(slot, item);
     }
 }

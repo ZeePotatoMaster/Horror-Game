@@ -80,7 +80,7 @@ public class PlayerBase : NetworkBehaviour
         GameObject canvas = GameObject.Find("Canvas");
         lootImage = canvas.transform.Find("LootIcon").gameObject;
 
-        inventoryManager = GameObject.Find("InventoryManager").GetComponent<InventoryManager>();
+        inventoryManager = GetComponent<InventoryManager>();
     }
 
     //player inputs
@@ -219,7 +219,7 @@ public class PlayerBase : NetworkBehaviour
 
                     if (lootTimer >= lootTime)
                     {
-                        looty.transform.GetComponent<WorldItem>().OnPickup();
+                        looty.transform.GetComponent<WorldItem>().OnPickup(inventoryManager);
                         EndLoot();
                     }
                 }
