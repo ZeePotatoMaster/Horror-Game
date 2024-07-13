@@ -9,4 +9,6 @@ public class InventoryItem : ScriptableObject
 {
     public Sprite image;
     public NetworkObject itemObject;
+    public NetworkObject worldItemObject;
+    public int itemId;
 }

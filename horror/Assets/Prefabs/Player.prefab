@@ -278,6 +278,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: cec20bfe-e0a9-4a7c-9eba-793271b44908
     m_ActionName: Player/Scroll[/Mouse/scroll/y]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2270474227976372310}
+        m_TargetAssemblyTypeName: PlayerBase, Assembly-CSharp
+        m_MethodName: OnDrop
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 6d552c7c-4521-4cc7-baef-7148806afc6c
+    m_ActionName: Player/Drop[/Keyboard/g]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -391,7 +407,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d496bb57ccaa1342a65a097e78be971, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventorySlots: []
+  inventoryItems:
+  - {fileID: 11400000, guid: ddfe33e6979a4d941b09fcd0078cba37, type: 2}
   inventoryItemPrefab: {fileID: 1125365378332852919, guid: 1438c0609362bda42b75fc4d03e50db7, type: 3}
 --- !u!1 &5485920895521073550
 GameObject:

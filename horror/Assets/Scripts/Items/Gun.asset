@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   image: {fileID: 21300000, guid: ef933e6e7c62ce448a4fa11e37787515, type: 3}
   itemObject: {fileID: 9223001457922114019, guid: 9d3b047cc8e8bd14faf67b3200402e51, type: 3}
+  worldItemObject: {fileID: 5292304150126203688, guid: f234e700fdae34f4eb4b71b658e34323, type: 3}

@@ -16,7 +16,7 @@ public class Gun : NetworkBehaviour
 
     [SerializeField]
     private int MaxAmmo = 6;
-    private int CurrentAmmo;
+    public int CurrentAmmo;
     [SerializeField]
     private float ReloadTime = 1f;
     [SerializeField]
@@ -69,9 +69,6 @@ public class Gun : NetworkBehaviour
 
         // crosshair start size
         defCrosshairSize = new Vector3(Crosshair.transform.localScale.x, Crosshair.transform.localScale.y, Crosshair.transform.localScale.z);
-        
-        //ammo
-        CurrentAmmo = MaxAmmo;
 
         //find base
         pb = this.transform.parent.gameObject.GetComponent<PlayerBase>();

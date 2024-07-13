@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7660678653911320629}
   - component: {fileID: 5038018931875978356}
   - component: {fileID: 5292304150126203688}
-  - component: {fileID: 3543590236432203257}
+  - component: {fileID: 2259407355741392016}
   m_Layer: 0
   m_Name: GunItem
   m_TagString: Untagged
@@ -128,7 +128,7 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &3543590236432203257
+--- !u!114 &2259407355741392016
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -137,8 +137,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8070985552137903184}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbcb3c42fa46b8f47aedc1eb9fe6420d, type: 3}
+  m_Script: {fileID: 11500000, guid: 7fcc3504051eaa14fad17e592345e9a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   lootTime: 1
   item: {fileID: 11400000, guid: ddfe33e6979a4d941b09fcd0078cba37, type: 2}
+  currentAmmo: 6
+  totalAmmo: 18

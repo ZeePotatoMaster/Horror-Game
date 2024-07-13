@@ -30,6 +30,19 @@ public class WorldItem : NetworkBehaviour
     [ClientRpc]
     private void AddItemClientRpc(NetworkObjectReference reference, int slot, ClientRpcParams clientRpcParams)
     {
-        if (reference.TryGet(out NetworkObject item)) NetworkManager.LocalClient.PlayerObject.gameObject.GetComponent<InventoryManager>().AddItemObject(slot, item);
+        if (reference.TryGet(out NetworkObject item)) {
+            NetworkManager.LocalClient.PlayerObject.gameObject.GetComponent<InventoryManager>().AddItemObject(slot, item);
+            SetupItem(item);
+        }
+    }
+
+    virtual public void SetupWorldItem(NetworkObject item)
+    {
+        
+    }
+
+    virtual public void SetupItem(NetworkObject item)
+    {
+
     }
 }

@@ -55,6 +55,7 @@ public class PlayerBase : NetworkBehaviour
     private bool swappedWeapons;
     private int swapDirection = 0;
     private InventoryManager inventoryManager;
+    private bool dropped;
 
     // Start is called before the first frame update
     void Start()
@@ -99,6 +100,10 @@ public class PlayerBase : NetworkBehaviour
 
     public void OnJump(InputAction.CallbackContext context) {
         jumped = context.action.triggered;
+    }
+
+    public void OnDrop(InputAction.CallbackContext context) {
+        dropped = context.action.triggered;
     }
 
     public void OnLook(InputAction.CallbackContext context) {
@@ -184,7 +189,9 @@ public class PlayerBase : NetworkBehaviour
             inventoryManager.ChangeSelectedSlot(swapDirection);
             swapDirection = 0;
             swappedWeapons = false;
-        } 
+        }
+
+        if (dropped) inventoryManager.DropItem();
     }
 
     void HandleHeadBob()

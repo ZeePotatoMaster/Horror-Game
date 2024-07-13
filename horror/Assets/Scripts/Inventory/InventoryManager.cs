@@ -8,6 +8,7 @@ using UnityEngine;
 public class InventoryManager : NetworkBehaviour
 {
     private List<InventorySlot> inventorySlots = new List<InventorySlot>();
+    [SerializeField] private InventoryItem[] inventoryItems;
     private Dictionary<int, NetworkObject> itemObjects = new Dictionary<int, NetworkObject>();
     [SerializeField] private GameObject inventoryItemPrefab;
     private int selectedSlot = -1;
@@ -35,6 +36,14 @@ public class InventoryManager : NetworkBehaviour
         if (itemObjects.ContainsKey(slot)) EnableItemServerRpc(itemObjects[slot].gameObject, true);
 
         selectedSlot = slot;
+    }
+
+    public void DropItem() {
+        if (!IsOwner) return;
+        if (!itemObjects.ContainsKey(selectedSlot)) return;
+
+        SpawnWorldItemServerRpc(NetworkManager.LocalClientId, inventorySlots[selectedSlot].GetComponentInChildren<ItemInSlot>().item.itemId, itemObjects[selectedSlot]);
+        inventorySlots[selectedSlot].GetComponentInChildren<ItemInSlot>().DestroySelf();
     }
 
     public int AddItem(InventoryItem item)
@@ -81,5 +90,29 @@ public class InventoryManager : NetworkBehaviour
     private void EnableItemClientRpc(NetworkObjectReference refItem, bool enable)
     {
         if (refItem.TryGet(out NetworkObject item)) item.gameObject.SetActive(enable);
+    }
+
+    [ServerRpc (RequireOwnership = false)]
+    private void SpawnWorldItemServerRpc(ulong id, int itemId, NetworkObjectReference reference)
+    {
+        InventoryItem item = null;
+        for (int i = 0; i < inventoryItems.Length; i++)
+        {
+            if (inventoryItems[i].itemId == itemId) item = inventoryItems[i];
+        }
+
+        NetworkObject worldItem = Instantiate(item.worldItemObject, NetworkManager.ConnectedClients[id].PlayerObject.gameObject.transform.position, Quaternion.identity);
+        worldItem.SpawnWithOwnership(id, true);
+        SetupWorldItemClientRpc(worldItem, new ClientRpcParams { Send = new ClientRpcSendParams {TargetClientIds = new List<ulong> {id}}});
+        if (reference.TryGet(out NetworkObject itemObject)) itemObject.Despawn(true);
+    }
+
+    [ClientRpc]
+    private void SetupWorldItemClientRpc(NetworkObjectReference reference, ClientRpcParams clientRpcParams)
+    {
+        if (reference.TryGet(out NetworkObject worldItem)) {
+            worldItem.GetComponent<WorldItem>().SetupWorldItem(itemObjects[selectedSlot]);
+            itemObjects.Remove(selectedSlot);
+        }
     }
 }
