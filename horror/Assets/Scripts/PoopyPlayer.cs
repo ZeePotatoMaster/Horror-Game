@@ -31,12 +31,19 @@ public class PoopyPlayer : MonoBehaviour
     private float timer;
 
     [SerializeField] private bool canMove = true;
+    
+    //animation stuff
+    public Animator playerAnimator;
 
     private Vector2 movementInput = Vector2.zero;
     private Vector2 lookInput = Vector2.zero;
     private bool jumped = false;
     [HideInInspector] public bool attacked = false;
     [HideInInspector] public bool reloaded = false; 
+
+    private bool isMoving = false;
+    private bool isJumping = false;
+    private bool isSprinting = false;
 
     private GameObject lootImage;
 
@@ -62,6 +69,7 @@ public class PoopyPlayer : MonoBehaviour
 
     public void OnMove(InputAction.CallbackContext context) {
         movementInput = context.ReadValue<Vector2>();
+        //isMoving = context.ReadValue<Vector2>();
     }
 
     public void OnAttack(InputAction.CallbackContext context) {
@@ -74,6 +82,7 @@ public class PoopyPlayer : MonoBehaviour
 
     public void OnJump(InputAction.CallbackContext context) {
         jumped = context.action.triggered;
+        isJumping = context.action.triggered;
     }
 
     public void OnLook(InputAction.CallbackContext context) {
@@ -104,6 +113,14 @@ public class PoopyPlayer : MonoBehaviour
             moveDirection.y = movementDirectionY;
         }
 
+        if (Mathf.Abs(moveDirection.x) > 0.1f || Mathf.Abs(moveDirection.z) > 0.1f) {
+            isMoving = true;
+        } else {
+            isMoving = false;
+        }
+
+        updateAnimations();
+
         // Apply gravity. Gravity is multiplied by deltaTime twice (once here, and once below
         // when the moveDirection is multiplied by deltaTime). This is because gravity should be applied
         // as an acceleration (ms^-2)
@@ -127,11 +144,31 @@ public class PoopyPlayer : MonoBehaviour
         if (canUseHeadBob && canMove) HandleHeadBob();
     }
 
+    void updateAnimations() {
+
+        if (isJumping) {
+            updateAnimatorParameters(false, true, false);
+        } else if (isMoving && isSprinting) {
+            updateAnimatorParameters(true, false, true);
+        } else if (isMoving) {
+            updateAnimatorParameters(true, false, false);
+        } else { 
+            updateAnimatorParameters(false, false, false);      
+        }
+    }
+
+    void updateAnimatorParameters(bool walking, bool jumping, bool sprinting) {
+
+        playerAnimator.SetBool("isWalking", walking);
+        playerAnimator.SetBool("isJumping", jumping);
+        playerAnimator.SetBool("isSprinting", sprinting);
+    }
+
     void HandleHeadBob()
     {
         if (!characterController.isGrounded) return;
 
-        if (Mathf.Abs(moveDirection.x) > 0.1f || Mathf.Abs(moveDirection.z) > 0.1f)
+        if (isMoving)
         {
             timer += Time.deltaTime * walkBobSpeed;
             playerCamera.transform.localPosition = new Vector3(playerCamera.transform.localPosition.x, defaultYPos + Mathf.Sin(timer) * walkBobAmount, playerCamera.transform.localPosition.z);
