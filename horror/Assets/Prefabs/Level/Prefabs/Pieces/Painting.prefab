@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8329614147133596279}
   - component: {fileID: 4279898562904072756}
   - component: {fileID: 1939823885716790907}
+  - component: {fileID: 8325261647984292748}
   m_Layer: 0
   m_Name: Painting
   m_TagString: Untagged
@@ -105,6 +106,26 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8325261647984292748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 478204714418733299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe336905eb3fce046a8d2b592368c33b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  paintings:
+  - {fileID: 2100000, guid: 5536ca178ea6fda4daf8d7212dcec5f0, type: 2}
+  - {fileID: 2100000, guid: 76892fd065eec0e4a8bcab28cd0122a0, type: 2}
+  - {fileID: 2100000, guid: e4991fd7f27a97b429c8f904ebe88405, type: 2}
+  corruptedPainting: {fileID: 2100000, guid: e770ce48b0ce44b488a71b10aff9d2ae, type: 2}
+  gameObject: {fileID: 478204714418733299}
+  isCorrupted: 0
+  corruptionChance: 10
 --- !u!1 &6589445460450081282
 GameObject:
   m_ObjectHideFlags: 0
@@ -1206,7 +1227,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1692
+  m_VersionIndex: 1695
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []

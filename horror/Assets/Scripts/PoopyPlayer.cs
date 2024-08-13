@@ -10,31 +10,35 @@ using Unity.VisualScripting;
 public class PoopyPlayer : MonoBehaviour
 {
 
-    //movement vars
+    //Movement Vars
     [SerializeField] private float walkingSpeed = 7.5f;
     [SerializeField] private float jumpSpeed = 8.0f;
     [SerializeField] private float gravity = 20.0f;
+    private float rotationX = 0;
+    [HideInInspector] public float currentSpeed;
+    [SerializeField] private bool canMove = true;
+
+    //Camera Vars
+    public Camera lobbyCamera;
     public Camera playerCamera;
     [SerializeField] private float lookSpeed = 2.0f;
     [SerializeField] private float lookXLimit = 90.0f;
 
+    //Character Controller
     private CharacterController characterController;
     [HideInInspector] public Vector3 moveDirection = Vector3.zero;
-    private float rotationX = 0;
-    [HideInInspector] public float currentSpeed;
 
-    //headbob stuff
+    //Headbob Vars
     [SerializeField] private bool canUseHeadBob = true;
     [SerializeField] private float walkBobSpeed = 14f;
     [SerializeField] private float walkBobAmount = 0.5f;
     private float defaultYPos = 0;
     private float timer;
-
-    [SerializeField] private bool canMove = true;
     
-    //animation stuff
+    //Animation Vars
     public Animator playerAnimator;
 
+    //Movement Vars
     private Vector2 movementInput = Vector2.zero;
     private Vector2 lookInput = Vector2.zero;
     private bool jumped = false;
