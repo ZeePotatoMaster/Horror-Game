@@ -11,7 +11,7 @@ public class RoleClass : NetworkBehaviour
     [HideInInspector] public bool isHuman;
     [SerializeField] private GameObject text;
 
-    private void Start()
+    virtual public void Start()
     {
         if (!IsOwner) return;
         GameObject canvas = GameObject.Find("Canvas");
