@@ -6,6 +6,7 @@ using Unity.Netcode;
 public class Roles : NetworkBehaviour
 {
     [SerializeField] private GameObject farter;
+    [SerializeField] private GameObject corpseEater;
     [SerializeField] private GameObject normie;
     
     public void AssignRoles()
@@ -16,7 +17,7 @@ public class Roles : NetworkBehaviour
         int badCount = (int)Mathf.Floor(playerCount/2f);
         int goodCount = (int)Mathf.Ceil(playerCount/2f);
         List<GameObject> goodClasses = new List<GameObject>{normie};
-        List<GameObject> badClasses = new List<GameObject>{farter};
+        List<GameObject> badClasses = new List<GameObject>{corpseEater};
 
         Debug.Log("initial bad " + badCount);
         Debug.Log("initial good " + goodCount);

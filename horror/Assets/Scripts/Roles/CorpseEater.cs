@@ -9,7 +9,8 @@ public class CorpseEater : RoleClass
     private bool isEating = false;
     private PlayerBase pb;
     private float eatTick = 0;
-    private GameObject eatIcon;
+    [SerializeField] private GameObject eatIcon;
+    private bool canEat;
 
     private void Awake()
     {
@@ -18,29 +19,20 @@ public class CorpseEater : RoleClass
     }
 
     // Start is called before the first frame update
-    void Start()
+    public override void Start()
     {
+        base.Start();
         pb = GetComponent<PlayerBase>();
         GameObject canvas = GameObject.Find("Canvas");
-        eatIcon = canvas.transform.Find("EatIcon").gameObject;
+        eatIcon = Instantiate(eatIcon, canvas.transform, false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (pb.lootObject.gameObject.tag == "corpse")
-        {
-            isEating = true;
-
-            eatTick += Time.deltaTime;
-            eatIcon.GetComponent<Image>().fillAmount = eatTick/eatTime;
-
-            if (eatTick >= eatTime)
-            {
-                EndEat();
-            }
-        }
-        else if (pb.lootObject == null && isEating) EndEat();
+        if (pb.interacted && canEat) Eat();
+        if (isEating && !pb.interacted) EndEat();
+        if (!canEat && !pb.interacted) EndEat();
     }
 
     private void EndEat()
@@ -48,10 +40,51 @@ public class CorpseEater : RoleClass
         eatTick = 0;
         eatIcon.GetComponent<Image>().fillAmount = 0f;
         isEating = false;
+        canEat = true;
     }
 
-    private void Transform()
+    private void Eat()
     {
-        
+        RaycastHit looty;
+        if (Physics.Raycast(pb.playerCamera.transform.position, pb.playerCamera.transform.forward, out looty))
+        {
+            float dist = Vector3.Distance(looty.transform.position, transform.position);
+            if (dist <= 2.5) {
+                if (looty.transform.tag == "Corpse")
+                {
+                    isEating = true;
+
+                    eatTick += Time.deltaTime;
+                    eatIcon.GetComponent<Image>().fillAmount = eatTick/eatTime;
+
+                    if (eatTick >= eatTime)
+                    {
+                        EndEat();
+                    }
+                }
+                else {
+                    Debug.Log("nope eat");
+                    canEat = false;
+                    return;
+                }
+            }
+
+            else if (dist >= 2.5 && isEating)
+            {
+                EndEat();
+            }
+            else
+            {
+                Debug.Log("nope eat");
+                canEat = false;
+                return;
+            }
+        }
+        else
+        {
+            if (isEating) EndEat();
+            Debug.Log("nope eat");
+            canEat = false;
+        }
     }
 }

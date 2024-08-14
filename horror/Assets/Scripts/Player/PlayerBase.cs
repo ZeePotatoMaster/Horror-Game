@@ -40,11 +40,10 @@ public class PlayerBase : NetworkBehaviour
     [HideInInspector] public bool reloaded = false; 
 
     //looting
-    private bool interacted = false;
+    [HideInInspector] public bool interacted = false;
     private float lootTimer = 0f;
     private bool isLooting = false;
     private bool canLoot = true;
-    [HideInInspector] public Transform lootObject;
 
     private GameObject lootImage;
 
@@ -182,7 +181,6 @@ public class PlayerBase : NetworkBehaviour
         if (interacted && canLoot) Loot();
         if (isLooting && !interacted) EndLoot();
         if (!canLoot && !interacted) EndLoot();
-        if (lootObject != null && !interacted) lootObject = null;
 
         //inventory
         if (swappedWeapons) {
@@ -213,8 +211,6 @@ public class PlayerBase : NetworkBehaviour
             float dist = Vector3.Distance(looty.transform.position, transform.position);
             if (dist < 2.5)
             {
-                lootObject = looty.transform;
-
                 if (looty.transform.GetComponent<WorldItem>() != null)
                 {
                     float lootTime = looty.transform.GetComponent<WorldItem>().lootTime;
@@ -228,6 +224,18 @@ public class PlayerBase : NetworkBehaviour
                     {
                         looty.transform.GetComponent<WorldItem>().OnPickup(inventoryManager);
                         EndLoot();
+                    }
+                }
+                
+                else if (looty.transform.tag == "Door")
+                {
+                    Animator door = looty.transform.GetComponent<Animator>();
+
+                    if (door.GetCurrentAnimatorStateInfo(0).IsName("openidle")) {
+                        DoorServerRpc(looty.transform.parent.GetComponent<NetworkObject>(), false);
+                    }
+                    if (door.GetCurrentAnimatorStateInfo(0).IsName("closeidle")) {
+                        DoorServerRpc(looty.transform.parent.GetComponent<NetworkObject>(), true);
                     }
                 }
 
@@ -268,8 +276,12 @@ public class PlayerBase : NetworkBehaviour
         lootImage.GetComponent<Image>().fillAmount = 0f;
         isLooting = false;
         canLoot = true;
-        lootObject = null;
     }
 
-
+    [ServerRpc(RequireOwnership = false)]
+    private void DoorServerRpc(NetworkObjectReference reference, bool open) {
+        if (reference.TryGet(out NetworkObject door)) {
+            door.GetComponentInChildren<Animator>().SetBool("isOpen", open);
+        }
+    }
 }
