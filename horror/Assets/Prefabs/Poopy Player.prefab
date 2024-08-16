@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 4507386546224653580}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.06213379, y: 1.05, z: 0.2000122}
+  m_LocalPosition: {x: -0.06213379, y: 1.05, z: 0.262}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -199,20 +199,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b561a3364dd785345905f6dd2c508ea1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkingSpeed: 7.5
-  jumpSpeed: 10
-  gravity: 35
-  currentSpeed: 0
-  canMove: 1
-  lobbyCamera: {fileID: 0}
   playerCamera: {fileID: 7767054188117767889}
   lookSpeed: 0.1
   lookXLimit: 90
+  maxHorizontalTilt: 2
+  tiltAcceleration: 5
   moveDirection: {x: 0, y: 0, z: 0}
   canUseHeadBob: 1
   walkBobSpeed: 14
   walkBobAmount: 0.05
   playerAnimator: {fileID: 0}
+  currentSpeed: 0
+  walkingSpeed: 7.5
+  jumpSpeed: 10
+  gravity: 35
+  sprintingMultiplier: 1.5
+  canMove: 1
   attacked: 0
   reloaded: 0
   listener: {fileID: 0}
@@ -345,6 +347,14 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: cec20bfe-e0a9-4a7c-9eba-793271b44908
     m_ActionName: Player/Scroll[/Mouse/scroll/y]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c6b168fc-7485-4558-b8aa-849f28c6bd15
+    m_ActionName: Player/Sprint[/Keyboard/leftCtrl]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: ec947060-af4e-42ed-95a5-2f2251bd5e7c
+    m_ActionName: Player/Crouch[/Keyboard/leftShift]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
