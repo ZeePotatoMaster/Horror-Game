@@ -294,6 +294,14 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 6d552c7c-4521-4cc7-baef-7148806afc6c
     m_ActionName: Player/Drop[/Keyboard/g]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c6b168fc-7485-4558-b8aa-849f28c6bd15
+    m_ActionName: Player/Sprint[/Keyboard/leftCtrl]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: ec947060-af4e-42ed-95a5-2f2251bd5e7c
+    m_ActionName: Player/Crouch[/Keyboard/leftShift]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -311,7 +319,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3246169823
+  GlobalObjectIdHash: 3184430517
   InScenePlacedSourceGlobalObjectIdHash: 3246169823
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -346,7 +354,7 @@ MonoBehaviour:
   canMove: 1
   attacked: 0
   reloaded: 0
-  lootObject: {fileID: 0}
+  interacted: 0
   listener: {fileID: 5263132758131298911}
 --- !u!114 &3472689813334838383
 MonoBehaviour:
@@ -482,7 +490,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 63
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0

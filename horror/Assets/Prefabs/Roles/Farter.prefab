@@ -370,6 +370,18 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: cec20bfe-e0a9-4a7c-9eba-793271b44908
     m_ActionName: Player/Scroll[/Mouse/scroll/y]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 6d552c7c-4521-4cc7-baef-7148806afc6c
+    m_ActionName: Player/Drop[/Keyboard/g]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c6b168fc-7485-4558-b8aa-849f28c6bd15
+    m_ActionName: Player/Sprint[/Keyboard/leftCtrl]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: ec947060-af4e-42ed-95a5-2f2251bd5e7c
+    m_ActionName: Player/Crouch[/Keyboard/leftShift]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -422,7 +434,10 @@ MonoBehaviour:
   canMove: 1
   attacked: 0
   reloaded: 0
-  lootObject: {fileID: 0}
+  interacted: 0
+  interactTick: 0
+  isInteracting: 0
+  interactObject: {fileID: 0}
   listener: {fileID: 4042649721395348440}
 --- !u!114 &5752599715425855077
 MonoBehaviour:
@@ -486,3 +501,6 @@ MonoBehaviour:
   roleName: Base Role
   isHuman: 0
   text: {fileID: 185556377958009015, guid: 60b28d9323d48f1479f2c8a4759159b9, type: 3}
+  pb: {fileID: 3995117877680334081}
+  energyEatTime: 1
+  energyIcon: {fileID: 1542578338837384093, guid: b98b4d649e9e72349a24eb6c6ce072de, type: 3}

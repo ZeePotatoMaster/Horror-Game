@@ -16,8 +16,8 @@ public class Roles : NetworkBehaviour
         float playerCount = NetworkManager.Singleton.ConnectedClientsList.Count;
         int badCount = (int)Mathf.Floor(playerCount/2f);
         int goodCount = (int)Mathf.Ceil(playerCount/2f);
-        List<GameObject> goodClasses = new List<GameObject>{normie};
-        List<GameObject> badClasses = new List<GameObject>{corpseEater};
+        List<GameObject> goodClasses = new List<GameObject>{farter};
+        List<GameObject> badClasses = new List<GameObject>{farter};
 
         Debug.Log("initial bad " + badCount);
         Debug.Log("initial good " + goodCount);

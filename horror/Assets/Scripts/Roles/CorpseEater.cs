@@ -7,7 +7,6 @@ public class CorpseEater : RoleClass
 {
     [SerializeField] private float eatTime;
     private bool isEating = false;
-    private PlayerBase pb;
     private float eatTick = 0;
     [SerializeField] private GameObject eatIcon;
     private bool canEat;

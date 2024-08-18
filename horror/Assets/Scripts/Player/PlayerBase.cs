@@ -41,9 +41,10 @@ public class PlayerBase : NetworkBehaviour
 
     //looting
     [HideInInspector] public bool interacted = false;
-    private float lootTimer = 0f;
-    private bool isLooting = false;
-    private bool canLoot = true;
+    [HideInInspector] public float interactTick = 0f;
+    [HideInInspector] public bool isInteracting = false;
+    private bool canInteract = true;
+    [HideInInspector] public Transform interactObject;
 
     private GameObject lootImage;
 
@@ -178,9 +179,47 @@ public class PlayerBase : NetworkBehaviour
         if (canUseHeadBob && canMove) HandleHeadBob();
 
         //loot
-        if (interacted && canLoot) Loot();
-        if (isLooting && !interacted) EndLoot();
-        if (!canLoot && !interacted) EndLoot();
+        if (interacted && canInteract) interactObject = Interact();
+
+        if (interactObject == null) {
+            canInteract = false;
+            if (isInteracting) EndInteract();
+        }
+        else if (interactObject.GetComponent<WorldItem>() != null)
+        {
+            float lootTime = interactObject.GetComponent<WorldItem>().lootTime;
+
+            isInteracting = true;
+
+            interactTick += Time.deltaTime;
+            lootImage.GetComponent<Image>().fillAmount = interactTick/lootTime;
+
+            if (interactTick >= lootTime)
+            {
+                interactObject.GetComponent<WorldItem>().OnPickup(inventoryManager);
+                EndInteract();
+            }
+        }
+        else if (interactObject.tag == "Door")
+        {
+            Animator door = interactObject.GetComponent<Animator>();
+
+            if (door.GetCurrentAnimatorStateInfo(0).IsName("openidle")) {
+                DoorServerRpc(interactObject.parent.GetComponent<NetworkObject>(), false);
+            }
+            if (door.GetCurrentAnimatorStateInfo(0).IsName("closeidle")) {
+                DoorServerRpc(interactObject.parent.GetComponent<NetworkObject>(), true);
+            }
+            EndInteract();
+        }
+
+        else if (interactObject.GetComponent<Roles>() != null)
+        {
+            interactObject.GetComponent<Roles>().AssignRoles();
+        }
+
+        if (isInteracting && !interacted) EndInteract();
+        if (!canInteract && !interacted) EndInteract();
 
         //inventory
         if (swappedWeapons) {
@@ -203,79 +242,33 @@ public class PlayerBase : NetworkBehaviour
         }
     }
 
-    private void Loot()
+    private Transform Interact()
     {
+        Debug.Log("started");
         RaycastHit looty;
         if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out looty))
         {
             float dist = Vector3.Distance(looty.transform.position, transform.position);
-            if (dist < 2.5)
-            {
-                if (looty.transform.GetComponent<WorldItem>() != null)
-                {
-                    float lootTime = looty.transform.GetComponent<WorldItem>().lootTime;
-
-                    isLooting = true;
-
-                    lootTimer += Time.deltaTime;
-                    lootImage.GetComponent<Image>().fillAmount = lootTimer/lootTime;
-
-                    if (lootTimer >= lootTime)
-                    {
-                        looty.transform.GetComponent<WorldItem>().OnPickup(inventoryManager);
-                        EndLoot();
-                    }
-                }
-                
-                else if (looty.transform.tag == "Door")
-                {
-                    Animator door = looty.transform.GetComponent<Animator>();
-
-                    if (door.GetCurrentAnimatorStateInfo(0).IsName("openidle")) {
-                        DoorServerRpc(looty.transform.parent.GetComponent<NetworkObject>(), false);
-                    }
-                    if (door.GetCurrentAnimatorStateInfo(0).IsName("closeidle")) {
-                        DoorServerRpc(looty.transform.parent.GetComponent<NetworkObject>(), true);
-                    }
-                }
-
-                else if (looty.transform.GetComponent<Roles>() != null)
-                {
-                    looty.transform.GetComponent<Roles>().AssignRoles();
-                }
-
-                else {
-                    Debug.Log("can';t");
-                    canLoot = false;
-                    return;
-                }
+            if (dist <= 2.5) {
+                Debug.Log(looty.transform);
+                return looty.transform;
             }
 
-            else if (dist >= 2.5 && isLooting)
+            else if (dist >= 2.5 && isInteracting)
             {
-                EndLoot();
-            }
-            else
-            {
-                Debug.Log("can';t");
-                canLoot = false;
-                return;
+                EndInteract();
             }
         }
-        else
-        {
-            if (isLooting) EndLoot();
-            Debug.Log("can';t");
-            canLoot = false;
-        }
+       return null;
     }
 
-    private void EndLoot()
+    public void EndInteract()
     {
-        lootTimer = 0;
+        interactTick = 0;
         lootImage.GetComponent<Image>().fillAmount = 0f;
-        isLooting = false;
-        canLoot = true;
+        isInteracting = false;
+        canInteract = true;
+        interactObject = null;
     }
 
     [ServerRpc(RequireOwnership = false)]
