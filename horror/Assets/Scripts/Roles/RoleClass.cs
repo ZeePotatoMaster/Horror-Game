@@ -14,6 +14,7 @@ public class RoleClass : NetworkBehaviour
     public PlayerBase pb;
     [SerializeField] private float energyEatTime = 1f;
     public GameObject energyIcon;
+    public NetworkVariable<float> curseEnergy = new NetworkVariable<float>(100f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     virtual public void Start()
     {
