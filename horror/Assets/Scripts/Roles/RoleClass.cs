@@ -5,6 +5,7 @@ using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class RoleClass : NetworkBehaviour
 {
@@ -15,6 +16,11 @@ public class RoleClass : NetworkBehaviour
     [SerializeField] private float energyEatTime = 1f;
     public GameObject energyIcon;
     public NetworkVariable<float> curseEnergy = new NetworkVariable<float>(100f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    [SerializeField] private GameObject radialMenu;
+    private bool picking;
+    private bool casted;
+    [HideInInspector] public Curse currentAbility;
+    [SerializeField] private CurseObject[] curseObjects;
 
     virtual public void Start()
     {
@@ -24,6 +30,17 @@ public class RoleClass : NetworkBehaviour
         roleText.GetComponent<TextMeshProUGUI>().SetText("You are: " + roleName);
         StartCoroutine(DestroyObject(roleText));
         energyIcon = Instantiate(energyIcon, canvas.transform, false);
+
+        radialMenu = Instantiate(radialMenu, canvas.transform, false);
+        radialMenu.GetComponent<RadialMenu>().curseObjects = curseObjects;
+        radialMenu.GetComponent<RadialMenu>().Setup(this.gameObject);
+    }
+
+    public void OnPickCurse(InputAction.CallbackContext context) {
+        picking = context.action.triggered;
+    }
+    public void OnCast(InputAction.CallbackContext context) {
+        casted = context.action.triggered;
     }
 
     private IEnumerator DestroyObject(GameObject o)
@@ -38,6 +55,23 @@ public class RoleClass : NetworkBehaviour
         if (!IsOwner) return;
 
         if (isHuman) return;
+
+        if (picking && !radialMenu.activeSelf) {
+            radialMenu.SetActive(true);
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            pb.lookSpeed = pb.lookSpeed / 4;
+        }
+        else if (!picking && radialMenu.activeSelf) {
+            radialMenu.SetActive(false);
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            pb.lookSpeed = pb.lookSpeed * 4;
+        } 
+
+        if (currentAbility != null) {
+            if (casted && !currentAbility.activated && !this.GetComponent<InventoryManager>().HoldingSomething()) currentAbility.OnActivate(this.gameObject);
+        }
 
         if (pb.interactObject != null) {
             if (pb.interactObject.tag == "Energy") {

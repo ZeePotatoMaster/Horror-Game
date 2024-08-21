@@ -8,13 +8,16 @@ using UnityEngine;
 public class InventoryManager : NetworkBehaviour
 {
     private List<InventorySlot> inventorySlots = new List<InventorySlot>();
-    [SerializeField] private InventoryItem[] inventoryItems;
+    private InventoryItem[] inventoryItems;
     private Dictionary<int, NetworkObject> itemObjects = new Dictionary<int, NetworkObject>();
     [SerializeField] private GameObject inventoryItemPrefab;
     private int selectedSlot = -1;
 
     public override void OnNetworkSpawn() {
         if (!IsOwner) return;
+
+        inventoryItems = GameObject.Find("ItemHolder").GetComponent<ItemHolder>().inventoryItems;
+
         GameObject canvas = GameObject.Find("Canvas");
         Transform hotbar = canvas.transform.Find("Toolbar");
         foreach (InventorySlot slot in hotbar.GetComponentsInChildren<InventorySlot>())
@@ -44,6 +47,12 @@ public class InventoryManager : NetworkBehaviour
 
         SpawnWorldItemServerRpc(NetworkManager.LocalClientId, inventorySlots[selectedSlot].GetComponentInChildren<ItemInSlot>().item.itemId, itemObjects[selectedSlot]);
         inventorySlots[selectedSlot].GetComponentInChildren<ItemInSlot>().DestroySelf();
+    }
+
+    public bool HoldingSomething() 
+    {
+        if (!itemObjects.ContainsKey(selectedSlot)) return false;
+        else return true;
     }
 
     public int AddItem(InventoryItem item)

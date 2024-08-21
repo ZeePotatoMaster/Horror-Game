@@ -9,31 +9,43 @@ public class RadialMenu : MonoBehaviour
 {
     [SerializeField] private GameObject entryPrefab;
     private List<RadialMenuEntry> Entries;
-    [SerializeField] private CurseObject[] curseObjects;
+    [HideInInspector] public CurseObject[] curseObjects;
     [SerializeField] private float radius = 3f;
-    [HideInInspector] public Curse currentAbility;
+    private GameObject player;
 
     // Start is called before the first frame update
     void Start()
     {
+        
+    }
+
+    public void Setup(GameObject pPlayer)
+    {
         Entries = new List<RadialMenuEntry>();
+        player = pPlayer;
 
         //"start"
         for (int i=0; i < curseObjects.Length; i++) {
-            Curse formed = (Curse)this.gameObject.AddComponent(Type.GetType(curseObjects[i].abilityType));
+            Curse formed = (Curse)player.GetComponent(Type.GetType(curseObjects[i].abilityType));
+            formed.enabled = true;
             AddEntry(curseObjects[i].curseName, curseObjects[i].image, curseObjects[i].cost, formed);
         }
         Rearrange();
+    }
+
+    public RoleClass GetRoleClass()
+    {
+        return player.GetComponent<RoleClass>();
     }
 
     void AddEntry(string pLabel, Texture pIcon, float pCost, Curse pAbility)
     {
         GameObject entry = Instantiate(entryPrefab, transform);
         RadialMenuEntry rme = entry.GetComponent<RadialMenuEntry>();
-        rme.SetLabel(pLabel);
         rme.SetIcon(pIcon);
-        rme.SetCost(pCost);
         rme.SetAbility(pAbility);
+        rme.SetCost(pCost);
+        rme.SetLabel(pLabel);
 
         Entries.Add(rme);
     }

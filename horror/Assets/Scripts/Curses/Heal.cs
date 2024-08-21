@@ -5,11 +5,29 @@ using Unity.Netcode;
 
 public class Heal : Curse
 {
-    public override void OnActivate(float cost, GameObject player)
+
+    private void Start()
     {
-        base.OnActivate(cost, player);
+        chargeTime = 1f;
+    }
+
+    public override void OnChargeUp()
+    {
         Debug.Log("healed up");
         HealServerRpc(this.OwnerClientId, 25f);
+    }
+
+    public override void OnActivate(GameObject player)
+    {
+        base.OnActivate(player);
+        if (!activated) return;
+        this.GetComponent<PlayerBase>().currentSpeed -= 4f;
+    }
+
+    public override void EndCasting()
+    {
+        base.EndCasting();
+        this.GetComponent<PlayerBase>().currentSpeed += 4f;
     }
 
     [ServerRpc]

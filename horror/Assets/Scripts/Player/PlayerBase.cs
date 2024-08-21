@@ -16,7 +16,7 @@ public class PlayerBase : NetworkBehaviour
     [SerializeField] private float jumpSpeed = 8.0f;
     [SerializeField] private float gravity = 20.0f;
     public Camera playerCamera;
-    [SerializeField] private float lookSpeed = 2.0f;
+    public float lookSpeed = 2.0f;
     [SerializeField] private float lookXLimit = 90.0f;
 
     private CharacterController characterController;

@@ -17,7 +17,7 @@ public class RadialMenuEntry : MonoBehaviour, IPointerClickHandler, IPointerEnte
 
     public void SetLabel(string pText)
     {
-        label.text = pText;
+        label.text = pText +  " (" + cost + ")";
     }
 
     public void SetIcon(Texture pIcon)
@@ -28,6 +28,7 @@ public class RadialMenuEntry : MonoBehaviour, IPointerClickHandler, IPointerEnte
     public void SetCost(float pCost)
     {
         cost = pCost;
+        ability.SetCost(pCost);
     }
 
     public void SetAbility(Curse pAbility)
@@ -49,7 +50,7 @@ public class RadialMenuEntry : MonoBehaviour, IPointerClickHandler, IPointerEnte
     {
         rect.DOComplete();
         rect.DOScale(Vector3.one * 1.2f, .3f).SetEase(Ease.OutQuad);
-        this.GetComponentInParent<RadialMenu>().currentAbility = ability;
+        this.GetComponentInParent<RadialMenu>().GetRoleClass().currentAbility = ability;
         Debug.Log(ability);
     }
 

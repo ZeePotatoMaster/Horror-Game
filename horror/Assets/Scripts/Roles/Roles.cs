@@ -50,7 +50,6 @@ public class Roles : NetworkBehaviour
             NetworkManager.Singleton.ConnectedClients[client.ClientId].PlayerObject.Despawn(true);
             GameObject newPlayer = Instantiate(role);
             newPlayer.GetComponent<NetworkObject>().SpawnAsPlayerObject(client.ClientId);
-            
         }
     }
 }
