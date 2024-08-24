@@ -2,12 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
+using System;
+using Unity.Collections;
 
 public class Roles : NetworkBehaviour
 {
-    [SerializeField] private GameObject farter;
-    [SerializeField] private GameObject corpseEater;
-    [SerializeField] private GameObject normie;
+    [SerializeField] private List<RoleObject> goodRoles = new List<RoleObject>();
+    [SerializeField] private List<RoleObject> badRoles = new List<RoleObject>();
+    [SerializeField] private RoleObject defaultGood;
+    [SerializeField] private RoleObject defaultBad;
+    [SerializeField] private GameObject blankPlayer;
+
+    [SerializeField] private GameObject menuPrefab;
+    [SerializeField] private GameObject energyIconPrefab;
+    
     
     public void AssignRoles()
     {
@@ -16,8 +24,6 @@ public class Roles : NetworkBehaviour
         float playerCount = NetworkManager.Singleton.ConnectedClientsList.Count;
         int badCount = (int)Mathf.Floor(playerCount/2f);
         int goodCount = (int)Mathf.Ceil(playerCount/2f);
-        List<GameObject> goodClasses = new List<GameObject>{farter};
-        List<GameObject> badClasses = new List<GameObject>{farter};
 
         Debug.Log("initial bad " + badCount);
         Debug.Log("initial good " + goodCount);
@@ -26,21 +32,21 @@ public class Roles : NetworkBehaviour
         foreach (NetworkClient client in NetworkManager.Singleton.ConnectedClientsList)
         {   
             int coin = 0;
-            if (badCount > 0 && goodCount > 0)  coin = Random.Range(0, 2);
+            if (badCount > 0 && goodCount > 0)  coin = UnityEngine.Random.Range(0, 2);
             else if (badCount > 0 && goodCount == 0) coin = 0;
             else if (badCount == 0 && goodCount > 0) coin = 1;
             
-            GameObject role;
+            RoleObject role;
             if (coin == 0) {
-                if (badClasses.Count == 0) role = normie;
-                else role = badClasses[Random.Range(0, badClasses.Count)];
-                badClasses.Remove(role);
+                if (badRoles.Count == 0) role = defaultBad;
+                else role = badRoles[UnityEngine.Random.Range(0, badRoles.Count)];
+                badRoles.Remove(role);
                 badCount--;
             }
             else {
-                if (goodClasses.Count == 0) role = normie;
-                else role = goodClasses[Random.Range(0, goodClasses.Count)];
-                goodClasses.Remove(role);
+                if (goodRoles.Count == 0) role = defaultGood;
+                else role = goodRoles[UnityEngine.Random.Range(0, goodRoles.Count)];
+                goodRoles.Remove(role);
                 goodCount--;
             }
 
@@ -48,8 +54,34 @@ public class Roles : NetworkBehaviour
             Debug.Log("good " + goodCount);
 
             NetworkManager.Singleton.ConnectedClients[client.ClientId].PlayerObject.Despawn(true);
-            GameObject newPlayer = Instantiate(role);
-            newPlayer.GetComponent<NetworkObject>().SpawnAsPlayerObject(client.ClientId);
+
+            GameObject newPlayer = Instantiate(blankPlayer);
+            if (Type.GetType(role.scriptName) != null) newPlayer.AddComponent(Type.GetType(role.scriptName));
+
+            if (!role.isHuman) {
+                for (int i=0; i < role.curseObjects.Length; i++) newPlayer.AddComponent(Type.GetType(role.curseObjects[i].abilityType));
+                newPlayer.GetComponent<CurseManager>().SetupCurses(role.curseObjects, menuPrefab, energyIconPrefab);
+            }
+            newPlayer.GetComponent<NetworkObject>().SpawnAsPlayerObject(client.ClientId, true);
+
+            RoleClass roleClass = newPlayer.GetComponent<RoleClass>();
+            roleClass.rolePrefabs = role.prefabs;
+            roleClass.roleName.Value = new FixedString32Bytes(role.roleName);
+            roleClass.isHuman.Value = role.isHuman;
+
+            newPlayer.GetComponent<PlayerHealth>().health.Value = role.health;
+            
+            for (int i=0; i < role.startItems.Length; i++) {
+                NetworkObject worldItem = Instantiate(role.startItems[i].worldItemObject);
+                worldItem.Spawn(true);
+                PickupItemClientRpc(worldItem, new ClientRpcParams { Send = new ClientRpcSendParams {TargetClientIds = new List<ulong> {client.ClientId}}});
+            }
         }
+    }
+
+    [ClientRpc]
+    private void PickupItemClientRpc(NetworkObjectReference itemRef, ClientRpcParams clientRpcParams)
+    {
+        if (itemRef.TryGet(out NetworkObject item)) item.GetComponent<WorldItem>().OnPickup(NetworkManager.LocalClient.PlayerObject.gameObject.GetComponent<InventoryManager>());
     }
 }

@@ -35,7 +35,7 @@ public class Curse : NetworkBehaviour
 
     public virtual void OnActivate(GameObject player)
     {
-        RoleClass rc = player.GetComponent<RoleClass>();
+        CurseManager rc = player.GetComponent<CurseManager>();
         if (rc.curseEnergy.Value < cost) return;
         
         RemoveCurseEnergyServerRpc(this.gameObject.GetComponent<NetworkObject>().OwnerClientId, cost);
@@ -52,6 +52,6 @@ public class Curse : NetworkBehaviour
     private void RemoveCurseEnergyServerRpc(ulong id, float cost)
     {  
         Debug.Log(NetworkManager);
-        NetworkManager.ConnectedClients[id].PlayerObject.GetComponent<RoleClass>().curseEnergy.Value -= cost;
+        NetworkManager.ConnectedClients[id].PlayerObject.GetComponent<CurseManager>().curseEnergy.Value -= cost;
     }
 }

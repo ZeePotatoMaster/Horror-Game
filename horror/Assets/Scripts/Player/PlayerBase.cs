@@ -57,6 +57,10 @@ public class PlayerBase : NetworkBehaviour
     private InventoryManager inventoryManager;
     private bool dropped;
 
+    //spells
+    [HideInInspector] public bool picking;
+    [HideInInspector] public bool casted;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -108,6 +112,13 @@ public class PlayerBase : NetworkBehaviour
 
     public void OnLook(InputAction.CallbackContext context) {
         lookInput = context.ReadValue<Vector2>();
+    }
+    
+    public void OnPickCurse(InputAction.CallbackContext context) {
+        picking = context.action.triggered;
+    }
+    public void OnCast(InputAction.CallbackContext context) {
+        casted = context.action.triggered;
     }
     
     public void OnInteract(InputAction.CallbackContext context) {

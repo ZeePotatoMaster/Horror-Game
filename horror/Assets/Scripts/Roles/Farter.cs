@@ -3,15 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Farter : RoleClass
+public class Farter : CurseManager
 {
     private float cylinderMunchTime = 3f;
-
-    private void Awake()
-    {
-        roleName = "Farter";
-        isHuman = false;
-    }
 
     public override void Update()
     {

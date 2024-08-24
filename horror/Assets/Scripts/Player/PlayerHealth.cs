@@ -43,6 +43,7 @@ public class PlayerHealth : NetworkBehaviour
 
     private void HurtEffect()
     {
+        if (hurtScreen == null) return;
         var color = hurtScreen.GetComponent<Image>().color;
         color.a = 0.5f;
         hurtScreen.GetComponent<Image>().color = color;

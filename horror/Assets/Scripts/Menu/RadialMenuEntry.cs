@@ -50,7 +50,7 @@ public class RadialMenuEntry : MonoBehaviour, IPointerClickHandler, IPointerEnte
     {
         rect.DOComplete();
         rect.DOScale(Vector3.one * 1.2f, .3f).SetEase(Ease.OutQuad);
-        this.GetComponentInParent<RadialMenu>().GetRoleClass().currentAbility = ability;
+        this.GetComponentInParent<RadialMenu>().GetCurseManager().currentAbility = ability;
         Debug.Log(ability);
     }
 

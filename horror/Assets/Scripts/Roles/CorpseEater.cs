@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CorpseEater : RoleClass
+public class CorpseEater : CurseManager
 {
     [SerializeField] private float eatTime;
     private bool isEating = false;
@@ -11,16 +11,12 @@ public class CorpseEater : RoleClass
     [SerializeField] private GameObject eatIcon;
     private bool canEat;
 
-    private void Awake()
-    {
-        roleName = "Corpse Eater";
-        isHuman = false;
-    }
-
     // Start is called before the first frame update
     public override void Start()
     {
         base.Start();
+        if (!IsOwner) return;
+        
         pb = GetComponent<PlayerBase>();
         GameObject canvas = GameObject.Find("Canvas");
         eatIcon = Instantiate(eatIcon, canvas.transform, false);

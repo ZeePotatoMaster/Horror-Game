@@ -27,15 +27,14 @@ public class RadialMenu : MonoBehaviour
         //"start"
         for (int i=0; i < curseObjects.Length; i++) {
             Curse formed = (Curse)player.GetComponent(Type.GetType(curseObjects[i].abilityType));
-            formed.enabled = true;
             AddEntry(curseObjects[i].curseName, curseObjects[i].image, curseObjects[i].cost, formed);
         }
         Rearrange();
     }
 
-    public RoleClass GetRoleClass()
+    public CurseManager GetCurseManager()
     {
-        return player.GetComponent<RoleClass>();
+        return player.GetComponent<CurseManager>();
     }
 
     void AddEntry(string pLabel, Texture pIcon, float pCost, Curse pAbility)

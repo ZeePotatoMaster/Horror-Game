@@ -1,12 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class Normie : RoleClass
+public class Normie : NetworkBehaviour
 {
-    private void Awake()
-    {
-        roleName = "Normie";
-        isHuman = true;
-    }
+   
 }
