@@ -140,7 +140,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fcc3504051eaa14fad17e592345e9a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lootTime: 1
+  humansInteract: 1
+  isInstant: 0
+  interactTime: 1
+  destroyOnUse: 1
   item: {fileID: 11400000, guid: ddfe33e6979a4d941b09fcd0078cba37, type: 2}
-  currentAmmo: 6
-  totalAmmo: 18
+  currentAmmo:
+    m_InternalValue: 6
+  totalAmmo:
+    m_InternalValue: 18

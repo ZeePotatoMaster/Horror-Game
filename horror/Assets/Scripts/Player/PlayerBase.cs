@@ -43,10 +43,10 @@ public class PlayerBase : NetworkBehaviour
     [HideInInspector] public bool interacted = false;
     [HideInInspector] public float interactTick = 0f;
     [HideInInspector] public bool isInteracting = false;
-    private bool canInteract = true;
+    [HideInInspector] public bool canInteract = true;
     [HideInInspector] public Transform interactObject;
 
-    private GameObject lootImage;
+    [HideInInspector] public GameObject lootImage;
 
     //listener (to disable for multiplayer)
     [SerializeField] private AudioListener listener;
@@ -196,41 +196,9 @@ public class PlayerBase : NetworkBehaviour
             canInteract = false;
             if (isInteracting) EndInteract();
         }
-        else if (interactObject.GetComponent<WorldItem>() != null)
-        {
-            float lootTime = interactObject.GetComponent<WorldItem>().lootTime;
+        else if (interactObject.GetComponent<Interactable>() != null) interactObject.GetComponent<Interactable>().OnInteract(this.gameObject);
 
-            isInteracting = true;
-
-            interactTick += Time.deltaTime;
-            lootImage.GetComponent<Image>().fillAmount = interactTick/lootTime;
-
-            if (interactTick >= lootTime)
-            {
-                interactObject.GetComponent<WorldItem>().OnPickup(inventoryManager);
-                EndInteract();
-            }
-        }
-        else if (interactObject.tag == "Door")
-        {
-            Animator door = interactObject.GetComponent<Animator>();
-
-            if (door.GetCurrentAnimatorStateInfo(0).IsName("openidle")) {
-                DoorServerRpc(interactObject.parent.GetComponent<NetworkObject>(), false);
-            }
-            if (door.GetCurrentAnimatorStateInfo(0).IsName("closeidle")) {
-                DoorServerRpc(interactObject.parent.GetComponent<NetworkObject>(), true);
-            }
-            EndInteract();
-        }
-
-        else if (interactObject.GetComponent<Roles>() != null)
-        {
-            interactObject.GetComponent<Roles>().AssignRoles();
-        }
-
-        if (isInteracting && !interacted) EndInteract();
-        if (!canInteract && !interacted) EndInteract();
+        if (!interacted && (!canInteract || isInteracting)) EndInteract();
 
         //inventory
         if (swappedWeapons) {
@@ -280,12 +248,5 @@ public class PlayerBase : NetworkBehaviour
         isInteracting = false;
         canInteract = true;
         interactObject = null;
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    private void DoorServerRpc(NetworkObjectReference reference, bool open) {
-        if (reference.TryGet(out NetworkObject door)) {
-            door.GetComponentInChildren<Animator>().SetBool("isOpen", open);
-        }
     }
 }

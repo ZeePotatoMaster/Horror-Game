@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class WorldItem : NetworkBehaviour
+public class WorldItem : Interactable
 {
-    public float lootTime = 1f;
     [SerializeField] private InventoryItem item;
 
-    public void OnPickup(InventoryManager inventoryManager){
+    public override void FinishInteract(GameObject player){
+        InventoryManager inventoryManager = player.GetComponent<InventoryManager>();
+        
         int canPickup = inventoryManager.AddItem(item);
         if (canPickup == -1) return;
 
@@ -24,7 +25,6 @@ public class WorldItem : NetworkBehaviour
         itemObject.transform.SetParent(g_camera.transform, false);
         AddItemClientRpc(itemObject, slot, new ClientRpcParams { Send = new ClientRpcSendParams {TargetClientIds = new List<ulong> {id}}});
         Debug.Log(itemObject + " was given to " + id);
-        this.GetComponent<NetworkObject>().Despawn(true);
     }
 
     [ClientRpc]

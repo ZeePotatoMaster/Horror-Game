@@ -5,7 +5,7 @@ using Unity.Netcode;
 using System;
 using Unity.Collections;
 
-public class Roles : NetworkBehaviour
+public class Roles : Interactable
 {
     [SerializeField] private List<RoleObject> goodRoles = new List<RoleObject>();
     [SerializeField] private List<RoleObject> badRoles = new List<RoleObject>();
@@ -17,7 +17,7 @@ public class Roles : NetworkBehaviour
     [SerializeField] private GameObject energyIconPrefab;
     
     
-    public void AssignRoles()
+    public override void FinishInteract(GameObject player)
     {
         if (!IsHost) return;
 
@@ -82,6 +82,6 @@ public class Roles : NetworkBehaviour
     [ClientRpc]
     private void PickupItemClientRpc(NetworkObjectReference itemRef, ClientRpcParams clientRpcParams)
     {
-        if (itemRef.TryGet(out NetworkObject item)) item.GetComponent<WorldItem>().OnPickup(NetworkManager.LocalClient.PlayerObject.gameObject.GetComponent<InventoryManager>());
+        if (itemRef.TryGet(out NetworkObject item)) item.GetComponent<WorldItem>().FinishInteract(NetworkManager.LocalClient.PlayerObject.gameObject);
     }
 }

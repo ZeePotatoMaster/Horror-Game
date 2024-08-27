@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 3472689813334838383}
   - component: {fileID: 5701591248003119687}
   - component: {fileID: 694177294459213378}
+  - component: {fileID: 8774586265770531734}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -302,6 +303,14 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: ec947060-af4e-42ed-95a5-2f2251bd5e7c
     m_ActionName: Player/Crouch[/Keyboard/leftShift]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 3f68c16f-7400-4ed5-8719-a9bec875ca02
+    m_ActionName: Player/SelectCurse[/Keyboard/q]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c183148b-f201-4aab-8a09-7f253ecf4f5d
+    m_ActionName: Player/CastCurse[/Mouse/rightButton]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -355,7 +364,14 @@ MonoBehaviour:
   attacked: 0
   reloaded: 0
   interacted: 0
+  interactTick: 0
+  isInteracting: 0
+  canInteract: 1
+  interactObject: {fileID: 0}
+  lootImage: {fileID: 0}
   listener: {fileID: 5263132758131298911}
+  picking: 0
+  casted: 0
 --- !u!114 &3472689813334838383
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -415,9 +431,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d496bb57ccaa1342a65a097e78be971, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryItems:
-  - {fileID: 11400000, guid: ddfe33e6979a4d941b09fcd0078cba37, type: 2}
   inventoryItemPrefab: {fileID: 1125365378332852919, guid: 1438c0609362bda42b75fc4d03e50db7, type: 3}
+--- !u!114 &8774586265770531734
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1379570201347889758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f752bd36f695cfc408ab39fbc5780c91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isHuman:
+    m_InternalValue: 1
+  text: {fileID: 185556377958009015, guid: 60b28d9323d48f1479f2c8a4759159b9, type: 3}
+  rolePrefabs: []
 --- !u!1 &5485920895521073550
 GameObject:
   m_ObjectHideFlags: 0

@@ -51,7 +51,6 @@ public class Curse : NetworkBehaviour
     [ServerRpc]
     private void RemoveCurseEnergyServerRpc(ulong id, float cost)
     {  
-        Debug.Log(NetworkManager);
         NetworkManager.ConnectedClients[id].PlayerObject.GetComponent<CurseManager>().curseEnergy.Value -= cost;
     }
 }

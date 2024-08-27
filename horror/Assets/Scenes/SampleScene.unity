@@ -397,6 +397,7 @@ GameObject:
   - component: {fileID: 131872667}
   - component: {fileID: 131872666}
   - component: {fileID: 131872665}
+  - component: {fileID: 131872670}
   m_Layer: 0
   m_Name: EnergyOrb
   m_TagString: Energy
@@ -511,6 +512,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &131872670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 131872664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ebef30c86293374092ae82ee6c0ae3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  humansInteract: 0
+  isInstant: 0
+  interactTime: 1
+  destroyOnUse: 1
+  amount: 25
 --- !u!43 &148765280
 Mesh:
   m_ObjectHideFlags: 0
@@ -895,6 +913,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 751e5b07d7055414fa0bcfd412379df2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  humansInteract: 1
+  isInstant: 1
+  interactTime: 0
+  destroyOnUse: 0
   goodRoles: []
   badRoles: []
   defaultGood: {fileID: 11400000, guid: 73e07a2b5c8d8384fb8e1e7e371d606f, type: 2}
