@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public abstract class Interactable : NetworkBehaviour
 {
+    [SerializeField] private bool parentProxy;
     [SerializeField] private bool humansInteract;
     [SerializeField] private bool isInstant;
     [SerializeField] private float interactTime;
@@ -13,6 +14,11 @@ public abstract class Interactable : NetworkBehaviour
 
     public virtual void OnInteract(GameObject player)
     {
+        if (parentProxy) {
+            this.transform.root.GetComponentInParent<Interactable>().OnInteract(player);
+            return;
+        } 
+
         PlayerBase pb = player.GetComponent<PlayerBase>();
 
         if (player.GetComponent<RoleClass>().isHuman.Value && !humansInteract) {
@@ -20,8 +26,7 @@ public abstract class Interactable : NetworkBehaviour
             return;
         }
         if (isInstant) {
-            FinishInteract(player);
-            pb.EndInteract();
+            CompiledFinish(player, pb);
             return;
         }
 
@@ -30,13 +35,16 @@ public abstract class Interactable : NetworkBehaviour
         pb.interactTick += Time.deltaTime;
         pb.lootImage.GetComponent<Image>().fillAmount = pb.interactTick/interactTime;
 
-        if (pb.interactTick >= interactTime)
-        {
-            FinishInteract(player);
-            pb.EndInteract();
-            if (destroyOnUse) DestroySelfServerRpc();
-        }
+        if (pb.interactTick >= interactTime) CompiledFinish(player, pb);
         
+    }
+
+    private void CompiledFinish(GameObject player, PlayerBase pb)
+    {
+        FinishInteract(player);
+        pb.EndInteract();
+        pb.canInteract = false;
+        if (destroyOnUse) DestroySelfServerRpc();
     }
 
     public abstract void FinishInteract(GameObject player);
