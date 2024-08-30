@@ -153,8 +153,8 @@ public class PlayerBase : NetworkBehaviour
         Vector3 forward = transform.TransformDirection(Vector3.forward);
         Vector3 right = transform.TransformDirection(Vector3.right);
         //movespeed from input
-        float curSpeedX = canMove ? (currentSpeed) * movementInput.y : 0;
-        float curSpeedY = canMove ? (currentSpeed) * movementInput.x : 0;
+        float curSpeedX = canMove ? currentSpeed * movementInput.y : 0;
+        float curSpeedY = canMove ? currentSpeed * movementInput.x : 0;
         float movementDirectionY = moveDirection.y;
         moveDirection = (forward * curSpeedX) + (right * curSpeedY);
 

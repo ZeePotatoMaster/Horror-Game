@@ -54,6 +54,12 @@ public class PlayerHealth : NetworkBehaviour
         SummonRagdollServerRpc(this.transform.position, this.OwnerClientId);
     }
 
+    [ServerRpc(RequireOwnership = false)]
+    public void DamageServerRpc(float damage)
+    {
+        health.Value -= damage;
+    }
+
     [ServerRpc]
     private void SummonRagdollServerRpc(Vector3 pos, ulong id)
     {

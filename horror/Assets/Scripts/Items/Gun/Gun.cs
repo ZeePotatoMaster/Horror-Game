@@ -8,7 +8,7 @@ public class Gun : NetworkBehaviour
 {
     //gun variables
     [SerializeField]
-    private float Damage = 50f;
+    private float damage = 25f;
     [SerializeField]
     private float TimeBetweenShots = 0.3f;
     private float TimeUntilShot;
@@ -178,13 +178,13 @@ public class Gun : NetworkBehaviour
 
             if (hit.transform.tag == "Enemy")
             {
-                hit.transform.gameObject.SendMessage("TakeGunDamage", Damage);
+                hit.transform.gameObject.SendMessage("TakeGunDamage", damage);
                 hitMarker = true;
             }
 
             if (hit.transform.tag == "Player")
             {
-                DamageServerRpc(hit.transform.gameObject.GetComponent<NetworkObject>().OwnerClientId);
+                hit.transform.gameObject.GetComponent<PlayerHealth>().DamageServerRpc(damage);
                 hitMarker = true;
             }
 
@@ -195,12 +195,6 @@ public class Gun : NetworkBehaviour
         TimeUntilShot = Time.time + TimeBetweenShots;
 
         CurrentAmmo--;
-    }
-
-    [ServerRpc]
-    private void DamageServerRpc(ulong id)
-    {  
-        NetworkManager.ConnectedClients[id].PlayerObject.GetComponent<PlayerHealth>().health.Value -= 25f;
     }
 
 
