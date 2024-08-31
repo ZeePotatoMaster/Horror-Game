@@ -6,6 +6,7 @@ using UnityEngine;
 public class WorldItem : Interactable
 {
     [SerializeField] private InventoryItem item;
+    [HideInInspector] protected ItemInSlot slotItem;
 
     public override void FinishInteract(GameObject player){
         InventoryManager inventoryManager = player.GetComponent<InventoryManager>();
@@ -13,7 +14,8 @@ public class WorldItem : Interactable
         int canPickup = inventoryManager.AddItem(item);
         if (canPickup == -1) return;
 
-        OnPickupServerRpc(NetworkManager.LocalClient.ClientId, canPickup);
+        slotItem = inventoryManager.GetItemInSlot(canPickup);
+        OnPickupServerRpc(NetworkManager.LocalClientId, canPickup);
     }
 
     [ServerRpc(RequireOwnership = false)]

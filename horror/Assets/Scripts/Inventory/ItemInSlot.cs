@@ -9,20 +9,46 @@ public class ItemInSlot : MonoBehaviour
 {
     [HideInInspector] public InventoryItem item;
     private Image image;
+    [SerializeField] private Image decayImage;
+    private InventoryManager inventoryManager;
+    private int thisSlot;
+
+    private float decayTime;
+    private float currentDecay;
+    private bool isDecaying;
 
     private void Awake() {
         image = GetComponent<Image>();
     }
 
-    public void InitializeItem(InventoryItem i)
+    private void Update()
+    {
+        if (currentDecay >= decayTime) inventoryManager.DestroyItem(thisSlot);
+
+        if (!isDecaying) return;
+
+        currentDecay += Time.deltaTime;
+        decayImage.fillAmount = currentDecay/decayTime;
+    }
+
+    public void InitializeItem(InventoryItem i, InventoryManager m, int s)
     {
         item = i;
         image.sprite = i.image;
+        inventoryManager = m;
+        thisSlot = s;
     }
 
     public void DestroySelf()
     {
         image.sprite = null;
         Destroy(this.gameObject);
+    }
+
+    public void SetDecay(float pDecayTime, float pCurrentDecay, bool decayActive)
+    {
+        isDecaying = decayActive;
+        decayTime = pDecayTime;
+        currentDecay = pCurrentDecay;
     }
 }

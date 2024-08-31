@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7541345533897507640}
   - component: {fileID: 8823109232336139928}
   - component: {fileID: 4481767587427074653}
-  - component: {fileID: 7147171624435456498}
+  - component: {fileID: 2291750406469781893}
   m_Layer: 0
   m_Name: HammerItem
   m_TagString: Untagged
@@ -119,8 +119,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 4032754779
-  InScenePlacedSourceGlobalObjectIdHash: 0
+  GlobalObjectIdHash: 3579995753
+  InScenePlacedSourceGlobalObjectIdHash: 1552803125
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -128,7 +128,7 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &7147171624435456498
+--- !u!114 &2291750406469781893
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -137,7 +137,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4661092416226661549}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbcb3c42fa46b8f47aedc1eb9fe6420d, type: 3}
+  m_Script: {fileID: 11500000, guid: 19022e7abe10c2744b51d3cf1a45048d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   parentProxy: 0
@@ -146,3 +146,4 @@ MonoBehaviour:
   interactTime: 1
   destroyOnUse: 0
   item: {fileID: 11400000, guid: 55ee9ac976f672c4cbf616a538e788db, type: 2}
+  decayTime: 5

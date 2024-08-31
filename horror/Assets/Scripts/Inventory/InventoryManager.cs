@@ -46,7 +46,14 @@ public class InventoryManager : NetworkBehaviour
         if (!itemObjects.ContainsKey(selectedSlot)) return;
 
         SpawnWorldItemServerRpc(NetworkManager.LocalClientId, inventorySlots[selectedSlot].GetComponentInChildren<ItemInSlot>().item.itemId, itemObjects[selectedSlot]);
-        inventorySlots[selectedSlot].GetComponentInChildren<ItemInSlot>().DestroySelf();
+        DestroyItem(selectedSlot);
+    }
+
+    public void DestroyItem(int slot)
+    {
+        inventorySlots[slot].GetComponentInChildren<ItemInSlot>().DestroySelf();
+        DestroyItemServerRpc(itemObjects[slot]);
+        itemObjects.Remove(slot);
     }
 
     public bool HoldingSomething() 
@@ -55,13 +62,18 @@ public class InventoryManager : NetworkBehaviour
         else return true;
     }
 
+    public ItemInSlot GetItemInSlot(int i)
+    {
+        return inventorySlots[i].GetComponentInChildren<ItemInSlot>();
+    }
+
     public int AddItem(InventoryItem item)
     {
         for (int i = 0; i < inventorySlots.Count; i++)
         {
             ItemInSlot slotItem = inventorySlots[i].GetComponentInChildren<ItemInSlot>();
             if (slotItem == null) {
-                SpawnNewItem(item, inventorySlots[i]);
+                SpawnNewItem(item, inventorySlots[i], i);
                 return i;
             }
         }
@@ -69,11 +81,11 @@ public class InventoryManager : NetworkBehaviour
         return -1;
     }
 
-    private void SpawnNewItem(InventoryItem item, InventorySlot slot)
+    private void SpawnNewItem(InventoryItem item, InventorySlot slot, int slotNumber)
     {
         GameObject newItemGo = Instantiate(inventoryItemPrefab, slot.transform);
         ItemInSlot inventoryItem = newItemGo.GetComponent<ItemInSlot>();
-        inventoryItem.InitializeItem(item);
+        inventoryItem.InitializeItem(item, this, slotNumber);
     }
 
     public void AddItemObject(int slot, NetworkObject itemObject) {
@@ -113,15 +125,17 @@ public class InventoryManager : NetworkBehaviour
         NetworkObject worldItem = Instantiate(item.worldItemObject, NetworkManager.ConnectedClients[id].PlayerObject.gameObject.transform.position, Quaternion.identity);
         worldItem.SpawnWithOwnership(id, true);
         SetupWorldItemClientRpc(worldItem, new ClientRpcParams { Send = new ClientRpcSendParams {TargetClientIds = new List<ulong> {id}}});
-        if (reference.TryGet(out NetworkObject itemObject)) itemObject.Despawn(true);
     }
 
     [ClientRpc]
     private void SetupWorldItemClientRpc(NetworkObjectReference reference, ClientRpcParams clientRpcParams)
     {
-        if (reference.TryGet(out NetworkObject worldItem)) {
-            worldItem.GetComponent<WorldItem>().SetupWorldItem(itemObjects[selectedSlot]);
-            itemObjects.Remove(selectedSlot);
-        }
+        if (reference.TryGet(out NetworkObject worldItem)) worldItem.GetComponent<WorldItem>().SetupWorldItem(itemObjects[selectedSlot]);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void DestroyItemServerRpc(NetworkObjectReference reference)
+    {
+        if (reference.TryGet(out NetworkObject itemObject)) itemObject.Despawn(true);
     }
 }
