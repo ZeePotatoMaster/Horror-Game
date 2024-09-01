@@ -19,7 +19,7 @@ public class InventoryConcept : MonoBehaviour
 
     void Start()
     {
-        currentSlot = 3;
+        currentSlot = 1;
     }
 
     void Update()
