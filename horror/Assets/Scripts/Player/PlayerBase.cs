@@ -30,6 +30,8 @@ public class PlayerBase : NetworkBehaviour
     [SerializeField] private float walkBobAmount = 0.5f;
     private float defaultYPos = 0;
     private float timer;
+    private float knockbackY;
+    private float knockbackZ;
 
     [SerializeField] private bool canMove = true;
 
@@ -53,6 +55,7 @@ public class PlayerBase : NetworkBehaviour
 
     //inventory
     private bool swappedWeapons;
+    [HideInInspector] public bool canSwapWeapons;
     private int swapDirection = 0;
     private InventoryManager inventoryManager;
     private bool dropped;
@@ -201,7 +204,7 @@ public class PlayerBase : NetworkBehaviour
         if (!interacted && (!canInteract || isInteracting)) EndInteract();
 
         //inventory
-        if (swappedWeapons) {
+        if (swappedWeapons && canSwapWeapons) {
             inventoryManager.ChangeSelectedSlot(swapDirection);
             swapDirection = 0;
             swappedWeapons = false;
@@ -218,6 +221,24 @@ public class PlayerBase : NetworkBehaviour
         {
             timer += Time.deltaTime * walkBobSpeed;
             playerCamera.transform.localPosition = new Vector3(playerCamera.transform.localPosition.x, defaultYPos + Mathf.Sin(timer) * walkBobAmount, playerCamera.transform.localPosition.z);
+        }
+        playerCamera.transform.rotation = new Vector3()
+    }
+
+    public void AddCameraKnockback(Transform direction, float yAmount, float zAmount)
+    {
+        Vector3 localDirection = this.transform.InverseTransformPoint(direction.position);
+
+        if (localDirection.x < 0 && Mathf.Abs(localDirection.z) < 1) knockbackY = 45f;
+        else if (localDirection.x > 0 && Mathf.Abs(localDirection.z) < 1) knockbackY = -45f;
+
+        else if (localDirection.z >= 1) {
+            knockbackY = yAmount;
+            knockbackZ = zAmount;
+        }
+        else if (localDirection.z <= -1) {
+            knockbackY = -yAmount;
+            knockbackZ = -zAmount;
         }
     }
 

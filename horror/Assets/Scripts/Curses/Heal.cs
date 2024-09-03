@@ -17,9 +17,9 @@ public class Heal : Curse
         HealServerRpc(this.OwnerClientId, 25f);
     }
 
-    public override void OnActivate(GameObject player)
+    public override void OnActivate()
     {
-        base.OnActivate(player);
+        base.OnActivate();
         if (!activated) return;
         this.GetComponent<PlayerBase>().currentSpeed -= 4f;
     }

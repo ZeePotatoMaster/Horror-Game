@@ -46,7 +46,7 @@ public class CurseManager : NetworkBehaviour
         } 
 
         if (currentAbility != null) {
-            if (pb.casted && !currentAbility.activated && !this.GetComponent<InventoryManager>().HoldingSomething()) currentAbility.OnActivate(this.gameObject);
+            if (pb.casted && !currentAbility.activated && !this.GetComponent<InventoryManager>().HoldingSomething()) currentAbility.OnActivate();
         }
     }
 

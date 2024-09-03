@@ -19,6 +19,11 @@ MonoBehaviour:
   curseObjects:
   - {fileID: 11400000, guid: 6987e9f115a1e5e43af03991fcad2724, type: 2}
   - {fileID: 11400000, guid: 6987e9f115a1e5e43af03991fcad2724, type: 2}
+  - {fileID: 11400000, guid: 6987e9f115a1e5e43af03991fcad2724, type: 2}
+  - {fileID: 11400000, guid: 6987e9f115a1e5e43af03991fcad2724, type: 2}
+  - {fileID: 11400000, guid: 6987e9f115a1e5e43af03991fcad2724, type: 2}
+  - {fileID: 11400000, guid: 6987e9f115a1e5e43af03991fcad2724, type: 2}
   startItems:
   - {fileID: 11400000, guid: ddfe33e6979a4d941b09fcd0078cba37, type: 2}
   - {fileID: 11400000, guid: ddfe33e6979a4d941b09fcd0078cba37, type: 2}
+  prefabs: []

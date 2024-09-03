@@ -3068,10 +3068,6 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 3579995753
       objectReference: {fileID: 0}
-    - target: {fileID: 4481767587427074653, guid: 4f11c3a735d7f464fb7bd99d57c67ec7, type: 3}
-      propertyPath: InScenePlacedSourceGlobalObjectIdHash
-      value: 1552803125
-      objectReference: {fileID: 0}
     - target: {fileID: 4661092416226661549, guid: 4f11c3a735d7f464fb7bd99d57c67ec7, type: 3}
       propertyPath: m_Name
       value: HammerItem
@@ -3114,10 +3110,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6891338017804574684, guid: 4f11c3a735d7f464fb7bd99d57c67ec7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7147171624435456498, guid: 4f11c3a735d7f464fb7bd99d57c67ec7, type: 3}
-      propertyPath: destroyOnUse
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

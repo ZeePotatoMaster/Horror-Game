@@ -70,9 +70,14 @@ public class Hammer : NetworkBehaviour
 
     private void AttackCollider()
     {
-        foreach (PlayerHealth h in mh.targets)
+        foreach (GameObject p in mh.targets)
         {
-            h.DamageServerRpc(attackDamage);
+            if (p == null) {
+                mh.targets.Remove(p);
+                return;
+            }
+            p.GetComponent<PlayerHealth>().DamageServerRpc(attackDamage);
+            p.GetComponent<PlayerBase>().
         }
     }
 

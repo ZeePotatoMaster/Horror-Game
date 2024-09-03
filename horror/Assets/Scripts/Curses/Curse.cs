@@ -33,12 +33,13 @@ public class Curse : NetworkBehaviour
         
     }
 
-    public virtual void OnActivate(GameObject player)
+    public virtual void OnActivate()
     {
-        CurseManager rc = player.GetComponent<CurseManager>();
+        CurseManager rc = this.GetComponent<CurseManager>();
         if (rc.curseEnergy.Value < cost) return;
         
-        RemoveCurseEnergyServerRpc(this.gameObject.GetComponent<NetworkObject>().OwnerClientId, cost);
+        this.GetComponent<PlayerBase>().canSwapWeapons = false;
+        RemoveCurseEnergyServerRpc(NetworkManager.LocalClientId, cost);
         activated = true;
     }
 
@@ -46,6 +47,7 @@ public class Curse : NetworkBehaviour
     {
         currentCharge = 0f;
         activated = false;
+        this.GetComponent<PlayerBase>().canSwapWeapons = true;
     }
 
     [ServerRpc]

@@ -5,20 +5,19 @@ using UnityEngine;
 public class MeleeHitbox : MonoBehaviour
 {
 
-    [HideInInspector] public List<PlayerHealth> targets = new List<PlayerHealth>();
+    [HideInInspector] public List<GameObject> targets = new List<GameObject>();
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<PlayerHealth>() == null) return;
 
-        PlayerHealth h = other.GetComponent<PlayerHealth>();
-        if (!targets.Contains(h)) targets.Add(h);
+        if (!targets.Contains(other.gameObject)) targets.Add(other.gameObject);
     }
 
     private void OnTriggerExit(Collider other)
     {
         if (other.GetComponent<PlayerHealth>() == null) return;
         
-        targets.Remove(other.GetComponent<PlayerHealth>());
+        targets.Remove(other.gameObject);
     }
 }
