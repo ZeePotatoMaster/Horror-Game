@@ -77,7 +77,8 @@ public class Hammer : NetworkBehaviour
                 return;
             }
             p.GetComponent<PlayerHealth>().DamageServerRpc(attackDamage);
-            //p.GetComponent<PlayerBase>().
+            if (attackCount == 0) SetKnockback(p, 0, 1, 45);
+            if (attackCount == 1) SetKnockback(p, 1, 0, 45);
         }
     }
 
@@ -86,6 +87,17 @@ public class Hammer : NetworkBehaviour
         if (attacking) return;
         if (Mathf.Abs(pb.moveDirection.x) > 0.1f || Mathf.Abs(pb.moveDirection.z) > 0.1f) ChangeAnimationState(WALK);
         else ChangeAnimationState(IDLE);
+    }
+
+    private void SetKnockback(GameObject p, int defaultY, int defaultZ, float intensity)
+    {
+        Vector3 localDirection = p.transform.InverseTransformPoint(this.transform.position);
+        PlayerBase pb = p.GetComponent<PlayerBase>();
+        
+        if (localDirection.x < 0 && Mathf.Abs(localDirection.z) < 1) pb.CamKnockbackServerRpc(1, -1, intensity, p.GetComponent<NetworkObject>().OwnerClientId);
+        else if (localDirection.x > 0 && Mathf.Abs(localDirection.z) < 1) pb.CamKnockbackServerRpc(-1, 1, intensity, p.GetComponent<NetworkObject>().OwnerClientId);
+        else if (localDirection.z >= 1) pb.CamKnockbackServerRpc(defaultY, defaultZ, intensity, p.GetComponent<NetworkObject>().OwnerClientId);
+        else if (localDirection.z <= -1) pb.CamKnockbackServerRpc(-defaultY, -defaultZ, intensity, p.GetComponent<NetworkObject>().OwnerClientId);
     }
 
     private void ChangeAnimationState(string newState)

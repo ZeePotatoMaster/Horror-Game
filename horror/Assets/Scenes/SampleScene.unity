@@ -384,6 +384,11 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!95 &63068016 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 4513800528858050246, guid: ed513dc5dfe11ce48a91a67615a4d906, type: 3}
+  m_PrefabInstance: {fileID: 2371166518294183809}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &131872664
 GameObject:
   m_ObjectHideFlags: 0
@@ -3064,6 +3069,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2291750406469781893, guid: 4f11c3a735d7f464fb7bd99d57c67ec7, type: 3}
+      propertyPath: decayTime
+      value: 90
+      objectReference: {fileID: 0}
     - target: {fileID: 4481767587427074653, guid: 4f11c3a735d7f464fb7bd99d57c67ec7, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 3579995753
@@ -16419,6 +16428,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1887551547871472432, guid: ed513dc5dfe11ce48a91a67615a4d906, type: 3}
+      propertyPath: m_Animator
+      value: 
+      objectReference: {fileID: 63068016}
     - target: {fileID: 4995326391733486054, guid: ed513dc5dfe11ce48a91a67615a4d906, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 3509266971

@@ -352,7 +352,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 723248096
+  GlobalObjectIdHash: 3301645731
   InScenePlacedSourceGlobalObjectIdHash: 3301645731
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -390,8 +390,11 @@ MonoBehaviour:
   interacted: 0
   interactTick: 0
   isInteracting: 0
+  canInteract: 1
   interactObject: {fileID: 0}
+  lootImage: {fileID: 0}
   listener: {fileID: 2686063748884554893}
+  canSwapWeapons: 1
   picking: 0
   casted: 0
 --- !u!114 &1184421577421489697

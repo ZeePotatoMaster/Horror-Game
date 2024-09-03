@@ -13,8 +13,8 @@ public class ItemInSlot : MonoBehaviour
     private InventoryManager inventoryManager;
     private int thisSlot;
 
-    private float decayTime;
-    private float currentDecay;
+    private float decayTime = 1f;
+    private float currentDecay = 0f;
     private bool isDecaying;
 
     private void Awake() {

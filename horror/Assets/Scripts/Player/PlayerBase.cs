@@ -32,6 +32,7 @@ public class PlayerBase : NetworkBehaviour
     private float timer;
     private float knockbackY;
     private float knockbackZ;
+    private float knockbackTimer;
 
     [SerializeField] private bool canMove = true;
 
@@ -55,7 +56,7 @@ public class PlayerBase : NetworkBehaviour
 
     //inventory
     private bool swappedWeapons;
-    [HideInInspector] public bool canSwapWeapons;
+    public bool canSwapWeapons = true;
     private int swapDirection = 0;
     private InventoryManager inventoryManager;
     private bool dropped;
@@ -186,7 +187,7 @@ public class PlayerBase : NetworkBehaviour
         {
             rotationX += -lookInput.y * lookSpeed;
             rotationX = Mathf.Clamp(rotationX, -lookXLimit, lookXLimit);
-            playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
+            playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0f, 0f);
             transform.rotation *= Quaternion.Euler(0, lookInput.x * lookSpeed, 0);
         }
 
@@ -222,12 +223,19 @@ public class PlayerBase : NetworkBehaviour
             timer += Time.deltaTime * walkBobSpeed;
             playerCamera.transform.localPosition = new Vector3(playerCamera.transform.localPosition.x, defaultYPos + Mathf.Sin(timer) * walkBobAmount, playerCamera.transform.localPosition.z);
         }
-        //playerCamera.transform.rotation = new Vector3()
+        
+        Quaternion normal = Quaternion.Euler(rotationX, 0, 0);
+        Quaternion knock = Quaternion.Euler(rotationX, knockbackY, knockbackZ);
+        if (knockbackTimer > 0) {
+            playerCamera.transform.localRotation = Quaternion.Lerp(normal, knock, knockbackTimer);
+            knockbackTimer = Mathf.Clamp(knockbackTimer - Time.deltaTime, 0f, 1f);
+        }
     }
 
-    public void AddCameraKnockback(Transform direction, float yAmount, float zAmount)
+    /*public void AddCameraKnockback(Transform direction, float yAmount, float zAmount)
     {
         Vector3 localDirection = this.transform.InverseTransformPoint(direction.position);
+        knockbackTimer = 1f;
 
         if (localDirection.x < 0 && Mathf.Abs(localDirection.z) < 1) knockbackY = 45f;
         else if (localDirection.x > 0 && Mathf.Abs(localDirection.z) < 1) knockbackY = -45f;
@@ -240,6 +248,20 @@ public class PlayerBase : NetworkBehaviour
             knockbackY = -yAmount;
             knockbackZ = -zAmount;
         }
+    }*/
+
+    [ServerRpc(RequireOwnership = false)]
+    public void CamKnockbackServerRpc(int directionY, int directionZ, float intensity, ulong id)
+    {
+        CamKnockbackClientRpc(directionY, directionZ, intensity, new ClientRpcParams { Send = new ClientRpcSendParams {TargetClientIds = new List<ulong> {id}}});
+    }
+
+    [ClientRpc]
+    private void CamKnockbackClientRpc(int directionY, int directionZ, float intensity, ClientRpcParams clientRpcParams)
+    {
+        knockbackY = directionY * intensity;
+        knockbackZ = directionZ * intensity;
+        knockbackTimer = 1f;
     }
 
     private Transform Interact()
