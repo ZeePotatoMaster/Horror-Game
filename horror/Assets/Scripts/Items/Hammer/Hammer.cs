@@ -77,7 +77,7 @@ public class Hammer : NetworkBehaviour
                 return;
             }
             p.GetComponent<PlayerHealth>().DamageServerRpc(attackDamage);
-            p.GetComponent<PlayerBase>().
+            //p.GetComponent<PlayerBase>().
         }
     }
 

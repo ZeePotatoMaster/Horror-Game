@@ -222,7 +222,7 @@ public class PlayerBase : NetworkBehaviour
             timer += Time.deltaTime * walkBobSpeed;
             playerCamera.transform.localPosition = new Vector3(playerCamera.transform.localPosition.x, defaultYPos + Mathf.Sin(timer) * walkBobAmount, playerCamera.transform.localPosition.z);
         }
-        playerCamera.transform.rotation = new Vector3()
+        //playerCamera.transform.rotation = new Vector3()
     }
 
     public void AddCameraKnockback(Transform direction, float yAmount, float zAmount)
