@@ -5,7 +5,7 @@ using Unity.Netcode;
 using System;
 using Unity.Collections;
 
-public class Roles : Interactable
+public class Roles : NetworkBehaviour
 {
     [SerializeField] private List<RoleObject> goodRoles = new List<RoleObject>();
     [SerializeField] private List<RoleObject> badRoles = new List<RoleObject>();
@@ -15,9 +15,13 @@ public class Roles : Interactable
 
     [SerializeField] private GameObject menuPrefab;
     [SerializeField] private GameObject energyIconPrefab;
+
+    public override void OnNetworkSpawn()
+    {
+        SetupRoles();
+    }
     
-    
-    public override void FinishInteract(GameObject player)
+    private void SetupRoles()
     {
         if (!IsHost) return;
 
@@ -53,7 +57,7 @@ public class Roles : Interactable
             Debug.Log("bad " + badCount);
             Debug.Log("good " + goodCount);
 
-            NetworkManager.Singleton.ConnectedClients[client.ClientId].PlayerObject.Despawn(true);
+            //NetworkManager.Singleton.ConnectedClients[client.ClientId].PlayerObject.Despawn(true);
 
             GameObject newPlayer = Instantiate(blankPlayer);
             if (Type.GetType(role.scriptName) != null) newPlayer.AddComponent(Type.GetType(role.scriptName));
