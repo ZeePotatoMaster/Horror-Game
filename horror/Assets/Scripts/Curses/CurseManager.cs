@@ -11,9 +11,8 @@ public class CurseManager : NetworkBehaviour
     [SerializeField] private GameObject radialMenu;
     [HideInInspector] public Curse currentAbility;
 
-    private void OnEnable()
+    private void Start()
     {
-        if (!IsOwner) return;
         pb = this.GetComponent<PlayerBase>();
     }
 
