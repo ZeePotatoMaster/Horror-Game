@@ -15,7 +15,7 @@ public class Hammer : NetworkBehaviour
     private bool canAttack = true;
     private int attackCount;
     private PlayerBase pb;
-    private MeleeHitbox mh;
+    [SerializeField] private GameObject mh;
 
     const string IDLE = "Idle";
     const string WALK = "Walk";
@@ -27,7 +27,7 @@ public class Hammer : NetworkBehaviour
     void Start()
     {
         pb = this.transform.parent.GetComponent<PlayerBase>();
-        mh = this.GetComponentInChildren<MeleeHitbox>();
+        mh.SetActive(false);
     }
 
     // Update is called once per frame
@@ -43,6 +43,8 @@ public class Hammer : NetworkBehaviour
         if (!canAttack || attacking) return;
 
         Debug.Log("YAHA");
+
+        mh.SetActive(true);
 
         Invoke(nameof(ResetAttack), attackSpeed);
         Invoke(nameof(AttackCollider), attackDelay);
@@ -66,14 +68,17 @@ public class Hammer : NetworkBehaviour
     {
         canAttack = true;
         attacking = false;
+        mh.SetActive(false);
     }
 
     private void AttackCollider()
     {
-        foreach (GameObject p in mh.targets)
+        MeleeHitbox meleeHitbox = mh.GetComponent<MeleeHitbox>();
+
+        foreach (GameObject p in meleeHitbox.targets)
         {
             if (p == null) {
-                mh.targets.Remove(p);
+                meleeHitbox.targets.Remove(p);
                 return;
             }
             p.GetComponent<PlayerHealth>().DamageServerRpc(attackDamage);

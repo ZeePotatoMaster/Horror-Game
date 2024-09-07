@@ -8,6 +8,7 @@ TagManager:
   - Corpse
   - Energy
   - test
+  - PlayerCard
   layers:
   - Default
   - TransparentFX

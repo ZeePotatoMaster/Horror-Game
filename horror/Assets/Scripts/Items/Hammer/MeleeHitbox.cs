@@ -7,6 +7,11 @@ public class MeleeHitbox : MonoBehaviour
 
     [HideInInspector] public List<GameObject> targets = new List<GameObject>();
 
+    void OnDisable()
+    {
+        targets.Clear();
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<PlayerHealth>() == null) return;
