@@ -15,7 +15,11 @@ public class RoleClass : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        if (!IsOwner) return;
+        
+    }
+
+    public void Intro()
+    {
         GameObject canvas = GameObject.Find("Canvas");
         GameObject roleText = Instantiate(text, canvas.transform, false);
         roleText.GetComponent<TextMeshProUGUI>().SetText("You are: " + roleName.Value);

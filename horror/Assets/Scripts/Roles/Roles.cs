@@ -110,6 +110,7 @@ public class Roles : Interactable
     private void SetupCursesClientRPC(int rolenumber, ClientRpcParams clientRpcParams)
     {
         RoleObject role = allRoles[rolenumber];
+        NetworkManager.LocalClient.PlayerObject.GetComponent<RoleClass>().Intro();
         if (role.isHuman) return;
         NetworkManager.LocalClient.PlayerObject.GetComponent<CurseManager>().SetupCurses(role.curseObjects, menuPrefab, energyIconPrefab);
     }

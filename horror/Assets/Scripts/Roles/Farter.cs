@@ -9,6 +9,7 @@ public class Farter : CurseManager
 
     public override void Update()
     {
+        if (!IsOwner) return;
         base.Update();
         if (pb.interactObject != null) {
             if (pb.interactObject.tag == "test") {

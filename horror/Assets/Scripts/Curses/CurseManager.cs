@@ -13,11 +13,13 @@ public class CurseManager : NetworkBehaviour
 
     private void Start()
     {
+        if (!IsOwner) return;
         pb = this.GetComponent<PlayerBase>();
     }
 
     public void SetupCurses(CurseObject[] pCurseObjects, GameObject menuPrefab, GameObject energyPrefab)
     {
+        if (!IsOwner) return;
         GameObject canvas = GameObject.Find("Canvas");
         radialMenu = Instantiate(menuPrefab, canvas.transform, false);
         energyIcon = Instantiate(energyPrefab, canvas.transform, false);
