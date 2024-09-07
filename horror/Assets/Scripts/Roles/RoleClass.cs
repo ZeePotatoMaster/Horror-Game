@@ -13,7 +13,7 @@ public class RoleClass : NetworkBehaviour
     [SerializeField] private GameObject text;
     [HideInInspector] public GameObject[] rolePrefabs;
 
-    virtual public void Start()
+    public override void OnNetworkSpawn()
     {
         if (!IsOwner) return;
         GameObject canvas = GameObject.Find("Canvas");

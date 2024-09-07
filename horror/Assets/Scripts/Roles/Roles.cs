@@ -72,7 +72,7 @@ public class Roles : Interactable
 
             if (!role.isHuman) {
                 for (int i=0; i < role.curseObjects.Length; i++) newPlayer.AddComponent(Type.GetType(role.curseObjects[i].abilityType));
-                newPlayer.GetComponent<CurseManager>().SetupCurses(role.curseObjects, menuPrefab, energyIconPrefab);
+                SetupCursesClientRpc(role.curseObjects, menuPrefab, energyIconPrefab, new ClientRpcParams { Send = new ClientRpcSendParams {TargetClientIds = new List<ulong> {client.ClientId}}});
             }
             newPlayer.GetComponent<NetworkObject>().SpawnAsPlayerObject(client.ClientId, true);
 
@@ -102,5 +102,11 @@ public class Roles : Interactable
     private void PickupItemClientRpc(NetworkObjectReference itemRef, ClientRpcParams clientRpcParams)
     {
         if (itemRef.TryGet(out NetworkObject item)) item.GetComponent<WorldItem>().FinishInteract(NetworkManager.LocalClient.PlayerObject.gameObject);
+    }
+
+    [ClientRpc]
+    private void SetupCursesClientRpc(CurseObject[] pCurseObjects, GameObject menuPrefab, GameObject energyPrefab, ClientRpcParams clientRpcParams)
+    {
+        NetworkManager.LocalClient.PlayerObject.GetComponent<CurseManager>().SetupCurses(pCurseObjects, menuPrefab, energyPrefab);
     }
 }
