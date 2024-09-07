@@ -12,7 +12,7 @@ public class CorpseEater : CurseManager
     private bool canEat;
 
     // Start is called before the first frame update
-    public override void Start()
+    /*public override void Start()
     {
         base.Start();
         if (!IsOwner) return;
@@ -20,7 +20,7 @@ public class CorpseEater : CurseManager
         pb = GetComponent<PlayerBase>();
         GameObject canvas = GameObject.Find("Canvas");
         eatIcon = Instantiate(eatIcon, canvas.transform, false);
-    }
+    }*/
 
     // Update is called once per frame
     void Update()
