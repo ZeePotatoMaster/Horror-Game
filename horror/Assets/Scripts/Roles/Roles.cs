@@ -16,14 +16,19 @@ public class Roles : NetworkBehaviour
     [SerializeField] private GameObject menuPrefab;
     [SerializeField] private GameObject energyIconPrefab;
 
+    [SerializeField] private GameObject defPlayer;
+
+
     public override void OnNetworkSpawn()
     {
-        SetupRolesServerRpc();
+        //SetupRoles();
+        if (IsOwner) SpawnPlayerServerRpc(NetworkManager.LocalClientId);
     }
     
-    [ServerRpc(RequireOwnership = false)]
-    private void SetupRolesServerRpc()
+    private void SetupRoles()
     {
+        if (!IsHost) return;
+
         float playerCount = NetworkManager.Singleton.ConnectedClientsList.Count;
         int badCount = (int)Mathf.Floor(playerCount/2f);
         int goodCount = (int)Mathf.Ceil(playerCount/2f);
@@ -80,6 +85,13 @@ public class Roles : NetworkBehaviour
                 PickupItemClientRpc(worldItem, new ClientRpcParams { Send = new ClientRpcSendParams {TargetClientIds = new List<ulong> {client.ClientId}}});
             }
         }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SpawnPlayerServerRpc(ulong id)
+    {
+        GameObject newPlayer = Instantiate(defPlayer);
+        newPlayer.GetComponent<NetworkObject>().SpawnAsPlayerObject(id, true);
     }
 
     [ClientRpc]
