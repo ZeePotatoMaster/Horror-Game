@@ -91,7 +91,7 @@ public class Roles : NetworkBehaviour
     private void SpawnPlayerServerRpc(ulong id)
     {
         GameObject newPlayer = Instantiate(defPlayer);
-        newPlayer.GetComponent<NetworkObject>().SpawnAsPlayerObject(id, true);
+        newPlayer.GetComponent<NetworkObject>().SpawnAsPlayerObject(id, false);
     }
 
     [ClientRpc]
