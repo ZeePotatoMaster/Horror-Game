@@ -17,7 +17,7 @@ public class Roles : Interactable
     [SerializeField] private GameObject energyIconPrefab;
 
     [SerializeField] private GameObject defPlayer;
-    [SerializeField] private static List<RoleObject> allRoles = new List<RoleObject>();
+    [SerializeField] private List<RoleObject> allRoles = new List<RoleObject>();
 
 
     public override void OnNetworkSpawn()
@@ -83,7 +83,7 @@ public class Roles : Interactable
 
             newPlayer.GetComponent<PlayerHealth>().health.Value = role.health;
 
-            SetupCursesRPC(allRoles.IndexOf(role), new ClientRpcParams { Send = new ClientRpcSendParams {TargetClientIds = new List<ulong> {client.ClientId}}});
+            SetupCursesClientRPC(allRoles.IndexOf(role), new ClientRpcParams { Send = new ClientRpcSendParams {TargetClientIds = new List<ulong> {client.ClientId}}});
             
             for (int i=0; i < role.startItems.Length; i++) {
                 NetworkObject worldItem = Instantiate(role.startItems[i].worldItemObject);
@@ -107,7 +107,7 @@ public class Roles : Interactable
     }
 
     [ClientRpc]
-    private void SetupCursesRPC(int rolenumber, ClientRpcParams clientRpcParams)
+    private void SetupCursesClientRPC(int rolenumber, ClientRpcParams clientRpcParams)
     {
         RoleObject role = allRoles[rolenumber];
         if (role.isHuman) return;
