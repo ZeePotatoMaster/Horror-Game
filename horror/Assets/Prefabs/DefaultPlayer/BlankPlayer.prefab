@@ -20,6 +20,8 @@ GameObject:
   - component: {fileID: 508850191387574785}
   - component: {fileID: 8845684638223272760}
   - component: {fileID: 1873312850826431208}
+  - component: {fileID: 8709205445819568172}
+  - component: {fileID: 7358645627612788904}
   m_Layer: 0
   m_Name: BlankPlayer
   m_TagString: Player
@@ -352,7 +354,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3301645731
+  GlobalObjectIdHash: 723248096
   InScenePlacedSourceGlobalObjectIdHash: 3301645731
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -469,10 +471,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f752bd36f695cfc408ab39fbc5780c91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roleName: 
   isHuman:
     m_InternalValue: 1
   text: {fileID: 185556377958009015, guid: 60b28d9323d48f1479f2c8a4759159b9, type: 3}
   rolePrefabs: []
+--- !u!114 &8709205445819568172
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1803831332351707901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c62838665f84f0e4787a45ad560d4c5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pb: {fileID: 0}
+  energyIcon: {fileID: 0}
+  curseEnergy:
+    m_InternalValue: 100
+  radialMenu: {fileID: 0}
+  currentAbility: {fileID: 0}
+--- !u!114 &7358645627612788904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1803831332351707901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5a59f38916288649883bccf210c6b2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  activated: 0
+  chargeTime: 1
+  currentCharge: 0
 --- !u!1 &4178495641468831721
 GameObject:
   m_ObjectHideFlags: 0

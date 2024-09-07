@@ -8,17 +8,18 @@ using UnityEngine;
 
 public class RoleClass : NetworkBehaviour
 {
-    public NetworkVariable<FixedString32Bytes> roleName {get; private set;} = new();
+    public string roleName;
+    //public NetworkVariable<FixedString32Bytes> roleName {get; private set;} = new();
     public NetworkVariable<bool> isHuman = new NetworkVariable<bool>(true, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     [SerializeField] private GameObject text;
     [HideInInspector] public GameObject[] rolePrefabs;
 
-    virtual public void Start()
+    public void Intro()
     {
         if (!IsOwner) return;
         GameObject canvas = GameObject.Find("Canvas");
         GameObject roleText = Instantiate(text, canvas.transform, false);
-        roleText.GetComponent<TextMeshProUGUI>().SetText("You are: " + roleName.Value);
+        roleText.GetComponent<TextMeshProUGUI>().SetText("You are: " + roleName);
         StartCoroutine(DestroyObject(roleText));
     }
 

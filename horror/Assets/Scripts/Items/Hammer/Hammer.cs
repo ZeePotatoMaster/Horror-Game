@@ -82,8 +82,8 @@ public class Hammer : NetworkBehaviour
                 return;
             }
             p.GetComponent<PlayerHealth>().DamageServerRpc(attackDamage);
-            if (attackCount == 0) SetKnockback(p, 0, 1, 45);
-            if (attackCount == 1) SetKnockback(p, 1, 0, 45);
+            if (attackCount == 0) SetKnockback(p, -1, 1, 45);
+            if (attackCount == 1) SetKnockback(p, 1, -1, 45);
         }
     }
 

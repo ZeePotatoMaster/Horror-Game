@@ -11,7 +11,7 @@ public class CurseManager : NetworkBehaviour
     [SerializeField] private GameObject radialMenu;
     [HideInInspector] public Curse currentAbility;
 
-    virtual public void Start()
+    private void Start()
     {
         if (!IsOwner) return;
         pb = this.GetComponent<PlayerBase>();
@@ -19,6 +19,7 @@ public class CurseManager : NetworkBehaviour
 
     public void SetupCurses(CurseObject[] pCurseObjects, GameObject menuPrefab, GameObject energyPrefab)
     {
+        if (!IsOwner) return;
         GameObject canvas = GameObject.Find("Canvas");
         radialMenu = Instantiate(menuPrefab, canvas.transform, false);
         energyIcon = Instantiate(energyPrefab, canvas.transform, false);
