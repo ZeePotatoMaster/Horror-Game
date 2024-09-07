@@ -919,11 +919,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 751e5b07d7055414fa0bcfd412379df2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parentProxy: 0
-  humansInteract: 1
-  isInstant: 1
-  interactTime: 0
-  destroyOnUse: 0
   goodRoles: []
   badRoles: []
   defaultGood: {fileID: 11400000, guid: 73e07a2b5c8d8384fb8e1e7e371d606f, type: 2}
@@ -931,6 +926,7 @@ MonoBehaviour:
   blankPlayer: {fileID: 1803831332351707901, guid: f3ebbea28f1cf404481664f5f7b24d50, type: 3}
   menuPrefab: {fileID: 3995040114384127714, guid: 100e7ba80287a704697eba801b92fd33, type: 3}
   energyIconPrefab: {fileID: 1542578338837384093, guid: b98b4d649e9e72349a24eb6c6ce072de, type: 3}
+  defPlayer: {fileID: 0}
 --- !u!65 &182213374
 BoxCollider:
   m_ObjectHideFlags: 0
