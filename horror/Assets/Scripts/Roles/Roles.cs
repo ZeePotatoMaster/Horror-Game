@@ -18,13 +18,12 @@ public class Roles : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        SetupRoles();
+        SetupRolesServerRpc();
     }
     
-    private void SetupRoles()
+    [ServerRpc(RequireOwnership = false)]
+    private void SetupRolesServerRpc()
     {
-        if (!IsHost) return;
-
         float playerCount = NetworkManager.Singleton.ConnectedClientsList.Count;
         int badCount = (int)Mathf.Floor(playerCount/2f);
         int goodCount = (int)Mathf.Ceil(playerCount/2f);
