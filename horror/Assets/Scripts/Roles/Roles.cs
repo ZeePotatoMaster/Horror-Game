@@ -78,7 +78,6 @@ public class Roles : Interactable
 
             RoleClass roleClass = newPlayer.GetComponent<RoleClass>();
             roleClass.rolePrefabs = role.prefabs;
-            roleClass.roleName.Value = new FixedString32Bytes(role.roleName);
             roleClass.isHuman.Value = role.isHuman;
 
             newPlayer.GetComponent<PlayerHealth>().health.Value = role.health;
@@ -110,8 +109,12 @@ public class Roles : Interactable
     private void SetupCursesClientRPC(int rolenumber, ClientRpcParams clientRpcParams)
     {
         RoleObject role = allRoles[rolenumber];
-        NetworkManager.LocalClient.PlayerObject.GetComponent<RoleClass>().Intro();
+        NetworkObject p = NetworkManager.LocalClient.PlayerObject;
+
+        p.GetComponent<RoleClass>().roleName = role.roleName;
+        p.GetComponent<RoleClass>().Intro();
+
         if (role.isHuman) return;
-        NetworkManager.LocalClient.PlayerObject.GetComponent<CurseManager>().SetupCurses(role.curseObjects, menuPrefab, energyIconPrefab);
+        p.GetComponent<CurseManager>().SetupCurses(role.curseObjects, menuPrefab, energyIconPrefab);
     }
 }
