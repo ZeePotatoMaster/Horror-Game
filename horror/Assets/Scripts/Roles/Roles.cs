@@ -17,6 +17,7 @@ public class Roles : Interactable
     [SerializeField] private GameObject energyIconPrefab;
 
     [SerializeField] private GameObject defPlayer;
+    [SerializeField] private static List<RoleObject> allRoles = new List<RoleObject>();
 
 
     public override void OnNetworkSpawn()
@@ -72,7 +73,6 @@ public class Roles : Interactable
 
             if (!role.isHuman) {
                 for (int i=0; i < role.curseObjects.Length; i++) newPlayer.AddComponent(Type.GetType(role.curseObjects[i].abilityType));
-                SetupCursesClientRpc(role.curseObjects, menuPrefab, energyIconPrefab, new ClientRpcParams { Send = new ClientRpcSendParams {TargetClientIds = new List<ulong> {client.ClientId}}});
             }
             newPlayer.GetComponent<NetworkObject>().SpawnAsPlayerObject(client.ClientId, true);
 
@@ -82,6 +82,8 @@ public class Roles : Interactable
             roleClass.isHuman.Value = role.isHuman;
 
             newPlayer.GetComponent<PlayerHealth>().health.Value = role.health;
+
+            SetupCursesRPC(allRoles.IndexOf(role), new ClientRpcParams { Send = new ClientRpcSendParams {TargetClientIds = new List<ulong> {client.ClientId}}});
             
             for (int i=0; i < role.startItems.Length; i++) {
                 NetworkObject worldItem = Instantiate(role.startItems[i].worldItemObject);
@@ -105,8 +107,10 @@ public class Roles : Interactable
     }
 
     [ClientRpc]
-    private void SetupCursesClientRpc(CurseObject[] pCurseObjects, GameObject menuPrefab, GameObject energyPrefab, ClientRpcParams clientRpcParams)
+    private void SetupCursesRPC(int rolenumber, ClientRpcParams clientRpcParams)
     {
-        NetworkManager.LocalClient.PlayerObject.GetComponent<CurseManager>().SetupCurses(pCurseObjects, menuPrefab, energyPrefab);
+        RoleObject role = allRoles[rolenumber];
+        if (role.isHuman) return;
+        NetworkManager.LocalClient.PlayerObject.GetComponent<CurseManager>().SetupCurses(role.curseObjects, menuPrefab, energyIconPrefab);
     }
 }
