@@ -2,11 +2,17 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-   public static GameManager instance;
-   [SerializeField] private GameObject menu, lobbyMenu;
+    public static GameManager instance;
+    [SerializeField] private GameObject menu, lobbyMenu;
+    public TMP_FontAsset defaultGlobalFont;
+    public Sprite readySprite;
+    public Sprite unreadySprite;
+    public Camera mainCamera;
  
     private void Awake()
     {
@@ -51,6 +57,7 @@ public class GameManager : MonoBehaviour
         if (!playerInfo.ContainsKey(clientId))
         {
             PlayerInfo pi = Instantiate(playerCardPrefab, playerFieldBox.transform).GetComponent<PlayerInfo>();
+            pi.updateFont(defaultGlobalFont);
             pi.steamId = steamId;
             pi.steamName = steamName;
             playerInfo.Add(clientId, pi.gameObject);
