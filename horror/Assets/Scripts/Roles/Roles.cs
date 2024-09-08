@@ -115,6 +115,8 @@ public class Roles : Interactable
         p.GetComponent<RoleClass>().Intro();
 
         if (role.isHuman) return;
+        Debug.Log(menuPrefab);
+        Debug.Log(energyIconPrefab);
         p.GetComponent<CurseManager>().SetupCurses(role.curseObjects, menuPrefab, energyIconPrefab);
     }
 }
