@@ -69,11 +69,9 @@ public class Roles : Interactable
             NetworkManager.Singleton.ConnectedClients[client.ClientId].PlayerObject?.Despawn(true);
 
             GameObject newPlayer = Instantiate(blankPlayer);
-            if (Type.GetType(role.scriptName) != null) newPlayer.AddComponent(Type.GetType(role.scriptName));
 
-            if (!role.isHuman) {
-                for (int i=0; i < role.curseObjects.Length; i++) newPlayer.AddComponent(Type.GetType(role.curseObjects[i].abilityType));
-            }
+            AddScriptsClientRpc(allRoles.IndexOf(role), new ClientRpcParams { Send = new ClientRpcSendParams {TargetClientIds = new List<ulong> {client.ClientId}}});
+
             newPlayer.GetComponent<NetworkObject>().SpawnAsPlayerObject(client.ClientId, true);
 
             RoleClass roleClass = newPlayer.GetComponent<RoleClass>();
@@ -106,6 +104,16 @@ public class Roles : Interactable
     }
 
     [ClientRpc]
+    private void AddScriptsClientRpc(int rolenumber, ClientRpcParams clientRpcParams)
+    {
+        RoleObject role = allRoles[rolenumber];
+        GameObject p = NetworkManager.LocalClient.PlayerObject.gameObject;
+
+        if (Type.GetType(role.scriptName) != null) p.AddComponent(Type.GetType(role.scriptName));
+        for (int i=0; i < role.curseObjects.Length; i++) p.AddComponent(Type.GetType(role.curseObjects[i].abilityType));
+    }
+
+    [ClientRpc]
     private void SetupCursesClientRPC(int rolenumber, ClientRpcParams clientRpcParams)
     {
         RoleObject role = allRoles[rolenumber];
@@ -115,6 +123,5 @@ public class Roles : Interactable
         p.GetComponent<RoleClass>().Intro();
 
         if (p.GetComponent<CurseManager>() != null) p.GetComponent<CurseManager>().SetupCurses(role.curseObjects, menuPrefab, energyIconPrefab);
-        else Debug.Log("KLIMGA LEGFENDSSS");
     }
 }
