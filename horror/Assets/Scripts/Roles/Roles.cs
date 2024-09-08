@@ -114,9 +114,7 @@ public class Roles : Interactable
         p.GetComponent<RoleClass>().roleName = role.roleName;
         p.GetComponent<RoleClass>().Intro();
 
-        if (role.isHuman) return;
-        Debug.Log(menuPrefab);
-        Debug.Log(energyIconPrefab);
-        p.GetComponent<CurseManager>().SetupCurses(role.curseObjects, menuPrefab, energyIconPrefab);
+        if (p.GetComponent<CurseManager>() != null) p.GetComponent<CurseManager>().SetupCurses(role.curseObjects, menuPrefab, energyIconPrefab);
+        else Debug.Log("KLIMGA LEGFENDSSS");
     }
 }
