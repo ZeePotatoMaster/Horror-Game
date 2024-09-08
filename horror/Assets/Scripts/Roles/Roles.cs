@@ -4,6 +4,7 @@ using UnityEngine;
 using Unity.Netcode;
 using System;
 using Unity.Collections;
+using System.Linq;
 
 public class Roles : Interactable
 {
@@ -17,7 +18,9 @@ public class Roles : Interactable
     [SerializeField] private GameObject energyIconPrefab;
 
     [SerializeField] private GameObject defPlayer;
-    [SerializeField] private List<RoleObject> allRoles = new List<RoleObject>();
+    [SerializeField] private RoleObject[] allRoles;
+    [SerializeField] private string[] allRoleComponents;
+    [SerializeField] private CurseObject[] allCurseComponents;
 
 
     public override void OnNetworkSpawn()
@@ -70,9 +73,14 @@ public class Roles : Interactable
 
             GameObject newPlayer = Instantiate(blankPlayer);
 
-            if (Type.GetType(role.scriptName) != null) newPlayer.AddComponent(Type.GetType(role.scriptName));
+            if (Type.GetType(role.scriptName) != null)
+            {
+                foreach (string c in allRoleComponents) if (Type.GetType(c) != Type.GetType(role.scriptName)) Destroy(newPlayer.GetComponent(Type.GetType(c)));
+            } 
             
-            for (int i=0; i < role.curseObjects.Length; i++) newPlayer.AddComponent(Type.GetType(role.curseObjects[i].abilityType));
+            List<CurseObject> allCurses = allCurseComponents.ToList();
+            for (int i=0; i < role.curseObjects.Length; i++) foreach (CurseObject c in allCurseComponents) if (c == role.curseObjects[i]) allCurses.Remove(c);
+            foreach (CurseObject c in allCurses) Destroy(newPlayer.GetComponent(c.abilityType));
 
             newPlayer.GetComponent<NetworkObject>().SpawnAsPlayerObject(client.ClientId, true);
 
@@ -80,11 +88,9 @@ public class Roles : Interactable
             roleClass.rolePrefabs = role.prefabs;
             roleClass.isHuman.Value = role.isHuman;
 
-            AddScriptsClientRpc(allRoles.IndexOf(role), new ClientRpcParams { Send = new ClientRpcSendParams {TargetClientIds = new List<ulong> {client.ClientId}}});
-
             newPlayer.GetComponent<PlayerHealth>().health.Value = role.health;
 
-            SetupCursesClientRPC(allRoles.IndexOf(role), new ClientRpcParams { Send = new ClientRpcSendParams {TargetClientIds = new List<ulong> {client.ClientId}}});
+            SetupCursesClientRPC(Array.IndexOf(allRoles, role), new ClientRpcParams { Send = new ClientRpcSendParams {TargetClientIds = new List<ulong> {client.ClientId}}});
             
             for (int i=0; i < role.startItems.Length; i++) {
                 NetworkObject worldItem = Instantiate(role.startItems[i].worldItemObject);
@@ -105,16 +111,6 @@ public class Roles : Interactable
     private void PickupItemClientRpc(NetworkObjectReference itemRef, ClientRpcParams clientRpcParams)
     {
         if (itemRef.TryGet(out NetworkObject item)) item.GetComponent<WorldItem>().FinishInteract(NetworkManager.LocalClient.PlayerObject.gameObject);
-    }
-
-    [ClientRpc]
-    private void AddScriptsClientRpc(int rolenumber, ClientRpcParams clientRpcParams)
-    {
-        RoleObject role = allRoles[rolenumber];
-        GameObject p = NetworkManager.LocalClient.PlayerObject.gameObject;
-
-        if (Type.GetType(role.scriptName) != null) p.AddComponent(Type.GetType(role.scriptName));
-        for (int i=0; i < role.curseObjects.Length; i++) p.AddComponent(Type.GetType(role.curseObjects[i].abilityType));
     }
 
     [ClientRpc]

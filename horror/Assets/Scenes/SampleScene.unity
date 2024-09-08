@@ -935,6 +935,10 @@ MonoBehaviour:
   allRoles:
   - {fileID: 11400000, guid: 73e07a2b5c8d8384fb8e1e7e371d606f, type: 2}
   - {fileID: 11400000, guid: ef598fd0d9e6552458740015c4bce99b, type: 2}
+  allRoleComponents:
+  - Farter
+  allCurseComponents:
+  - {fileID: 11400000, guid: 6987e9f115a1e5e43af03991fcad2724, type: 2}
 --- !u!65 &182213374
 BoxCollider:
   m_ObjectHideFlags: 0
