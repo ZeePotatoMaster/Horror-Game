@@ -70,13 +70,17 @@ public class Roles : Interactable
 
             GameObject newPlayer = Instantiate(blankPlayer);
 
-            AddScriptsClientRpc(allRoles.IndexOf(role), new ClientRpcParams { Send = new ClientRpcSendParams {TargetClientIds = new List<ulong> {client.ClientId}}});
+            if (Type.GetType(role.scriptName) != null) newPlayer.AddComponent(Type.GetType(role.scriptName));
+            
+            for (int i=0; i < role.curseObjects.Length; i++) newPlayer.AddComponent(Type.GetType(role.curseObjects[i].abilityType));
 
             newPlayer.GetComponent<NetworkObject>().SpawnAsPlayerObject(client.ClientId, true);
 
             RoleClass roleClass = newPlayer.GetComponent<RoleClass>();
             roleClass.rolePrefabs = role.prefabs;
             roleClass.isHuman.Value = role.isHuman;
+
+            AddScriptsClientRpc(allRoles.IndexOf(role), new ClientRpcParams { Send = new ClientRpcSendParams {TargetClientIds = new List<ulong> {client.ClientId}}});
 
             newPlayer.GetComponent<PlayerHealth>().health.Value = role.health;
 
