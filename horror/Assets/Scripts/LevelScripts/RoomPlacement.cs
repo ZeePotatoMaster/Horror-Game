@@ -7,7 +7,8 @@ public class RoomPlacement : ScriptableObject
 {
     public Vector3 placeLocation;
     public float rotation;
-    public List<GameObject> roomPool;
+    [SerializeField] private List<GameObject> roomPool;
+    public bool shrinkingPool = false;
 
     public RoomPlacement(Vector3 position) {
 
@@ -21,10 +22,17 @@ public class RoomPlacement : ScriptableObject
 
     public void placeRoom(GameObject parentLevel) {
 
-        GameObject placed = Instantiate(roomPool[Random.Range(0, roomPool.Count)], placeLocation, Quaternion.identity);
+        int chosenRoom = Random.Range(0, roomPool.Count);
+
+        GameObject chosenRoomObject = roomPool[chosenRoom];
+        GameObject placed = Instantiate(chosenRoomObject, placeLocation, Quaternion.identity);
         placed.transform.Rotate(0f, rotation, 0f);
         placed.transform.SetParent(parentLevel.transform);
         placed.name = "Room";
+
+        if (shrinkingPool) {
+            roomPool.Remove(chosenRoomObject);
+        }
     }
 
     public Vector3 getPosition() {
