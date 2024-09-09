@@ -26,6 +26,7 @@ public class Hammer : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (!IsOwner) return;
         pb = this.transform.parent.GetComponent<PlayerBase>();
         mh.SetActive(false);
     }
@@ -33,6 +34,7 @@ public class Hammer : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!IsOwner) return;
         if (pb.attacked) Attack();
         if (attackCount > 0 && !attacking) attackCount = 0;
         SetAnimations();
@@ -81,6 +83,7 @@ public class Hammer : NetworkBehaviour
                 meleeHitbox.targets.Remove(p);
                 return;
             }
+            else if (p == this.gameObject) return;
             p.GetComponent<PlayerHealth>().DamageServerRpc(attackDamage);
             if (attackCount == 0) SetKnockback(p, -1, 1, 45);
             if (attackCount == 1) SetKnockback(p, 1, -1, 45);
