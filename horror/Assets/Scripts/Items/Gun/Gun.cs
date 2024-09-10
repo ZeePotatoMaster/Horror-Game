@@ -184,7 +184,8 @@ public class Gun : NetworkBehaviour
 
             if (hit.transform.tag == "Player")
             {
-                hit.transform.gameObject.GetComponent<PlayerHealth>().DamageServerRpc(damage);
+                GameObject p = hit.transform.gameObject;
+                p.GetComponent<PlayerHealth>().TryDamageServerRpc(damage, p.GetComponent<NetworkObject>().OwnerClientId, this.GetComponent<NetworkObject>());
                 hitMarker = true;
             }
 

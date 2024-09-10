@@ -325,7 +325,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 5417481839282594021}
         m_TargetAssemblyTypeName: PlayerBase, Assembly-CSharp
-        m_MethodName: OnCast
+        m_MethodName: OnAltAttack
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -388,6 +388,7 @@ MonoBehaviour:
   walkBobAmount: 0.02
   canMove: 1
   attacked: 0
+  altAttacked: 0
   reloaded: 0
   interacted: 0
   interactTick: 0
@@ -398,7 +399,6 @@ MonoBehaviour:
   listener: {fileID: 2686063748884554893}
   canSwapWeapons: 1
   picking: 0
-  casted: 0
 --- !u!114 &1184421577421489697
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -446,6 +446,7 @@ MonoBehaviour:
     m_InternalValue: 100
   ragDoll: {fileID: 7322075302377644862, guid: 3eb3006758a56c84c82b1a8ea58d2f58, type: 3}
   playerCamera: {fileID: 2455982969978869531}
+  isBlocking: 0
 --- !u!114 &8845684638223272760
 MonoBehaviour:
   m_ObjectHideFlags: 0

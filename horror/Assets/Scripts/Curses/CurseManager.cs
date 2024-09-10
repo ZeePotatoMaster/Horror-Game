@@ -47,7 +47,7 @@ public class CurseManager : NetworkBehaviour
         } 
 
         if (currentAbility != null) {
-            if (pb.casted && !currentAbility.activated && !this.GetComponent<InventoryManager>().HoldingSomething()) currentAbility.OnActivate();
+            if (pb.altAttacked && !currentAbility.activated && !this.GetComponent<InventoryManager>().HoldingSomething()) currentAbility.OnActivate();
         }
     }
 

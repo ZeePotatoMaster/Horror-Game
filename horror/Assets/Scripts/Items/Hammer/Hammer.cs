@@ -15,12 +15,14 @@ public class Hammer : NetworkBehaviour
     private bool canAttack = true;
     private int attackCount;
     private PlayerBase pb;
+    private PlayerHealth ph;
     [SerializeField] private GameObject mh;
 
     const string IDLE = "Idle";
     const string WALK = "Walk";
     const string ATTACK1 = "Attack 1";
     const string ATTACK2 = "Attack 2";
+    const string BLOCK = "Block";
     string currentAnimationState;
     
     // Start is called before the first frame update
@@ -28,6 +30,7 @@ public class Hammer : NetworkBehaviour
     {
         if (!IsOwner) return;
         pb = this.transform.parent.GetComponent<PlayerBase>();
+        ph = this.transform.parent.GetComponent<PlayerHealth>();
         mh.SetActive(false);
     }
 
@@ -35,7 +38,16 @@ public class Hammer : NetworkBehaviour
     void Update()
     {
         if (!IsOwner) return;
+
         if (pb.attacked) Attack();
+
+        if (pb.altAttacked) Block();
+
+        else if (ph.isBlocking) {
+            pb.currentSpeed += 5;
+            ph.isBlocking = false;
+        } 
+
         if (attackCount > 0 && !attacking) attackCount = 0;
         SetAnimations();
     }
@@ -84,28 +96,46 @@ public class Hammer : NetworkBehaviour
                 return;
             }
             else if (p == this.gameObject) return;
-            p.GetComponent<PlayerHealth>().DamageServerRpc(attackDamage);
-            if (attackCount == 0) SetKnockback(p, -1, 1, 45);
-            if (attackCount == 1) SetKnockback(p, 1, -1, 45);
+
+            bool b = CheckIfBlockable(p);
+
+            p.GetComponent<PlayerHealth>().TryDamageServerRpc(attackDamage, p.GetComponent<NetworkObject>().OwnerClientId, b);
+
+            if (attackCount == 0) SetKnockback(p, -1, 1, 45, b);
+            if (attackCount == 1) SetKnockback(p, 1, -1, 45, b);
         }
     }
 
     private void SetAnimations()
     {
         if (attacking) return;
+
         if (Mathf.Abs(pb.moveDirection.x) > 0.1f || Mathf.Abs(pb.moveDirection.z) > 0.1f) ChangeAnimationState(WALK);
         else ChangeAnimationState(IDLE);
+
+        if (ph.isBlocking) ChangeAnimationState(BLOCK);
     }
 
-    private void SetKnockback(GameObject p, int defaultY, int defaultZ, float intensity)
+    private void SetKnockback(GameObject p, int defaultY, int defaultZ, float intensity, bool blockable)
     {
         Vector3 localDirection = p.transform.InverseTransformPoint(this.transform.position);
         PlayerBase pb = p.GetComponent<PlayerBase>();
+
+        ulong id = p.GetComponent<NetworkObject>().OwnerClientId;
         
-        if (localDirection.x < 0 && Mathf.Abs(localDirection.z) < 1) pb.CamKnockbackServerRpc(1, -1, intensity, p.GetComponent<NetworkObject>().OwnerClientId);
-        else if (localDirection.x > 0 && Mathf.Abs(localDirection.z) < 1) pb.CamKnockbackServerRpc(-1, 1, intensity, p.GetComponent<NetworkObject>().OwnerClientId);
-        else if (localDirection.z >= 1) pb.CamKnockbackServerRpc(defaultY, defaultZ, intensity, p.GetComponent<NetworkObject>().OwnerClientId);
-        else if (localDirection.z <= -1) pb.CamKnockbackServerRpc(-defaultY, -defaultZ, intensity, p.GetComponent<NetworkObject>().OwnerClientId);
+        if (localDirection.z > 0 && Mathf.Abs(localDirection.x) < 0.5) pb.CamKnockbackServerRpc(defaultY, defaultZ, intensity, id, blockable);
+        else if (localDirection.z < 0 && Mathf.Abs(localDirection.x) < 0.5) pb.CamKnockbackServerRpc(-defaultY, -defaultZ, intensity, id, blockable);
+        else if (localDirection.x < 0) pb.CamKnockbackServerRpc(1, -1, intensity, id, blockable);
+        else if (localDirection.x > 0) pb.CamKnockbackServerRpc(-1, 1, intensity, id, blockable);
+    }
+
+    private bool CheckIfBlockable(GameObject p)
+    {
+        bool canBlock = false;
+        Vector3 localDirection = p.transform.InverseTransformPoint(this.transform.position);
+
+        if (localDirection.z > 0 && Mathf.Abs(localDirection.x) < 0.5 && localDirection.y >= 0) canBlock = true;
+        return canBlock;
     }
 
     private void ChangeAnimationState(string newState)
@@ -115,5 +145,12 @@ public class Hammer : NetworkBehaviour
         Debug.Log(newState);
         currentAnimationState = newState;
         this.GetComponent<Animator>().CrossFadeInFixedTime(newState, 0.2f);
+    }
+
+    private void Block()
+    {
+        if (attacking || ph.isBlocking) return;
+        ph.isBlocking = true;
+        pb.currentSpeed -= 5;
     }
 }

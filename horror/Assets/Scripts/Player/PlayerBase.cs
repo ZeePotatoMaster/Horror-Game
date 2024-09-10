@@ -40,6 +40,7 @@ public class PlayerBase : NetworkBehaviour
     private Vector2 lookInput = Vector2.zero;
     private bool jumped = false;
     [HideInInspector] public bool attacked = false;
+    [HideInInspector] public bool altAttacked = false;
     [HideInInspector] public bool reloaded = false; 
 
     //looting
@@ -63,7 +64,6 @@ public class PlayerBase : NetworkBehaviour
 
     //spells
     [HideInInspector] public bool picking;
-    [HideInInspector] public bool casted;
 
     // Start is called before the first frame update
     void Start()
@@ -102,6 +102,10 @@ public class PlayerBase : NetworkBehaviour
         attacked = context.action.triggered;
     }
 
+    public void OnAltAttack(InputAction.CallbackContext context) {
+        altAttacked = context.action.triggered;
+    }
+
     public void OnReload(InputAction.CallbackContext context) {
         reloaded = context.action.triggered;
     }
@@ -121,10 +125,7 @@ public class PlayerBase : NetworkBehaviour
     public void OnPickCurse(InputAction.CallbackContext context) {
         picking = context.action.triggered;
     }
-    public void OnCast(InputAction.CallbackContext context) {
-        casted = context.action.triggered;
-    }
-    
+
     public void OnInteract(InputAction.CallbackContext context) {
         context.action.performed += context => interacted = true;
         context.action.canceled += context => interacted = false;
@@ -251,14 +252,15 @@ public class PlayerBase : NetworkBehaviour
     }*/
 
     [ServerRpc(RequireOwnership = false)]
-    public void CamKnockbackServerRpc(int directionY, int directionZ, float intensity, ulong id)
+    public void CamKnockbackServerRpc(int directionY, int directionZ, float intensity, ulong id, bool blockable)
     {
-        CamKnockbackClientRpc(directionY, directionZ, intensity, new ClientRpcParams { Send = new ClientRpcSendParams {TargetClientIds = new List<ulong> {id}}});
+        CamKnockbackClientRpc(directionY, directionZ, intensity, blockable, new ClientRpcParams { Send = new ClientRpcSendParams {TargetClientIds = new List<ulong> {id}}});
     }
 
     [ClientRpc]
-    private void CamKnockbackClientRpc(int directionY, int directionZ, float intensity, ClientRpcParams clientRpcParams)
+    private void CamKnockbackClientRpc(int directionY, int directionZ, float intensity, bool blockable, ClientRpcParams clientRpcParams)
     {
+        if (this.GetComponent<PlayerHealth>().isBlocking && blockable) intensity -= intensity / 1.2f;
         knockbackY = directionY * intensity;
         knockbackZ = directionZ * intensity;
         knockbackTimer = 1f;

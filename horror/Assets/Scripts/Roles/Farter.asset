@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b92d49f5bfe8024f8ef978a4886dad9, type: 3}
   m_Name: Farter
   m_EditorClassIdentifier: 
-  health: 50
+  health: 500
   isHuman: 0
   roleName: Farter
   scriptName: Farter
