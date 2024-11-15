@@ -11,6 +11,7 @@ public class PoopyPlayer : MonoBehaviour
 {
     //Camera Vars
     public Camera playerCamera;
+    [SerializeField] private GameObject cameraRoot;
     [SerializeField] private float lookSpeed = 2.0f;
     [SerializeField] private float lookXLimit = 90.0f;
 
@@ -60,6 +61,12 @@ public class PoopyPlayer : MonoBehaviour
 
     //listener (to disable for multiplayer)
     [SerializeField] private AudioListener listener;
+    private float animatedWalkSpeed = 2f;
+    private int animatorX;
+    private int animatorY;
+    private float changeTime;
+    private Vector2 change;
+    private float animateTimer = 1;
 
     // Start is called before the first frame update
     void Start()
@@ -74,6 +81,9 @@ public class PoopyPlayer : MonoBehaviour
 
         //headbob default camera pos
         defaultYPos = playerCamera.transform.localPosition.y;
+
+        animatorX = Animator.StringToHash("X_Velocity");
+        animatorY = Animator.StringToHash("Y_Velocity");
     }
 
     //player inputs
@@ -134,6 +144,7 @@ public class PoopyPlayer : MonoBehaviour
         if (jumped && canMove && characterController.isGrounded)
         {
             moveDirection.y = jumpSpeed;
+            playerAnimator.Play("jump");
         }
         else
         {
@@ -164,6 +175,8 @@ public class PoopyPlayer : MonoBehaviour
         {
             updateCamera();
         }
+
+        updateAnimatorParameters();
     }
 
     void updateCamera() {
@@ -213,21 +226,18 @@ public class PoopyPlayer : MonoBehaviour
 
     void updateAnimations() {
 
-        if (isJumping) {
-            updateAnimatorParameters(false, true, false);
-        } else if (isMoving && isSprinting) {
-            updateAnimatorParameters(true, false, true);
-        } else if (isMoving) {
-            updateAnimatorParameters(true, false, false);
-        } else { 
-            updateAnimatorParameters(false, false, false);      
-        }
+        changeTime = movementInput == Vector2.zero ? Time.deltaTime * 12 : Time.deltaTime * 4;
+
+        change = Vector2.Lerp(change, isSprinting ? movementInput * 6 : movementInput * 2, changeTime);
+
+        playerAnimator.SetFloat(animatorX, canMove ? change.x * 2 : 0);
+        playerAnimator.SetFloat(animatorY, canMove ? change.y * 2 : 0);
     }
 
-    void updateAnimatorParameters(bool walking, bool jumping, bool sprinting) {
+    void updateAnimatorParameters() {
 
-        playerAnimator.SetBool("isWalking", walking);
-        playerAnimator.SetBool("isJumping", jumping);
-        playerAnimator.SetBool("isSprinting", sprinting);
+        playerAnimator.SetBool("Grounded", characterController.isGrounded);
+        playerAnimator.SetBool("Jump", jumped);
+        playerAnimator.SetBool("Falling", !characterController.isGrounded);
     }
 }
