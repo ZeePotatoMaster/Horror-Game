@@ -21,14 +21,7 @@ public abstract class Interactable : NetworkBehaviour
 
         PlayerBase pb = player.GetComponent<PlayerBase>();
 
-        if (player.GetComponent<RoleClass>().isHuman.Value && !humansInteract) {
-            pb.canInteract = false;
-            return;
-        }
-        if (isInstant) {
-            CompiledFinish(player, pb);
-            return;
-        }
+        
 
         pb.isInteracting = true;
 
