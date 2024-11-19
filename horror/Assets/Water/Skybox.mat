@@ -52,9 +52,9 @@ Material:
     - _BUILTIN_ZWriteControl: 0
     - _GradientBlend: 20
     - _StarMovementSpeed: 0.0005
-    - _StarThreshold: 100
+    - _StarThreshold: 65.15945
     m_Colors:
-    - _PrimaryColor: {r: 0.39632162, g: 0.44373336, b: 0.63457644, a: 0}
-    - _SecondaryColor: {r: 0.75127846, g: 0.5131175, b: 0.45452526, a: 0}
+    - _PrimaryColor: {r: 0.14408574, g: 0.1478445, b: 0.18793793, a: 0}
+    - _SecondaryColor: {r: 0.26677048, g: 0.120280266, b: 0.13279867, a: 0}
     - _Tiling: {r: 8, g: 4, b: 0, a: 0}
   m_BuildTextureStacks: []
