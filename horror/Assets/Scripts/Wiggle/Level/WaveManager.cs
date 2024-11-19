@@ -36,9 +36,9 @@ public class WaveManager : MonoBehaviour
 
     public float GetWaveHeight(float x, float z) {
 
-        //return amplitude * Mathf.Sin(((x * scale) / period + offset) + ((z * scale) / period + offset))
+        return amplitude * Mathf.Sin(((x * scale) / period + offset) + ((z * scale) / period + offset));
 
-        return amplitude * GerstnerWave(((x * scale) / period + offset), ((z * scale) / period + offset));
+        //return amplitude * GerstnerWave(((x * scale) / period + offset), ((z * scale) / period + offset));
     }
 
     private float GerstnerWave(float x, float z)
