@@ -54,11 +54,17 @@ public class Gun : NetworkBehaviour
     private string shootAnim;
     [SerializeField]
     private string reloadAnim;
+    [SerializeField] private Transform rightIKTarget, leftIKTarget, viewmodel, worldmodel;
+    private Vector3 pos, fw, up;
+    [SerializeField] private Animator animator;
 
     // Start is called before the first frame update
     void Start()
     {
-        if (!IsOwner) return;
+        if (!IsOwner) {
+            viewmodel.gameObject.SetActive(false);
+            return;
+        }
 
         canvas = GameObject.Find("Canvas");
         UI = Instantiate(PistolUI, Vector3.zero, Quaternion.identity);
@@ -72,16 +78,30 @@ public class Gun : NetworkBehaviour
 
         //find base
         pb = this.transform.parent.gameObject.GetComponent<PlayerBase>();
+
+        //viewmodel
+        viewmodel.SetParent(pb.playerCamera.transform, true);
+
+        int invisLayer = LayerMask.NameToLayer("Invisible");
+        var children = worldmodel.GetComponentsInChildren<Transform>();
+        foreach (var child in children) child.gameObject.layer = invisLayer;
+
+        //rotation
+        pos = pb.playerCamera.transform.InverseTransformPoint(transform.position);
+        pos = pb.playerCamera.transform.InverseTransformDirection(transform.forward);
+        pos = pb.playerCamera.transform.InverseTransformDirection(transform.up);
     }
 
     void OnEnable(){
         if (!IsOwner) return;
         if (UI != null) UI.gameObject.SetActive(true);
+        viewmodel.gameObject.SetActive(true);
     }
 
     void OnDisable(){
         if (!IsOwner) return;
         if (UI != null) UI.gameObject.SetActive(false);
+        viewmodel.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -125,11 +145,11 @@ public class Gun : NetworkBehaviour
         //weapon bob
         if (Mathf.Abs(pb.moveDirection.x) > 0.1f || Mathf.Abs(pb.moveDirection.z) > 0.1f)
         {
-            this.transform.GetComponent<Animator>().SetBool("walking", true);
+            //this.transform.GetComponent<Animator>().SetBool("walking", true);
         }
         else
         {
-            this.transform.GetComponent<Animator>().SetBool("walking", false);
+            //this.transform.GetComponent<Animator>().SetBool("walking", false);
         }
 
         //hit enemy with crosshair effect
@@ -150,19 +170,37 @@ public class Gun : NetworkBehaviour
             }
             if (crosshairTimer > 0.1 && crosshairTimer < 0.2)
             {
-                Crosshair.transform.localScale = new Vector3(Crosshair.transform.localScale.x, Crosshair.transform.localScale.y, Crosshair.transform.localScale.z) - ((new Vector3(crosshairTimer, crosshairTimer, crosshairTimer) / 2) * crosshairIncrease);
+                Crosshair.transform.localScale = new Vector3(Crosshair.transform.localScale.x, Crosshair.transform.localScale.y, Crosshair.transform.localScale.z) - (new Vector3(crosshairTimer, crosshairTimer, crosshairTimer) / 2 * crosshairIncrease);
             }
         }
 
         //UI
         CurrentAmmoScore.text = "" + CurrentAmmo;
         TotalAmmoScore.text = "" + TotalAmmo;
+        
+        //animate hands
+        pb.RHandTarget.SetPositionAndRotation(rightIKTarget.position, rightIKTarget.rotation);
+        pb.LHandTarget.SetPositionAndRotation(leftIKTarget.position, leftIKTarget.rotation);
+
+        //rotation
+        /*var newpos = pb.playerCamera.transform.TransformPoint(pos);
+        var newfw = pb.playerCamera.transform.TransformDirection(fw);
+        var newup = pb.playerCamera.transform.TransformDirection(up);
+        var newrot = Quaternion.LookRotation(newfw, newup);
+        transform.position = newpos;
+        transform.rotation = newrot;*/
+
+        float rotationX = 0;
+        rotationX += pb.playerCamera.transform.localRotation.x * 100;
+        rotationX = Mathf.Clamp(rotationX, -90, 40);
+        this.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
     }
 
     //shoot gun
     private void Shoot()
     {
-        this.transform.GetComponent<Animator>().Play(shootAnim);
+        animator.Play(shootAnim);
+        viewmodel.GetComponent<Animator>().Play(shootAnim + "view");
 
         rand = Random.Range(-randomLvl, randomLvl);
 
@@ -207,11 +245,12 @@ public class Gun : NetworkBehaviour
         CanShoot = false;
         IsReloading = true;
 
-        this.transform.GetComponent<Animator>().Play(reloadAnim);
+        animator.Play(reloadAnim);
+        viewmodel.GetComponent<Animator>().Play(reloadAnim + "view");
 
         yield return new WaitForSeconds(ReloadTime);
 
-        if (this.transform.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName(reloadAnim))
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName(reloadAnim))
         {
             //TotalAmmo -= MaxAmmo;
             TotalAmmo += CurrentAmmo;

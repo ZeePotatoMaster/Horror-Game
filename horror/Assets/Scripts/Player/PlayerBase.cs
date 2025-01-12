@@ -13,6 +13,7 @@ public class PlayerBase : NetworkBehaviour
 
     //movement vars
     [SerializeField] private float walkingSpeed = 7.5f;
+    [SerializeField] private float sprintSpeed = 15f;
     [SerializeField] private float jumpSpeed = 8.0f;
     [SerializeField] private float gravity = 20.0f;
     public Camera playerCamera;
@@ -39,6 +40,7 @@ public class PlayerBase : NetworkBehaviour
     private Vector2 movementInput = Vector2.zero;
     private Vector2 lookInput = Vector2.zero;
     private bool jumped = false;
+    private bool isSprinting = false;
     [HideInInspector] public bool attacked = false;
     [HideInInspector] public bool altAttacked = false;
     [HideInInspector] public bool reloaded = false; 
@@ -65,6 +67,12 @@ public class PlayerBase : NetworkBehaviour
     //spells
     [HideInInspector] public bool picking;
 
+    //animator
+    private Vector2 change;
+    [SerializeField] private GameObject playerModel;
+    private float changeTime;
+    public Transform RHandTarget, LHandTarget; 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -90,12 +98,21 @@ public class PlayerBase : NetworkBehaviour
         lootImage = canvas.transform.Find("LootIcon").gameObject;
 
         inventoryManager = GetComponent<InventoryManager>();
+
+        //invisible playermodel
+        int invisLayer = LayerMask.NameToLayer("Invisible");
+        var children = playerModel.GetComponentsInChildren<Transform>();
+        foreach (var child in children) child.gameObject.layer = invisLayer;
     }
 
     //player inputs
 
     public void OnMove(InputAction.CallbackContext context) {
         movementInput = context.ReadValue<Vector2>();
+    }
+
+    public void OnSprint(InputAction.CallbackContext context) {
+        isSprinting = context.action.triggered;
     }
 
     public void OnAttack(InputAction.CallbackContext context) {
@@ -153,6 +170,8 @@ public class PlayerBase : NetworkBehaviour
     void Update()
     {
         if (!IsOwner) return;
+
+        currentSpeed = isSprinting ? sprintSpeed : walkingSpeed;
 
         // We are grounded, so recalculate move direction based on axes
         Vector3 forward = transform.TransformDirection(Vector3.forward);
@@ -213,6 +232,10 @@ public class PlayerBase : NetworkBehaviour
         }
 
         if (dropped) inventoryManager.DropItem();
+
+        //anims
+        updateAnimations();
+        updateAnimatorParameters();
     }
 
     void HandleHeadBob()
@@ -231,6 +254,30 @@ public class PlayerBase : NetworkBehaviour
             playerCamera.transform.localRotation = Quaternion.Lerp(normal, knock, knockbackTimer);
             knockbackTimer = Mathf.Clamp(knockbackTimer - Time.deltaTime, 0f, 1f);
         }
+    }
+
+    void updateAnimations() {
+
+        changeTime = movementInput == Vector2.zero ? Time.deltaTime * 12 : Time.deltaTime * 4;
+
+        change = Vector2.Lerp(change, isSprinting ? movementInput * 6 : movementInput * 2, changeTime);
+
+        Animator animator = playerModel.GetComponent<Animator>();
+        PlayerModel modelScript = playerModel.GetComponent<PlayerModel>();
+
+        animator.SetFloat(modelScript.GetAnimInt(0), canMove ? change.x * 2 : 0);
+        animator.SetFloat(modelScript.GetAnimInt(1), canMove ? change.y * 2 : 0);
+    }
+
+    void updateAnimatorParameters() {
+
+        Animator animator = playerModel.GetComponent<Animator>();
+        PlayerModel modelScript = playerModel.GetComponent<PlayerModel>();
+
+        if (!jumped && animator.GetBool(modelScript.GetAnimInt(2))) animator.ResetTrigger(modelScript.GetAnimInt(2));
+        if (jumped) animator.SetTrigger(modelScript.GetAnimInt(2));
+        if (characterController.isGrounded && animator.GetBool(modelScript.GetAnimInt(3))) animator.ResetTrigger(modelScript.GetAnimInt(3));
+        if (!characterController.isGrounded) animator.SetTrigger(modelScript.GetAnimInt(3));
     }
 
     /*public void AddCameraKnockback(Transform direction, float yAmount, float zAmount)

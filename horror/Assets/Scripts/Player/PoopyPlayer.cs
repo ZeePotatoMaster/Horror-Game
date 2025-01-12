@@ -64,7 +64,11 @@ public class PoopyPlayer : MonoBehaviour
     private float animatedWalkSpeed = 2f;
     private int animatorX;
     private int animatorY;
+    private int jumpAnim;
+    private int groundedAnim;
+    private int fallingAnim;
     private float changeTime;
+   
     private Vector2 change;
     private float animateTimer = 1;
 
@@ -84,6 +88,9 @@ public class PoopyPlayer : MonoBehaviour
 
         animatorX = Animator.StringToHash("X_Velocity");
         animatorY = Animator.StringToHash("Y_Velocity");
+        jumpAnim = Animator.StringToHash("Jump");
+        groundedAnim = Animator.StringToHash("Grounded");
+        fallingAnim = Animator.StringToHash("Falling");
     }
 
     //player inputs
@@ -144,7 +151,6 @@ public class PoopyPlayer : MonoBehaviour
         if (jumped && canMove && characterController.isGrounded)
         {
             moveDirection.y = jumpSpeed;
-            playerAnimator.Play("jump");
         }
         else
         {
@@ -236,8 +242,8 @@ public class PoopyPlayer : MonoBehaviour
 
     void updateAnimatorParameters() {
 
-        playerAnimator.SetBool("Grounded", characterController.isGrounded);
-        playerAnimator.SetBool("Jump", jumped);
-        playerAnimator.SetBool("Falling", !characterController.isGrounded);
+        playerAnimator.SetBool(groundedAnim, characterController.isGrounded);
+        playerAnimator.SetBool(jumpAnim, jumped);
+        playerAnimator.SetBool(fallingAnim, !characterController.isGrounded);
     }
 }
