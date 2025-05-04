@@ -793,7 +793,7 @@ GameObject:
   - component: {fileID: 1228811809171210621}
   - component: {fileID: 1225884204051401844}
   - component: {fileID: 6644734223466066721}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player 1
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -3280,7 +3280,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 63
+    m_Bits: 447
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
