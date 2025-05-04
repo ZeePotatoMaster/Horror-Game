@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/SteamMultipalyer/MainMenu.unity
     guid: ab0802f8ae429be4bb804acd5447fd17
+  - enabled: 0
+    path: Assets/Scenes/SteamMultipalyer/Setup.unity
+    guid: f64fbf3a8cb2afd4dafba3bc91f4893b
   m_configObjects: {}

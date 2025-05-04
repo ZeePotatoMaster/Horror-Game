@@ -44,6 +44,7 @@ public class InventoryManager : NetworkBehaviour
     public void DropItem() {
         if (!IsOwner) return;
         if (!itemObjects.ContainsKey(selectedSlot)) return;
+        if (!inventorySlots[selectedSlot].GetComponentInChildren<ItemInSlot>().canDrop) return;
 
         SpawnWorldItemServerRpc(NetworkManager.LocalClientId, inventorySlots[selectedSlot].GetComponentInChildren<ItemInSlot>().item.itemId, itemObjects[selectedSlot]);
         DestroyItem(selectedSlot);

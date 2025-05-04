@@ -7,11 +7,10 @@ using UnityEngine.UI;
 
 public class PlayerHealth : NetworkBehaviour
 {
-    public NetworkVariable<float> health = new NetworkVariable<float>(100f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    public NetworkVariable<float> health = new NetworkVariable<float>(100f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     private GameObject hurtScreen;
     [SerializeField] private GameObject ragDoll;
     [SerializeField] private Camera playerCamera;
-    [HideInInspector] public bool isBlocking;
 
     // Start is called before the first frame update
     void Start()
@@ -56,16 +55,9 @@ public class PlayerHealth : NetworkBehaviour
     }
 
     [ServerRpc(RequireOwnership = false)]
-    public void TryDamageServerRpc(float damage, ulong id, bool blockable)
+    public void TryDamageServerRpc(float damage)
     {
-        TryDamageClientRpc(damage, blockable, new ClientRpcParams { Send = new ClientRpcSendParams { TargetClientIds = new List<ulong> {id}}});
-    }
-
-    [ClientRpc]
-    private void TryDamageClientRpc(float damage, bool blockable, ClientRpcParams rpcParams)
-    {
-        if (isBlocking && blockable) health.Value -= damage / 2;
-        else health.Value -= damage;
+        health.Value -= damage;
     }
 
     [ServerRpc]

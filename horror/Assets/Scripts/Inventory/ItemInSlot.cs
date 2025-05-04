@@ -16,6 +16,7 @@ public class ItemInSlot : MonoBehaviour
     private float decayTime = 1f;
     private float currentDecay = 0f;
     private bool isDecaying;
+    public bool canDrop = true;
 
     private void Awake() {
         image = GetComponent<Image>();

@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Hammer : NetworkBehaviour
 {
-    [SerializeField] private float attackDelay = 0.2f;
+    /*[SerializeField] private float attackDelay = 0.2f;
     [SerializeField] private float attackSpeed = 1f;
     [SerializeField] private float attackDamage = 25f;
 
@@ -152,5 +152,5 @@ public class Hammer : NetworkBehaviour
         if (attacking || ph.isBlocking) return;
         ph.isBlocking = true;
         pb.currentSpeed -= 5;
-    }
+    }*/
 }

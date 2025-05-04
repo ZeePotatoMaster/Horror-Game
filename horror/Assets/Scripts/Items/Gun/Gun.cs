@@ -82,14 +82,7 @@ public class Gun : NetworkBehaviour
         //viewmodel
         viewmodel.SetParent(pb.playerCamera.transform, true);
 
-        int invisLayer = LayerMask.NameToLayer("Invisible");
-        var children = worldmodel.GetComponentsInChildren<Transform>();
-        foreach (var child in children) child.gameObject.layer = invisLayer;
-
-        //rotation
-        pos = pb.playerCamera.transform.InverseTransformPoint(transform.position);
-        pos = pb.playerCamera.transform.InverseTransformDirection(transform.forward);
-        pos = pb.playerCamera.transform.InverseTransformDirection(transform.up);
+        worldmodel.gameObject.SetActive(false);
     }
 
     void OnEnable(){
@@ -102,6 +95,11 @@ public class Gun : NetworkBehaviour
         if (!IsOwner) return;
         if (UI != null) UI.gameObject.SetActive(false);
         viewmodel.gameObject.SetActive(false);
+    }
+
+    void OnNetworkDestroy ()
+    {
+        Destroy(viewmodel.gameObject);
     }
 
     // Update is called once per frame
@@ -223,7 +221,7 @@ public class Gun : NetworkBehaviour
             if (hit.transform.tag == "Player")
             {
                 GameObject p = hit.transform.gameObject;
-                p.GetComponent<PlayerHealth>().TryDamageServerRpc(damage, p.GetComponent<NetworkObject>().OwnerClientId, this.GetComponent<NetworkObject>());
+                p.GetComponent<PlayerHealth>().TryDamageServerRpc(damage);
                 hitMarker = true;
             }
 

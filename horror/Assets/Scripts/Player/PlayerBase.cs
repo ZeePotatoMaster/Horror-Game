@@ -35,7 +35,7 @@ public class PlayerBase : NetworkBehaviour
     private float knockbackZ;
     private float knockbackTimer;
 
-    [SerializeField] private bool canMove = true;
+    public bool canMove = true;
 
     private Vector2 movementInput = Vector2.zero;
     private Vector2 lookInput = Vector2.zero;
@@ -299,15 +299,14 @@ public class PlayerBase : NetworkBehaviour
     }*/
 
     [ServerRpc(RequireOwnership = false)]
-    public void CamKnockbackServerRpc(int directionY, int directionZ, float intensity, ulong id, bool blockable)
+    public void CamKnockbackServerRpc(int directionY, int directionZ, float intensity, ulong id)
     {
-        CamKnockbackClientRpc(directionY, directionZ, intensity, blockable, new ClientRpcParams { Send = new ClientRpcSendParams {TargetClientIds = new List<ulong> {id}}});
+        CamKnockbackClientRpc(directionY, directionZ, intensity, new ClientRpcParams { Send = new ClientRpcSendParams {TargetClientIds = new List<ulong> {id}}});
     }
 
     [ClientRpc]
-    private void CamKnockbackClientRpc(int directionY, int directionZ, float intensity, bool blockable, ClientRpcParams clientRpcParams)
+    private void CamKnockbackClientRpc(int directionY, int directionZ, float intensity, ClientRpcParams clientRpcParams)
     {
-        if (this.GetComponent<PlayerHealth>().isBlocking && blockable) intensity -= intensity / 1.2f;
         knockbackY = directionY * intensity;
         knockbackZ = directionZ * intensity;
         knockbackTimer = 1f;
