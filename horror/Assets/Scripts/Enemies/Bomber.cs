@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UIElements;
 
-public class Phaser : NetworkBehaviour
+public class Bomber : NetworkBehaviour
 {
     private NavMeshAgent agent;
     private Transform player;
@@ -18,14 +18,14 @@ public class Phaser : NetworkBehaviour
     [SerializeField] private float walkPointRange;
 
     //attacking
-    [SerializeField] private float timeBetweenAttacks;
-    bool alreadyAttacked;
+    [SerializeField] private float despawnTimeAfterAttack;
+    private bool alreadyAttacked;
 
     //states
     [SerializeField] private float sightRange, attackRange;
     private bool playerInSightRange, playerInAttackRange;
 
-    [SerializeField] private float damage = 20;
+    [SerializeField] private NetworkObject bomb;
 
     //find player
     private float nearestDist = 100;
@@ -33,25 +33,18 @@ public class Phaser : NetworkBehaviour
     private float tick = 0;
     [SerializeField] private float timeBetweenChecks = 0.2f;
 
-    //opacity
-    private float opacityTimer = 1f;
-    private bool flip = false;
-    [SerializeField] private float changeMultiplier;
-    private bool keepPhasing = true;
-
-    [SerializeField] private float invisTime;
-    private float invisTick = 0f;
+    private Animator animator;
 
     public override void OnNetworkSpawn()
     {
         agent = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
     }
 
     void Update()
     {
-        if (keepPhasing) GoInvisible();
-
         if (!IsServer) return;
+        if (alreadyAttacked) return;
 
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
@@ -64,12 +57,6 @@ public class Phaser : NetworkBehaviour
         if (playerInSightRange && playerInAttackRange) {
             FindPlayer();
             AttackPlayer();
-        }
-
-        invisTick += Time.deltaTime;
-        if (invisTick >= invisTime) {
-            GoVisibleRpc();
-            invisTick = 0f;
         }
         //Debug.Log(invisTick + " invise");
     }
@@ -141,46 +128,20 @@ public class Phaser : NetworkBehaviour
 
         if (!alreadyAttacked)
         {
-            RaycastHit attack;
-            if (Physics.Raycast(transform.position, transform.forward, out attack))
-            {
-                float dist = Vector3.Distance(attack.transform.position, transform.position);
-                if (dist <= 2)
-                {
-                    player.GetComponent<PlayerHealth>().TryDamageServerRpc(damage);
-                }
-            }
+            animator.Play("atttack");
+
+            NetworkObject bombie = Instantiate(bomb, this.transform.position, this.transform.rotation);
+            bombie.Spawn(true);
+
+            bombie.GetComponent<Rigidbody>().AddForce(transform.forward * 5, ForceMode.Impulse);
 
             alreadyAttacked = true;
-            Invoke(nameof(ResetAttack), timeBetweenAttacks);
+            Invoke(nameof(Despawn), despawnTimeAfterAttack);
         }
     }
 
-    private void ResetAttack()
+    private void Despawn()
     {
-        alreadyAttacked = false;
-    }
-
-    [Rpc(SendTo.Everyone)]
-    private void GoVisibleRpc()
-    {
-        keepPhasing = true;
-    }
-
-    private void GoInvisible()
-    {
-        this.GetComponent<MeshRenderer>().material.color = new Color(1f, 1f, 1f, opacityTimer);
-
-        float change = flip ? Time.deltaTime : -Time.deltaTime;
-        opacityTimer = Mathf.Clamp(opacityTimer + change * changeMultiplier, 0f, 1f);
-
-        if (opacityTimer == 0f) {
-            flip = true;
-            keepPhasing = false;
-            Debug.Log("oh yeah");
-        }
-        if (opacityTimer == 1f) {
-            flip = false;
-        }
+        this.GetComponent<NetworkObject>().Despawn(true);
     }
 }

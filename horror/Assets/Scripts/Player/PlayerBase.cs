@@ -73,6 +73,10 @@ public class PlayerBase : NetworkBehaviour
     private float changeTime;
     public Transform RHandTarget, LHandTarget; 
 
+    //camera shake
+    private Vector3 originalPos;
+    private float elapsed = 0f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -103,6 +107,9 @@ public class PlayerBase : NetworkBehaviour
         int invisLayer = LayerMask.NameToLayer("Invisible");
         var children = playerModel.GetComponentsInChildren<Transform>();
         foreach (var child in children) child.gameObject.layer = invisLayer;
+
+        //camera shake
+        originalPos = playerCamera.transform.localPosition;
     }
 
     //player inputs
@@ -339,5 +346,30 @@ public class PlayerBase : NetworkBehaviour
         isInteracting = false;
         canInteract = true;
         interactObject = null;
+    }
+
+    public void StartShake(float dur, float mag)
+    {
+        StartCoroutine(Shake(dur, mag));
+    }
+
+    //camera shake
+    private IEnumerator Shake(float duration, float magnitude)
+    {
+        elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            float x = Random.Range(-1f, 1f) * magnitude;
+            float y = Random.Range(-1f, 1f) * magnitude;
+
+            playerCamera.transform.localPosition = new Vector3(originalPos.x + x, originalPos.y + y, originalPos.z);
+
+            elapsed += Time.deltaTime;
+
+            yield return null; //before we continue to the next iteration of the while loop, we want to wait until the next frame is drawn
+        }
+
+        playerCamera.transform.localPosition = originalPos;
     }
 }
