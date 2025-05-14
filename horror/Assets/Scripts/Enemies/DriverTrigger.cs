@@ -8,12 +8,12 @@ public class DriverTrigger : MonoBehaviour
 
     void Start()
     {
-        parent = transform.parent;   
+        parent = transform.parent;
     }
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("guh");
+        Debug.Log(other);
 
         if (other.transform.tag == "Player" || other.transform.tag == "test") return;
         if (other.transform == parent) return;
@@ -21,7 +21,7 @@ public class DriverTrigger : MonoBehaviour
         foreach (Transform child in parent.transform)
         {
             PlayerHealth p = child.GetComponent<PlayerHealth>();
-            if (p != null) p.TryDamageServerRpc(parent.GetComponent<Driver>().bumpDamage);
+            if (p != null) p.TryDamageServerRpc(parent.GetComponent<NewDriver>().bumpDamage);
         }
 
         Destroy(parent.gameObject);

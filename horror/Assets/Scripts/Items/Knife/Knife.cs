@@ -82,11 +82,17 @@ public class Knife : NetworkBehaviour
     private void AttackCollider()
     {
         RaycastHit hit;
-        if (Physics.Raycast(pb.playerCamera.transform.position, new Vector3(pb.playerCamera.transform.forward.x, pb.playerCamera.transform.forward.y, pb.playerCamera.transform.forward.z), out hit))
+        if (Physics.Raycast(pb.playerCamera.transform.position, pb.playerCamera.transform.forward, out hit))
         {
-            if (hit.transform.tag != "Player" || hit.distance > 1) return;
-            
+            if (hit.distance > 1) return;
+
             GameObject p = hit.transform.gameObject;
+
+            if (hit.transform.tag == "Breakable") {
+                p.GetComponent<BreakableWall>().DamageServerRpc(attackDamage);
+            }
+
+            if (hit.transform.tag != "Player") return;
 
             p.GetComponent<PlayerHealth>().TryDamageServerRpc(attackDamage);
 

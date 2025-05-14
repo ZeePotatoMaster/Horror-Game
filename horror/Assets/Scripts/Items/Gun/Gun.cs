@@ -207,9 +207,11 @@ public class Gun : NetworkBehaviour
         {
             Debug.Log(hit.transform.name);
 
-            if (hit.transform.tag == "Bullet")
+            if (hit.transform.tag == "Breakable")
             {
-                Destroy(hit.transform.gameObject);
+                GameObject b = hit.transform.gameObject;
+                b.GetComponent<BreakableWall>().DamageServerRpc(damage);
+                hitMarker = true;
             }
 
             if (hit.transform.tag == "Enemy")
