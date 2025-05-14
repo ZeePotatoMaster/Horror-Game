@@ -8,6 +8,7 @@ public class CupboardScript : Interactable
 {
     public override void FinishInteract(GameObject player)
     {
+        Debug.Log("booyah");
         Animator cup = this.transform.GetComponent<Animator>();
 
         if (cup.GetCurrentAnimatorStateInfo(0).IsName("openidle")) {
