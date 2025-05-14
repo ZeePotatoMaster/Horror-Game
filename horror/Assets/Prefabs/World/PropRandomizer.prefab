@@ -14,7 +14,7 @@ GameObject:
   m_Layer: 0
   m_Name: PropRandomizer
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 4162164826716764455, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -76,11 +76,11 @@ MonoBehaviour:
   - {fileID: 4789480852769545712, guid: bd0863b1e691fa943b687815700af418, type: 3}
   - {fileID: 8358927428597452379, guid: 7c01d21b165b4fd4b96e425f749a66d2, type: 3}
   chances:
-  - 0
-  - 0
-  - 0
-  - 0
-  - 1
-  - 0
-  - 0
-  - 0
+  - 0.1
+  - 0.1
+  - 0.1
+  - 0.1
+  - 0.1
+  - 0.1
+  - 0.1
+  - 0.3

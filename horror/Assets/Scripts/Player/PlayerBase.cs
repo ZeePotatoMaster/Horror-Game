@@ -207,7 +207,7 @@ public class PlayerBase : NetworkBehaviour
         }
 
         // Move the controller
-        characterController.Move(moveDirection * Time.deltaTime);
+        if (characterController.enabled) characterController.Move(moveDirection * Time.deltaTime);
 
         // Player and Camera rotation
         if (canMove)
@@ -251,7 +251,8 @@ public class PlayerBase : NetworkBehaviour
 
         if (Mathf.Abs(moveDirection.x) > 0.1f || Mathf.Abs(moveDirection.z) > 0.1f)
         {
-            timer += Time.deltaTime * walkBobSpeed;
+            float bobSpeed = isSprinting ? walkBobSpeed * 1.4f : walkBobSpeed;
+            timer += Time.deltaTime * bobSpeed;
             playerCamera.transform.localPosition = new Vector3(playerCamera.transform.localPosition.x, defaultYPos + Mathf.Sin(timer) * walkBobAmount, playerCamera.transform.localPosition.z);
         }
         

@@ -1146,7 +1146,7 @@ MonoBehaviour:
   currentSpeed: 0
   canUseHeadBob: 1
   walkBobSpeed: 14
-  walkBobAmount: 0.02
+  walkBobAmount: 0.05
   canMove: 1
   attacked: 0
   altAttacked: 0

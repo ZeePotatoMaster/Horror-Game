@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
+using UnityEditor;
 using UnityEngine;
 
 public class DefaultSpawner : NetworkBehaviour
@@ -21,12 +22,16 @@ public class DefaultSpawner : NetworkBehaviour
     {
         if (!IsServer) return;
         if (!isSpawning && !spawnOnce) StartSpawn();
+        else if (!isSpawning && spawnObject) Destroy(this.gameObject);
     }
 
     void StartSpawn()
     {
         isSpawning = true;
-        if (!ShouldSpawn()) return;
+        if (!ShouldSpawn()) {
+            Invoke(nameof(ResetSpawn), GetSpawnTime());
+            return;
+        }
 
         Invoke(nameof(Spawn), GetSpawnTime());
     }
@@ -49,5 +54,11 @@ public class DefaultSpawner : NetworkBehaviour
         NetworkObject o = Instantiate(spawnObject, this.transform.position, this.transform.rotation);
         o.Spawn(true);
         isSpawning = false;
+    }
+
+    void ResetSpawn()
+    {
+        isSpawning = false;
+        if (spawnOnce) Destroy(this.gameObject);
     }
 }
