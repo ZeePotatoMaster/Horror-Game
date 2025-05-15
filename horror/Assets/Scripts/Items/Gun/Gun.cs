@@ -177,8 +177,10 @@ public class Gun : NetworkBehaviour
         TotalAmmoScore.text = "" + TotalAmmo;
         
         //animate hands
-        pb.RHandTarget.SetPositionAndRotation(rightIKTarget.position, rightIKTarget.rotation);
-        pb.LHandTarget.SetPositionAndRotation(leftIKTarget.position, leftIKTarget.rotation);
+        if (pb != null) {
+            pb.RHandTarget.SetPositionAndRotation(rightIKTarget.position, rightIKTarget.rotation);
+            pb.LHandTarget.SetPositionAndRotation(leftIKTarget.position, leftIKTarget.rotation);
+        }
 
         //rotation
         /*var newpos = pb.playerCamera.transform.TransformPoint(pos);

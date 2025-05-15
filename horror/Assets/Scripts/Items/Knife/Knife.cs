@@ -15,7 +15,6 @@ public class Knife : NetworkBehaviour
     private bool canAttack = true;
     private int attackCount;
     private PlayerBase pb;
-    private PlayerHealth ph;
 
     const string IDLE = "Idle";
     const string WALK = "Walk";
@@ -33,7 +32,6 @@ public class Knife : NetworkBehaviour
             return;
         }
         pb = this.transform.parent.GetComponent<PlayerBase>();
-        ph = this.transform.parent.GetComponent<PlayerHealth>();
         viewmodel.SetParent(pb.playerCamera.transform, true);
         worldmodel.GetComponent<MeshRenderer>().enabled = false;
     }

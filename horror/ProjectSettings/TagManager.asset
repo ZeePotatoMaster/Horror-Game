@@ -10,6 +10,7 @@ TagManager:
   - test
   - PlayerCard
   - Breakable
+  - Painting
   layers:
   - Default
   - TransparentFX

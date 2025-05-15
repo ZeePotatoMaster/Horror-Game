@@ -67,7 +67,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnObject: {fileID: 5993638764097193727, guid: 0a26d1e031670654c979d15b67d61377, type: 3}
-  avgSpawnTime: 5
-  spawnRandomTime: 5
+  avgSpawnTime: 30
+  spawnRandomTime: 30
   spawnOnce: 1
-  spawnChance: 1
+  spawnChance: 0.2
