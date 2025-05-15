@@ -47,7 +47,7 @@ public class NetworkTransmission : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void StartGameServerRPC()
     {
-        NetworkManager.Singleton.SceneManager.LoadScene("SampleScene", UnityEngine.SceneManagement.LoadSceneMode.Single);
+        NetworkManager.Singleton.SceneManager.LoadScene("Lobby", UnityEngine.SceneManagement.LoadSceneMode.Single);
     }
 
     [ClientRpc]

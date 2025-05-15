@@ -11,6 +11,7 @@ public class PlayerHealth : NetworkBehaviour
     private GameObject hurtScreen;
     [SerializeField] private GameObject ragDoll;
     [SerializeField] private Camera playerCamera;
+    public bool invulnerable = false;
 
     // Start is called before the first frame update
     void Start()
@@ -51,12 +52,14 @@ public class PlayerHealth : NetworkBehaviour
 
     private void Death()
     {
+        Paintings.instance.OnPlayerDeath(OwnerClientId);
         SummonRagdollServerRpc(this.transform.position, this.OwnerClientId);
     }
 
     [ServerRpc(RequireOwnership = false)]
     public void TryDamageServerRpc(float damage)
     {
+        if (invulnerable) return;
         health.Value -= damage;
     }
 

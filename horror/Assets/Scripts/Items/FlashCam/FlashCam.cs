@@ -96,7 +96,8 @@ public class FlashCam : NetworkBehaviour
 
             if (hit.transform.tag != "Painting") return;
 
-            Paintings.instance.shotPaintings++;
+            Paintings.instance.GetComponent<Paintings>().shotPaintings++;
+            hit.transform.tag = "Untagged";
         }
     }
 

@@ -29,7 +29,7 @@ public class PropRandomizer : NetworkBehaviour
 
         if (prop == -1) return;
 
-        if (props[prop].tag == "Painting") Paintings.instance.totalPaintings.Value++;
+        if (props[prop].tag == "Painting") Paintings.instance.GetComponent<Paintings>().totalPaintings.Value++;
 
         MakePropRpc(prop);
     }

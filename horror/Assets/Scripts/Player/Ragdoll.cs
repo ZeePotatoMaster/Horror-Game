@@ -17,7 +17,7 @@ public class Ragdoll : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        //StartCoroutine(Destroy(destroyDelay));
+        StartCoroutine(Destroy(destroyDelay));
     }
 
     // Update is called once per frame
