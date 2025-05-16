@@ -34,6 +34,7 @@ public class TheOvergame : NetworkBehaviour
         DontDestroyOnLoad(this.gameObject);
 
         foreach (ulong i in NetworkManager.Singleton.ConnectedClients.Keys) {
+            Debug.Log(i);
             NetworkManager.Singleton.ConnectedClients[i].PlayerObject.Despawn(true);
 
             NetworkObject newPlayer = Instantiate(playerPrefab);
@@ -52,6 +53,7 @@ public class TheOvergame : NetworkBehaviour
             elevators.Add(i, elevator);
             newPlayer.TrySetParent(elevator.transform);
         }
+        foreach (KeyValuePair<ulong, NetworkObject> e in elevators) Debug.Log(e);
 
         int rand = Random.Range(0, levels.Length);
         LoadLevel(levels[rand]);
@@ -59,6 +61,7 @@ public class TheOvergame : NetworkBehaviour
 
     public void LoadLevel(string level)
     {
+        if (!IsServer) return;
         NetworkManager.Singleton.SceneManager.LoadScene(level, LoadSceneMode.Single);
     }
 }

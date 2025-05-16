@@ -31,13 +31,18 @@ public class PropRandomizer : NetworkBehaviour
 
         if (props[prop].tag == "Painting") Paintings.instance.GetComponent<Paintings>().totalPaintings.Value++;
 
-        MakePropRpc(prop);
+        
+        if (props[prop].GetComponent<NetworkObject>() == null) MakePropRpc(prop);
+        else {
+            GameObject o = Instantiate(props[prop], this.transform);
+            o.GetComponent<NetworkObject>().Spawn(true);
+            o.GetComponent<NetworkObject>().TryRemoveParent(); //something's funny here
+        }
     }
 
     [Rpc(SendTo.Everyone)]
     void MakePropRpc(int i)
     {
         GameObject o = Instantiate(props[i], this.transform);
-        if (o.GetComponent<NetworkObject>() != null && IsServer) o.GetComponent<NetworkObject>().Spawn(true);
     }
 }

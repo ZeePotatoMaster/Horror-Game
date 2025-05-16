@@ -36,6 +36,7 @@ public class PlayerBase : NetworkBehaviour
     private float knockbackTimer;
 
     public bool canMove = true;
+    public Vector3 lockPosition = Vector3.zero;
 
     private Vector2 movementInput = Vector2.zero;
     private Vector2 lookInput = Vector2.zero;
@@ -217,6 +218,10 @@ public class PlayerBase : NetworkBehaviour
             playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0f, 0f);
             transform.rotation *= Quaternion.Euler(0, lookInput.x * lookSpeed, 0);
         }
+        if (lockPosition != Vector3.zero && transform.position != lockPosition)
+        {
+            transform.position = lockPosition;
+        }
 
         if (canUseHeadBob && canMove) HandleHeadBob();
 
@@ -372,5 +377,10 @@ public class PlayerBase : NetworkBehaviour
         }
 
         playerCamera.transform.localPosition = originalPos;
+    }
+
+    public void removeLockPosition()
+    {
+        lockPosition = Vector3.zero;
     }
 }

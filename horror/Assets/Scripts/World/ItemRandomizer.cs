@@ -13,6 +13,7 @@ public class ItemRandomizer : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
+        if (!IsServer) return;
         foreach(Transform p in poses) {
             float roll = Random.Range(0f, 1f);
             float chance = 0f;

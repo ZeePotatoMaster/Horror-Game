@@ -23,34 +23,45 @@ public class Paintings : MinigameManager
     [SerializeField] private NetworkObject flashCam;
 
     [SerializeField] private List<Transform> elevatorSpawns;
-
+    
     void Awake()
     {
         base.Awake();
         uit = Instantiate(ui, GameObject.Find("Canvas").transform).GetComponent<TMP_Text>();
     }
-
+    
     public override void OnNetworkSpawn()
     {
         if (!IsServer) return;
+        flashCam = Instantiate(flashCam, transform.position, transform.rotation);
+        flashCam.Spawn();
         foreach (KeyValuePair<ulong, NetworkObject> e in TheOvergame.instance.elevators) {
             int i = Random.Range(0, elevatorSpawns.Count);
 
-            NetworkObject p = NetworkManager.Singleton.ConnectedClients[e.Value.GetComponent<Elevator>().ownerid].PlayerObject;
-            p.GetComponent<CharacterController>().enabled = false;
-            p.transform.position = elevatorSpawns[i].position + p.transform.localPosition;
-            p.TryRemoveParent();
-
+            FirstTeleportRpc(flashCam, i, RpcTarget.Single(e.Key, RpcTargetUse.Temp));
             e.Value.transform.position = elevatorSpawns[i].position;
-            p.GetComponent<CharacterController>().enabled = true;
 
             Debug.Log("a ");
             elevatorSpawns.Remove(elevatorSpawns[i]);
-            flashCam.Spawn();
             PickupItemRpc(flashCam, RpcTarget.Single(e.Key, RpcTargetUse.Temp));
 
             alivePlayers++;
         }
+    }
+
+    [Rpc(SendTo.SpecifiedInParams)]
+    private void FirstTeleportRpc(NetworkObjectReference itemRef, int i, RpcParams rpcParams = default)
+    {
+        NetworkObject p = NetworkManager.Singleton.LocalClient.PlayerObject;
+        p.GetComponent<CharacterController>().enabled = false;
+        p.transform.position = elevatorSpawns[i].position + new Vector3(0, 2, 0);
+
+        PlayerBase pb = p.GetComponent<PlayerBase>();
+        pb.lockPosition = elevatorSpawns[i].position;
+        pb.Invoke(nameof(pb.removeLockPosition), 2f);
+
+        p.TryRemoveParent(true);
+        p.GetComponent<CharacterController>().enabled = true;
     }
 
     [Rpc(SendTo.SpecifiedInParams)]
@@ -64,7 +75,8 @@ public class Paintings : MinigameManager
     {
         uit.text = shotPaintings + " / " + totalPaintings.Value + " paintings";
         
-        if (cookedPlayer != null) cookedPlayer.GetComponent<PlayerHealth>().TryDamageServerRpc(1);
+        if (cookedPlayer != null) cookedPlayer.GetComponent<PlayerHealth>().TryDamageServerRpc(5);
+        if (cookedPlayer == null && alivePlayers == 1) EndGame();
         //if (shotPaintings == totalPaintings) 
     }
 
@@ -87,6 +99,18 @@ public class Paintings : MinigameManager
         NetworkObject newPlayer = Instantiate(playerPrefab);
         newPlayer.SpawnAsPlayerObject(id, true);
         PickupItemRpc(flashCam, RpcTarget.Single(id, RpcTargetUse.Temp));
+
+        Transform t = TheOvergame.instance.elevators[id].transform;
+        TeleportRpc(t.position.x, t.position.y, t.position.z, RpcTarget.Single(id, RpcTargetUse.Temp));
+    }
+
+    [Rpc(SendTo.SpecifiedInParams)]
+    private void TeleportRpc(float x, float y, float z, RpcParams rpcParams = default)
+    {
+        NetworkObject p = NetworkManager.Singleton.LocalClient.PlayerObject;
+        p.GetComponent<CharacterController>().enabled = false;
+        p.transform.position = new Vector3(x, y, z);
+        p.GetComponent<CharacterController>().enabled = true;
     }
 
     public override void OnPlayerEnterElevator(ulong id)
@@ -112,7 +136,6 @@ public class Paintings : MinigameManager
                     TheOvergame.instance.elevators.Remove(i.Key);
                 }
             }
-            EndGame();
         }
     }
 

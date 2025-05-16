@@ -52,7 +52,12 @@ public class PlayerHealth : NetworkBehaviour
 
     private void Death()
     {
-        Paintings.instance.OnPlayerDeath(OwnerClientId);
+        MinigameManager.instance.OnPlayerDeath(OwnerClientId);
+        InventoryManager m = GetComponent<InventoryManager>();
+        for (int i = 0; i < m.inventorySlots.Count; i++) {
+            m.selectedSlot = i;
+            m.DropItem();
+        }
         SummonRagdollServerRpc(this.transform.position, this.OwnerClientId);
     }
 

@@ -133,7 +133,7 @@ public class Bomber : NetworkBehaviour
             NetworkObject bombie = Instantiate(bomb, this.transform.position, this.transform.rotation);
             bombie.Spawn(true);
 
-            bombie.GetComponent<Rigidbody>().AddForce(transform.forward * 5, ForceMode.Impulse);
+            bombie.GetComponent<Rigidbody>().AddForce(this.transform.forward * 5, ForceMode.Impulse);
 
             alreadyAttacked = true;
             Invoke(nameof(Despawn), despawnTimeAfterAttack);

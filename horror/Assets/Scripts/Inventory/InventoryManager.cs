@@ -7,11 +7,11 @@ using UnityEngine;
 
 public class InventoryManager : NetworkBehaviour
 {
-    private List<InventorySlot> inventorySlots = new List<InventorySlot>();
+    [HideInInspector] public List<InventorySlot> inventorySlots = new List<InventorySlot>();
     private InventoryItem[] inventoryItems;
     private Dictionary<int, NetworkObject> itemObjects = new Dictionary<int, NetworkObject>();
     [SerializeField] private GameObject inventoryItemPrefab;
-    private int selectedSlot = -1;
+    [HideInInspector] public int selectedSlot = -1;
 
     public override void OnNetworkSpawn() {
         if (!IsOwner) return;

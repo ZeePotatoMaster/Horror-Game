@@ -31,6 +31,7 @@ public class FlashCam : NetworkBehaviour
             return;
         }
         pb = this.transform.parent.GetComponent<PlayerBase>();
+        Debug.Log(pb);
         viewmodel.SetParent(pb.playerCamera.transform, false);
         worldmodel.GetComponentInChildren<MeshRenderer>().enabled = false;
         flashScreen = Instantiate(flashScreen, GameObject.Find("Canvas").transform);
@@ -48,13 +49,6 @@ public class FlashCam : NetworkBehaviour
         }
 
         SetAnimations();
-
-        if (flashScreen.GetComponent<Image>().color.a > 0)
-        {
-            var color = flashScreen.GetComponent<Image>().color;
-            color.a -= 0.001f;
-            flashScreen.GetComponent<Image>().color = color;
-        }
     }
 
     private void Attack()

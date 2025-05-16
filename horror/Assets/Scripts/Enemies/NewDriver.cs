@@ -45,7 +45,13 @@ public class NewDriver : NetworkBehaviour
         foreach (var hitCollider in hitColliders)
         {
             hitCollider.GetComponent<Transform>().SetParent(this.transform);
-            hitCollider.GetComponent<CharacterController>().enabled = false;
+            CharacterControllerRpc(RpcTarget.Single(hitCollider.GetComponent<NetworkObject>().OwnerClientId, RpcTargetUse.Temp));
         }
+    }
+
+    [Rpc(SendTo.SpecifiedInParams)]
+    void CharacterControllerRpc(RpcParams rpcParams = default)
+    {
+        NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<CharacterController>().enabled = false;
     }
 }
