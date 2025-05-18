@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class Ragdoll : MonoBehaviour
+public class Ragdoll : NetworkBehaviour
 {
     private Rigidbody rb;
     [SerializeField]
@@ -14,8 +14,9 @@ public class Ragdoll : MonoBehaviour
     private float destroyDelay;
 
     // Start is called before the first frame update
-    void Start()
+    public override void OnNetworkSpawn()
     {
+        if (!IsServer) return;
         rb = GetComponent<Rigidbody>();
         StartCoroutine(Destroy(destroyDelay));
     }
@@ -23,6 +24,7 @@ public class Ragdoll : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!IsServer) return;
         rb.AddForce(force.x, force.y, force.z, ForceMode.Impulse);
         this.transform.Rotate(rotation.x, rotation.y, rotation.z);
     }

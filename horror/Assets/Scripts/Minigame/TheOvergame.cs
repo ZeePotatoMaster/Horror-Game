@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Unity.Netcode;
 using UnityEngine;
@@ -17,14 +18,50 @@ public class TheOvergame : NetworkBehaviour
     [HideInInspector] public Dictionary<ulong, NetworkObject> elevators = new Dictionary<ulong, NetworkObject>();
 
     public static TheOvergame instance;
+    private int clientsLoaded = 0;
+    [HideInInspector] public bool gameStarted = false;
+
+    void SC_OnSceneEvent(SceneEvent sceneEvent)
+    {
+        switch (sceneEvent.SceneEventType)
+        {
+            case SceneEventType.LoadComplete:
+                {
+                    ClientLoadedSceneRpc();
+                    break;
+                }
+            case SceneEventType.UnloadComplete:
+            case SceneEventType.LoadEventCompleted:
+            case SceneEventType.UnloadEventCompleted:
+                {
+                    break;
+                }
+        }
+    }
+
+    [Rpc(SendTo.Server)]
+    void ClientLoadedSceneRpc()
+    {
+        clientsLoaded++;
+        if (clientsLoaded == NetworkManager.Singleton.ConnectedClientsList.Count)
+        {
+            gameStarted = true;
+            clientsLoaded = 0;
+        }
+    }
 
     public override void OnNetworkSpawn()
     {
         if (!IsServer) return;
+        NetworkManager.Singleton.SceneManager.ActiveSceneSynchronizationEnabled = true;
+        NetworkManager.Singleton.SceneManager.OnSceneEvent += SC_OnSceneEvent;
+        NetworkManager.Singleton.SceneManager.SetClientSynchronizationMode(LoadSceneMode.Single);
+
         /*foreach (ulong i in NetworkManager.Singleton.ConnectedClients.Keys) {
             NetworkObject newPlayer = Instantiate(playerPrefab);
             newPlayer.SpawnAsPlayerObject(i, true);
         }*/
+        
         instance = this;
     }
 
@@ -51,7 +88,7 @@ public class TheOvergame : NetworkBehaviour
             newPlayer.transform.position = startingSpots[spot].position + new Vector3 (0, 1, 0);
 
             elevators.Add(i, elevator);
-            newPlayer.TrySetParent(elevator.transform);
+            //newPlayer.TrySetParent(elevator.transform);
         }
         foreach (KeyValuePair<ulong, NetworkObject> e in elevators) Debug.Log(e);
 
@@ -61,7 +98,13 @@ public class TheOvergame : NetworkBehaviour
 
     public void LoadLevel(string level)
     {
-        if (!IsServer) return;
-        NetworkManager.Singleton.SceneManager.LoadScene(level, LoadSceneMode.Single);
+        /*if (!oldLevel.IsNullOrEmpty())
+        {
+            NetworkManager.Singleton.SceneManager.UnloadScene(SceneManager.GetSceneByName(oldLevel));
+            while (SceneManager.GetSceneByName(oldLevel).isLoaded) yield return null;
+        }
+        var status = NetworkManager.SceneManager.LoadScene(level, LoadSceneMode.Additive);
+        while (status != SceneEventProgressStatus.SceneNotLoaded) yield return null;*/
+        NetworkManager.SceneManager.LoadScene(level, LoadSceneMode.Single);
     }
 }

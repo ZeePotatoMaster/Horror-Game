@@ -44,7 +44,7 @@ public class NewDriver : NetworkBehaviour
         Debug.Log(hitColliders);
         foreach (var hitCollider in hitColliders)
         {
-            hitCollider.GetComponent<Transform>().SetParent(this.transform);
+            hitCollider.GetComponent<NetworkObject>().TrySetParent(this.transform);
             CharacterControllerRpc(RpcTarget.Single(hitCollider.GetComponent<NetworkObject>().OwnerClientId, RpcTargetUse.Temp));
         }
     }
@@ -53,5 +53,10 @@ public class NewDriver : NetworkBehaviour
     void CharacterControllerRpc(RpcParams rpcParams = default)
     {
         NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<CharacterController>().enabled = false;
+    }
+
+    public void DestroySelf()
+    {
+        GetComponent<NetworkObject>().Despawn(true);
     }
 }

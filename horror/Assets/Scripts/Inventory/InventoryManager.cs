@@ -14,9 +14,8 @@ public class InventoryManager : NetworkBehaviour
     [HideInInspector] public int selectedSlot = -1;
 
     public override void OnNetworkSpawn() {
-        if (!IsOwner) return;
-
         inventoryItems = GameObject.Find("ItemHolder").GetComponent<ItemHolder>().inventoryItems;
+        if (!IsOwner) return;
 
         GameObject canvas = GameObject.Find("Canvas");
         Transform hotbar = canvas.transform.Find("Toolbar");

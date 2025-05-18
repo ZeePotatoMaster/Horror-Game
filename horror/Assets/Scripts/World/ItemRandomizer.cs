@@ -10,11 +10,14 @@ public class ItemRandomizer : NetworkBehaviour
     [SerializeField] private InventoryItem[] items;
     [SerializeField] private float[] chances;
     [SerializeField] private Transform[] poses;
+    private bool spawned = false;
 
-    public override void OnNetworkSpawn()
+    void SpawnItem()
     {
-        if (!IsServer) return;
-        foreach(Transform p in poses) {
+        spawned = true;
+
+        foreach (Transform p in poses)
+        {
             float roll = Random.Range(0f, 1f);
             float chance = 0f;
             InventoryItem item = null;
@@ -22,15 +25,24 @@ public class ItemRandomizer : NetworkBehaviour
             for (int i = 0; i < chances.Length; i++)
             {
                 chance += chances[i];
-                if (roll <= chance) {
+                if (roll <= chance)
+                {
                     if (items[i] != null) item = items[i];
                     i = chances.Length;
-                } 
+                }
             }
 
             if (item == null) return;
             NetworkObject o = Instantiate(item.worldItemObject, p.position, p.rotation);
             o.Spawn(true);
         }
+    }
+
+    void Update()
+    {
+        if (!IsServer) return;
+        if (!TheOvergame.instance.gameStarted) return;
+
+        if (!spawned) SpawnItem();
     }
 }

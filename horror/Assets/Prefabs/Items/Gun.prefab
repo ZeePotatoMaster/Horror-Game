@@ -988,7 +988,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3505600769
+  GlobalObjectIdHash: 1964159715
   InScenePlacedSourceGlobalObjectIdHash: 3505600769
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -1041,7 +1041,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 25
-  TimeBetweenShots: 1
+  TimeBetweenShots: 0.5
   MaxAmmo: 6
   CurrentAmmo: 0
   ReloadTime: 1

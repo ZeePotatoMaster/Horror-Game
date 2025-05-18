@@ -8,9 +8,9 @@ TagManager:
   - Corpse
   - Energy
   - test
-  - PlayerCard
   - Breakable
   - Painting
+  - Elevator
   layers:
   - Default
   - TransparentFX

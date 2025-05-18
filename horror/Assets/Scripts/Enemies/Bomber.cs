@@ -63,7 +63,9 @@ public class Bomber : NetworkBehaviour
 
     private void FindPlayer()
     {
-        if (tick != 0) {
+        if (player == null) player = null;
+        if (tick != 0)
+        {
             tick = Mathf.Clamp(tick -= Time.deltaTime, 0f, timeBetweenChecks);
             Debug.Log(tick);
             return;

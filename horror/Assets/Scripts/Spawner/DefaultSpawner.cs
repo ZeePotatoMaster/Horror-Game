@@ -12,17 +12,20 @@ public class DefaultSpawner : NetworkBehaviour
     [SerializeField] private float spawnRandomTime;
     [SerializeField] private bool spawnOnce;
     [SerializeField] private float spawnChance;
-    public override void OnNetworkSpawn()
-    {
-        if (!IsServer) return;
-        StartSpawn();
-    }
+
+    private bool firstSpawn = false;
 
     void Update()
     {
         if (!IsServer) return;
+        if (!TheOvergame.instance.gameStarted) return;
+
+        if (!firstSpawn) {
+            StartSpawn();
+            firstSpawn = true;
+        }
         if (!isSpawning && !spawnOnce) StartSpawn();
-        else if (!isSpawning && spawnObject) Destroy(this.gameObject);
+            else if (!isSpawning && spawnOnce) Destroy(this.gameObject);
     }
 
     void StartSpawn()

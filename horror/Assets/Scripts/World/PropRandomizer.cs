@@ -9,11 +9,13 @@ public class PropRandomizer : NetworkBehaviour
 
     [SerializeField] private GameObject[] props;
     [SerializeField] private float[] chances;
+    private bool loaded = false;
 
 
-    public override void OnNetworkSpawn()
+    public void LoadProp()
     {
-        if (!IsServer) return;
+        loaded = true;
+
         float roll = Random.Range(0f, 1f);
         float chance = 0f;
         int prop = -1;
@@ -21,23 +23,31 @@ public class PropRandomizer : NetworkBehaviour
         for (int i = 0; i < chances.Length; i++)
         {
             chance += chances[i];
-            if (roll <= chance) {
+            if (roll <= chance)
+            {
                 if (props[i] != null) prop = i;
                 break;
-            } 
+            }
         }
 
         if (prop == -1) return;
 
         if (props[prop].tag == "Painting") Paintings.instance.GetComponent<Paintings>().totalPaintings.Value++;
 
-        
+
         if (props[prop].GetComponent<NetworkObject>() == null) MakePropRpc(prop);
-        else {
-            GameObject o = Instantiate(props[prop], this.transform);
-            o.GetComponent<NetworkObject>().Spawn(true);
-            o.GetComponent<NetworkObject>().TryRemoveParent(); //something's funny here
+        else
+        {
+            NetworkObject o = Instantiate(props[prop], this.transform).GetComponent<NetworkObject>();
+            o.Spawn(true);
+            o.TryRemoveParent(true);
         }
+    }
+
+    void Update()
+    {
+        if (!IsServer) return;
+        if (TheOvergame.instance.gameStarted && !loaded) LoadProp();
     }
 
     [Rpc(SendTo.Everyone)]

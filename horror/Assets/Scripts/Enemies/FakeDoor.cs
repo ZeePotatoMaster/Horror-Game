@@ -15,6 +15,8 @@ public class FakeDoor : Interactable
     public override void FinishInteract(GameObject player)
     {
         AnimateRpc(player.GetComponent<NetworkObject>().OwnerClientId);
+        target = player.transform;
+        Invoke(nameof(StartAttack), attackDelay);
     }
 
     [Rpc(SendTo.Server)]
@@ -22,27 +24,28 @@ public class FakeDoor : Interactable
     {
         Animator door = this.transform.GetComponent<Animator>();
         door.Play("attack");
-        
-        target = NetworkManager.Singleton.ConnectedClients[id].PlayerObject.transform;
+
+        Debug.Log("Target = " + id);
         Debug.Log(NetworkManager.Singleton.ConnectedClients[id].PlayerObject.transform);
-        Invoke(nameof(StartAttack), attackDelay);
     }
 
     void StartAttack()
     {
+        NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<CharacterController>().enabled = false;
         attacking = true;
-        target.GetComponent<CharacterController>().enabled = false;
     }
 
     void Update()
     {
-        if (!IsServer) return;
-        if (attacking) {
+        if (attacking)
+        {
+            if (target == null) attacking = false;
             target.position = Vector3.MoveTowards(target.position, destination.position, attackSpeed * Time.deltaTime);
-            if (Vector3.Distance(target.position, destination.position) < 0.1) {
+            if (Vector3.Distance(target.position, destination.position) < 0.1)
+            {
                 target.GetComponent<PlayerHealth>().TryDamageServerRpc(100);
                 attacking = false;
-            } 
+            }
         }
     }
 }

@@ -1506,7 +1506,7 @@ GameObject:
   m_Component:
   - component: {fileID: 171072105}
   - component: {fileID: 171072103}
-  - component: {fileID: 171072104}
+  - component: {fileID: 171072106}
   m_Layer: 0
   m_Name: TheOvergame
   m_TagString: Untagged
@@ -1535,7 +1535,22 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &171072104
+--- !u!4 &171072105
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 171072102}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &171072106
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1560,21 +1575,7 @@ MonoBehaviour:
   - {fileID: 807952284}
   levels:
   - SampleScene
---- !u!4 &171072105
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 171072102}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  gameStarted: 0
 --- !u!43 &252103602
 Mesh:
   m_ObjectHideFlags: 0
@@ -5711,8 +5712,8 @@ Transform:
   - {fileID: 557462474}
   - {fileID: 1682349710}
   - {fileID: 375447390}
-  - {fileID: 1163459640}
   - {fileID: 947894485}
+  - {fileID: 1163459640}
   - {fileID: 807952284}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

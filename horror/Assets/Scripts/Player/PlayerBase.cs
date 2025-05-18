@@ -44,7 +44,7 @@ public class PlayerBase : NetworkBehaviour
     private bool isSprinting = false;
     [HideInInspector] public bool attacked = false;
     [HideInInspector] public bool altAttacked = false;
-    [HideInInspector] public bool reloaded = false; 
+    [HideInInspector] public bool reloaded = false;
 
     //looting
     [HideInInspector] public bool interacted = false;
@@ -72,7 +72,7 @@ public class PlayerBase : NetworkBehaviour
     private Vector2 change;
     [SerializeField] private GameObject playerModel;
     private float changeTime;
-    public Transform RHandTarget, LHandTarget; 
+    public Transform RHandTarget, LHandTarget;
 
     //camera shake
     private Vector3 originalPos;
@@ -115,48 +115,59 @@ public class PlayerBase : NetworkBehaviour
 
     //player inputs
 
-    public void OnMove(InputAction.CallbackContext context) {
+    public void OnMove(InputAction.CallbackContext context)
+    {
         movementInput = context.ReadValue<Vector2>();
     }
 
-    public void OnSprint(InputAction.CallbackContext context) {
+    public void OnSprint(InputAction.CallbackContext context)
+    {
         isSprinting = context.action.triggered;
     }
 
-    public void OnAttack(InputAction.CallbackContext context) {
+    public void OnAttack(InputAction.CallbackContext context)
+    {
         attacked = context.action.triggered;
     }
 
-    public void OnAltAttack(InputAction.CallbackContext context) {
+    public void OnAltAttack(InputAction.CallbackContext context)
+    {
         altAttacked = context.action.triggered;
     }
 
-    public void OnReload(InputAction.CallbackContext context) {
+    public void OnReload(InputAction.CallbackContext context)
+    {
         reloaded = context.action.triggered;
     }
 
-    public void OnJump(InputAction.CallbackContext context) {
+    public void OnJump(InputAction.CallbackContext context)
+    {
         jumped = context.action.triggered;
     }
 
-    public void OnDrop(InputAction.CallbackContext context) {
+    public void OnDrop(InputAction.CallbackContext context)
+    {
         dropped = context.action.triggered;
     }
 
-    public void OnLook(InputAction.CallbackContext context) {
+    public void OnLook(InputAction.CallbackContext context)
+    {
         lookInput = context.ReadValue<Vector2>();
     }
-    
-    public void OnPickCurse(InputAction.CallbackContext context) {
+
+    public void OnPickCurse(InputAction.CallbackContext context)
+    {
         picking = context.action.triggered;
     }
 
-    public void OnInteract(InputAction.CallbackContext context) {
+    public void OnInteract(InputAction.CallbackContext context)
+    {
         context.action.performed += context => interacted = true;
         context.action.canceled += context => interacted = false;
     }
 
-    public void OnWeaponChange(InputAction.CallbackContext context) {
+    public void OnWeaponChange(InputAction.CallbackContext context)
+    {
         Debug.Log(context.ReadValue<float>());
         if (context.ReadValue<float>() > 0)
         {
@@ -228,7 +239,8 @@ public class PlayerBase : NetworkBehaviour
         //loot
         if (interacted && canInteract) interactObject = Interact();
 
-        if (interactObject == null) {
+        if (interactObject == null)
+        {
             canInteract = false;
             if (isInteracting) EndInteract();
         }
@@ -237,7 +249,8 @@ public class PlayerBase : NetworkBehaviour
         if (!interacted && (!canInteract || isInteracting)) EndInteract();
 
         //inventory
-        if (swappedWeapons && canSwapWeapons) {
+        if (swappedWeapons && canSwapWeapons)
+        {
             inventoryManager.ChangeSelectedSlot(swapDirection);
             swapDirection = 0;
             swappedWeapons = false;
@@ -260,16 +273,18 @@ public class PlayerBase : NetworkBehaviour
             timer += Time.deltaTime * bobSpeed;
             playerCamera.transform.localPosition = new Vector3(playerCamera.transform.localPosition.x, defaultYPos + Mathf.Sin(timer) * walkBobAmount, playerCamera.transform.localPosition.z);
         }
-        
+
         Quaternion normal = Quaternion.Euler(rotationX, 0, 0);
         Quaternion knock = Quaternion.Euler(rotationX, knockbackY, knockbackZ);
-        if (knockbackTimer > 0) {
+        if (knockbackTimer > 0)
+        {
             playerCamera.transform.localRotation = Quaternion.Lerp(normal, knock, knockbackTimer);
             knockbackTimer = Mathf.Clamp(knockbackTimer - Time.deltaTime, 0f, 1f);
         }
     }
 
-    void updateAnimations() {
+    void updateAnimations()
+    {
 
         changeTime = movementInput == Vector2.zero ? Time.deltaTime * 12 : Time.deltaTime * 4;
 
@@ -282,7 +297,8 @@ public class PlayerBase : NetworkBehaviour
         animator.SetFloat(modelScript.GetAnimInt(1), canMove ? change.y * 2 : 0);
     }
 
-    void updateAnimatorParameters() {
+    void updateAnimatorParameters()
+    {
 
         Animator animator = playerModel.GetComponent<Animator>();
         PlayerModel modelScript = playerModel.GetComponent<PlayerModel>();
@@ -314,7 +330,7 @@ public class PlayerBase : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void CamKnockbackServerRpc(int directionY, int directionZ, float intensity, ulong id)
     {
-        CamKnockbackClientRpc(directionY, directionZ, intensity, new ClientRpcParams { Send = new ClientRpcSendParams {TargetClientIds = new List<ulong> {id}}});
+        CamKnockbackClientRpc(directionY, directionZ, intensity, new ClientRpcParams { Send = new ClientRpcSendParams { TargetClientIds = new List<ulong> { id } } });
     }
 
     [ClientRpc]
@@ -332,7 +348,8 @@ public class PlayerBase : NetworkBehaviour
         if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out looty))
         {
             float dist = Vector3.Distance(looty.transform.position, transform.position);
-            if (dist <= 2.5) {
+            if (dist <= 2.5)
+            {
                 Debug.Log(looty.transform);
                 return looty.transform;
             }
@@ -342,7 +359,7 @@ public class PlayerBase : NetworkBehaviour
                 EndInteract();
             }
         }
-       return null;
+        return null;
     }
 
     public void EndInteract()
@@ -382,5 +399,12 @@ public class PlayerBase : NetworkBehaviour
     public void removeLockPosition()
     {
         lockPosition = Vector3.zero;
+    }
+
+    //when touching elevator
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (!hit.collider.transform.CompareTag("Elevator")) return;
+        if (hit.collider.GetComponent<Elevator>().ownerid == OwnerClientId) Paintings.instance.OnPlayerEnterElevator(OwnerClientId);
     }
 }

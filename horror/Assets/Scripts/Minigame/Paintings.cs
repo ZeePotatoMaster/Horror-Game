@@ -23,34 +23,37 @@ public class Paintings : MinigameManager
     [SerializeField] private NetworkObject flashCam;
 
     [SerializeField] private List<Transform> elevatorSpawns;
+
+    private bool started = false;
     
     void Awake()
     {
         base.Awake();
         uit = Instantiate(ui, GameObject.Find("Canvas").transform).GetComponent<TMP_Text>();
     }
-    
-    public override void OnNetworkSpawn()
+
+    private void StartMinigame()
     {
-        if (!IsServer) return;
         flashCam = Instantiate(flashCam, transform.position, transform.rotation);
         flashCam.Spawn();
-        foreach (KeyValuePair<ulong, NetworkObject> e in TheOvergame.instance.elevators) {
+        foreach (KeyValuePair<ulong, NetworkObject> e in TheOvergame.instance.elevators)
+        {
             int i = Random.Range(0, elevatorSpawns.Count);
 
-            FirstTeleportRpc(flashCam, i, RpcTarget.Single(e.Key, RpcTargetUse.Temp));
+            FirstTeleportRpc(i, RpcTarget.Single(e.Key, RpcTargetUse.Temp));
             e.Value.transform.position = elevatorSpawns[i].position;
 
             Debug.Log("a ");
             elevatorSpawns.Remove(elevatorSpawns[i]);
-            PickupItemRpc(flashCam, RpcTarget.Single(e.Key, RpcTargetUse.Temp));
+            flashCam.GetComponent<FlashCamItem>().PickupItemRpc(RpcTarget.Single(e.Key, RpcTargetUse.Temp));
 
             alivePlayers++;
         }
+        Debug.Log("alive players: " + alivePlayers);
     }
 
     [Rpc(SendTo.SpecifiedInParams)]
-    private void FirstTeleportRpc(NetworkObjectReference itemRef, int i, RpcParams rpcParams = default)
+    private void FirstTeleportRpc(int i, RpcParams rpcParams = default)
     {
         NetworkObject p = NetworkManager.Singleton.LocalClient.PlayerObject;
         p.GetComponent<CharacterController>().enabled = false;
@@ -64,31 +67,32 @@ public class Paintings : MinigameManager
         p.GetComponent<CharacterController>().enabled = true;
     }
 
-    [Rpc(SendTo.SpecifiedInParams)]
-    private void PickupItemRpc(NetworkObjectReference itemRef, RpcParams rpcParams = default)
-    {
-        if (itemRef.TryGet(out NetworkObject item)) item.GetComponent<WorldItem>().FinishInteract(NetworkManager.LocalClient.PlayerObject.gameObject);
-    }
-
     // Update is called once per frame
     void Update()
     {
         uit.text = shotPaintings + " / " + totalPaintings.Value + " paintings";
-        
-        if (cookedPlayer != null) cookedPlayer.GetComponent<PlayerHealth>().TryDamageServerRpc(5);
-        if (cookedPlayer == null && alivePlayers == 1) EndGame();
+
+        if (!IsServer) return;
+        if (TheOvergame.instance.gameStarted && !started)
+        {
+            started = true;
+            StartMinigame();
+        }
+
+        if (cookedPlayer != null) cookedPlayer.GetComponent<PlayerHealth>().TryDamageServerRpc(1);
+        if (cookedPlayer == null && alivePlayers == 1) Invoke(nameof(EndGame), 5f);
         //if (shotPaintings == totalPaintings) 
     }
 
     public override void OnPlayerDeath(ulong id)
     {
-        if (alivePlayers == 1) return;
         RespawnPlayerRpc(id, 5f);
     }
 
     [Rpc(SendTo.Server)]
     void RespawnPlayerRpc(ulong id, float delayTime)
     {
+        if (alivePlayers == 1) return;
         StartCoroutine(RespawnPlayer(id ,delayTime));
     }
 
@@ -98,7 +102,7 @@ public class Paintings : MinigameManager
 
         NetworkObject newPlayer = Instantiate(playerPrefab);
         newPlayer.SpawnAsPlayerObject(id, true);
-        PickupItemRpc(flashCam, RpcTarget.Single(id, RpcTargetUse.Temp));
+        flashCam.GetComponent<FlashCamItem>().PickupItemRpc(RpcTarget.Single(id, RpcTargetUse.Temp));
 
         Transform t = TheOvergame.instance.elevators[id].transform;
         TeleportRpc(t.position.x, t.position.y, t.position.z, RpcTarget.Single(id, RpcTargetUse.Temp));
@@ -115,25 +119,32 @@ public class Paintings : MinigameManager
 
     public override void OnPlayerEnterElevator(ulong id)
     {
-        if (alivePlayers == 1) return;
+        Debug.Log("winning almost ahh");
         if (shotPaintings == totalPaintings.Value) PlayerWinRpc(id);
     }
 
     [Rpc(SendTo.Server)]
     private void PlayerWinRpc(ulong id)
     {
-        alivePlayers--;
+        if (alivePlayers == 1) return;
+
         NetworkObject p = NetworkManager.Singleton.ConnectedClients[id].PlayerObject;
+        if (winners.Contains(p)) return;
+        Debug.Log("winning ahh");
+
+        alivePlayers--;
         winners.Add(p);
         p.GetComponent<PlayerHealth>().invulnerable = true;
         p.gameObject.layer = nullLayer;
 
         if (alivePlayers == 1) {
             foreach (KeyValuePair<ulong, NetworkClient> i in NetworkManager.Singleton.ConnectedClients) {
-                if (!winners.Contains(i.Value.PlayerObject)) {
+                if (!winners.Contains(i.Value.PlayerObject) && i.Value.PlayerObject != null)
+                {
                     EliminatePlayerRpc(RpcTarget.Single(i.Key, RpcTargetUse.Temp));
-                    Destroy(TheOvergame.instance.elevators[i.Key]);
+                    TheOvergame.instance.elevators[i.Key].Despawn(true);
                     TheOvergame.instance.elevators.Remove(i.Key);
+                    cookedPlayer = i.Value.PlayerObject;
                 }
             }
         }
@@ -143,7 +154,6 @@ public class Paintings : MinigameManager
     private void EliminatePlayerRpc(RpcParams rpcParams = default)
     {
         Instantiate(cookedText, GameObject.Find("Canvas").transform);
-        cookedPlayer = NetworkManager.Singleton.LocalClient.PlayerObject;
     }
 
     private void EndGame()

@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 3603818296529742571}
   - component: {fileID: 2399883398049565120}
   - component: {fileID: 7754304085611909073}
-  - component: {fileID: 474140185547974375}
+  - component: {fileID: 5386548142375607414}
   m_Layer: 0
   m_Name: FlashCamItem
   m_TagString: Untagged
@@ -151,7 +151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2050298377
+  GlobalObjectIdHash: 1523405115
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -160,7 +160,7 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &474140185547974375
+--- !u!114 &5386548142375607414
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -169,12 +169,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 6660054248436374263}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbcb3c42fa46b8f47aedc1eb9fe6420d, type: 3}
+  m_Script: {fileID: 11500000, guid: 408e2e1f2da65fe41956f27d14778e6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   parentProxy: 0
   humansInteract: 1
   isInstant: 0
   interactTime: 1
-  destroyOnUse: 1
+  destroyOnUse: 0
   item: {fileID: 11400000, guid: e95f151d99050c84d82f589c5e86c718, type: 2}

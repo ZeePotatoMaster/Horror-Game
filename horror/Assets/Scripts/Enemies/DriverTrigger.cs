@@ -24,6 +24,6 @@ public class DriverTrigger : MonoBehaviour
             if (p != null) p.TryDamageServerRpc(parent.GetComponent<NewDriver>().bumpDamage);
         }
 
-        Destroy(parent.gameObject);
+        parent.GetComponent<NewDriver>().DestroySelf();
     }
 }
