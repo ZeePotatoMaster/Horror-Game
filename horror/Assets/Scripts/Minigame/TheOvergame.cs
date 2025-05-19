@@ -61,10 +61,16 @@ public class TheOvergame : NetworkBehaviour
             NetworkObject newPlayer = Instantiate(playerPrefab);
             newPlayer.SpawnAsPlayerObject(i, true);
         }*/
-        NetworkObject newPlayer = Instantiate(playerPrefab);
-        newPlayer.SpawnAsPlayerObject(OwnerClientId, true);
-        
+        if (IsOwner) SpawnPlayerServerRpc(NetworkManager.Singleton.LocalClientId);
+
         instance = this;
+    }
+    
+    [ServerRpc(RequireOwnership = false)]
+    private void SpawnPlayerServerRpc(ulong id)
+    {
+        NetworkObject newPlayer = Instantiate(playerPrefab);
+        newPlayer.SpawnAsPlayerObject(id);
     }
 
     public void StartGame()
@@ -72,7 +78,8 @@ public class TheOvergame : NetworkBehaviour
         if (!IsServer) return;
         DontDestroyOnLoad(this.gameObject);
 
-        foreach (ulong i in NetworkManager.Singleton.ConnectedClients.Keys) {
+        foreach (ulong i in NetworkManager.Singleton.ConnectedClients.Keys)
+        {
             Debug.Log(i);
             NetworkManager.Singleton.ConnectedClients[i].PlayerObject.Despawn(true);
 
@@ -87,7 +94,7 @@ public class TheOvergame : NetworkBehaviour
 
             int spot = Random.Range(0, startingSpots.Count);
             elevator.transform.position = startingSpots[spot].position;
-            newPlayer.transform.position = startingSpots[spot].position + new Vector3 (0, 1, 0);
+            newPlayer.transform.position = startingSpots[spot].position + new Vector3(0, 1, 0);
 
             elevators.Add(i, elevator);
             //newPlayer.TrySetParent(elevator.transform);
