@@ -81,7 +81,7 @@ public class TheOvergame : NetworkBehaviour
         foreach (ulong i in NetworkManager.Singleton.ConnectedClients.Keys)
         {
             Debug.Log(i);
-            NetworkManager.Singleton.ConnectedClients[i].PlayerObject.Despawn(true);
+            if (NetworkManager.Singleton.ConnectedClients[i].PlayerObject != null) NetworkManager.Singleton.ConnectedClients[i].PlayerObject.Despawn(true);
 
             NetworkObject newPlayer = Instantiate(playerPrefab);
             newPlayer.SpawnAsPlayerObject(i, false);
