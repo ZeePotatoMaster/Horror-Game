@@ -405,6 +405,7 @@ public class PlayerBase : NetworkBehaviour
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
         if (!hit.collider.transform.CompareTag("Elevator")) return;
-        if (hit.collider.GetComponent<Elevator>().ownerid == OwnerClientId) Paintings.instance.OnPlayerEnterElevator(OwnerClientId);
+        if (MinigameManager.instance == null) return;
+        if (hit.collider.GetComponent<Elevator>().ownerid == OwnerClientId) MinigameManager.instance.OnPlayerEnterElevator(OwnerClientId);
     }
 }
