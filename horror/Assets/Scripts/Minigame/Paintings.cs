@@ -119,7 +119,6 @@ public class Paintings : MinigameManager
 
     public override void OnPlayerEnterElevator(ulong id)
     {
-        Debug.Log("winning almost ahh");
         if (shotPaintings == totalPaintings.Value) PlayerWinRpc(id);
     }
 

@@ -61,6 +61,8 @@ public class TheOvergame : NetworkBehaviour
             NetworkObject newPlayer = Instantiate(playerPrefab);
             newPlayer.SpawnAsPlayerObject(i, true);
         }*/
+        NetworkObject newPlayer = Instantiate(playerPrefab);
+        newPlayer.SpawnAsPlayerObject(OwnerClientId, true);
         
         instance = this;
     }
