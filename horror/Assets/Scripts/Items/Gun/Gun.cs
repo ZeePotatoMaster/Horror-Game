@@ -19,6 +19,7 @@ public class Gun : NetworkBehaviour
     public int CurrentAmmo;
     [SerializeField]
     private float ReloadTime = 1f;
+    private float reloadTick = 0f;
     [SerializeField]
     public bool IsReloading = false;
     public int TotalAmmo = 18;
@@ -56,7 +57,8 @@ public class Gun : NetworkBehaviour
     private string reloadAnim;
     [SerializeField] private Transform rightIKTarget, leftIKTarget, viewmodel, worldmodel;
     private Vector3 pos, fw, up;
-    [SerializeField] private Animator animator;
+    [SerializeField] private Animator worldAnimator;
+    [SerializeField] private Animator viewAnimator;
 
     // Start is called before the first frame update
     void Start()
@@ -77,21 +79,34 @@ public class Gun : NetworkBehaviour
         defCrosshairSize = new Vector3(Crosshair.transform.localScale.x, Crosshair.transform.localScale.y, Crosshair.transform.localScale.z);
 
         //find base
-        pb = this.transform.parent.gameObject.GetComponent<PlayerBase>();
+        pb = transform.parent.gameObject.GetComponent<PlayerBase>();
 
         //viewmodel
-        viewmodel.SetParent(pb.playerCamera.transform, true);
+        viewmodel.SetParent(pb.playerCamera.transform, false);
 
-        worldmodel.gameObject.SetActive(false);
+        if (worldmodel.GetComponent<MeshRenderer>() != null) worldmodel.GetComponent<MeshRenderer>().enabled = false;
+        foreach (MeshRenderer e in worldmodel.GetComponentsInChildren<MeshRenderer>())
+        {
+            e.enabled = false;
+        }
     }
 
-    void OnEnable(){
+    void OnEnable()
+    {
         if (!IsOwner) return;
         if (UI != null) UI.gameObject.SetActive(true);
         viewmodel.gameObject.SetActive(true);
+
+        if (reloadTick != 0f)
+        {
+            CanShoot = true;
+            IsReloading = false;
+            reloadTick = 0f;
+        }
     }
 
-    void OnDisable(){
+    void OnDisable()
+    {
         if (!IsOwner) return;
         if (UI != null) UI.gameObject.SetActive(false);
         viewmodel.gameObject.SetActive(false);
@@ -199,14 +214,15 @@ public class Gun : NetworkBehaviour
     //shoot gun
     private void Shoot()
     {
-        animator.Play(shootAnim);
-        viewmodel.GetComponent<Animator>().Play(shootAnim + "view");
+        worldAnimator.Play(shootAnim);
+        viewAnimator.Play(shootAnim + "view");
 
         rand = Random.Range(-randomLvl, randomLvl);
 
         RaycastHit hit;
         if (Physics.Raycast(pb.playerCamera.transform.position, new Vector3(pb.playerCamera.transform.forward.x + rand, pb.playerCamera.transform.forward.y + rand, pb.playerCamera.transform.forward.z + rand), out hit))
         {
+            Debug.DrawLine(pb.playerCamera.transform.position, hit.point, Color.red, 2f);
             Debug.Log(hit.transform.name);
 
             if (hit.transform.tag == "Breakable")
@@ -247,32 +263,34 @@ public class Gun : NetworkBehaviour
         CanShoot = false;
         IsReloading = true;
 
-        animator.Play(reloadAnim);
-        viewmodel.GetComponent<Animator>().Play(reloadAnim + "view");
+        worldAnimator.Play(reloadAnim);
+        viewAnimator.Play(reloadAnim + "view");
 
-        yield return new WaitForSeconds(ReloadTime);
-
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName(reloadAnim))
+        while (reloadTick < ReloadTime)
         {
-            //TotalAmmo -= MaxAmmo;
-            TotalAmmo += CurrentAmmo;
-
-            if (TotalAmmo >= MaxAmmo)
-            {
-                CurrentAmmo = MaxAmmo;
-
-                TotalAmmo -= MaxAmmo;
-            }
-
-            else 
-            {
-                CurrentAmmo = TotalAmmo;
-
-                TotalAmmo = 0;
-            }
-
-            Debug.Log(TotalAmmo);
+            reloadTick += Time.deltaTime;
+            yield return null;
         }
+        reloadTick = 0f;
+        
+        //TotalAmmo -= MaxAmmo;
+        TotalAmmo += CurrentAmmo;
+
+        if (TotalAmmo >= MaxAmmo)
+        {
+            CurrentAmmo = MaxAmmo;
+
+            TotalAmmo -= MaxAmmo;
+        }
+
+        else 
+        {
+            CurrentAmmo = TotalAmmo;
+
+            TotalAmmo = 0;
+        }
+
+        Debug.Log(TotalAmmo);
 
         CanShoot = true;
         IsReloading = false;

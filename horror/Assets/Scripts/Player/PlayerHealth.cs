@@ -56,6 +56,7 @@ public class PlayerHealth : NetworkBehaviour
         InventoryManager m = GetComponent<InventoryManager>();
         for (int i = 0; i < m.inventorySlots.Count; i++) {
             m.selectedSlot = i;
+            m.inventorySlots[i].Deselect();
             m.DropItem();
         }
         SummonRagdollServerRpc(this.transform.position, this.OwnerClientId);

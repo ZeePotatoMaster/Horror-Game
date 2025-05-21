@@ -544,9 +544,9 @@ GameObject:
   - component: {fileID: 3942918476847914278}
   - component: {fileID: 3942918476849321060}
   - component: {fileID: 3942918476850136268}
-  - component: {fileID: 7106977560045280546}
+  - component: {fileID: 1607082148378267389}
   m_Layer: 0
-  m_Name: ViewModel
+  m_Name: gun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -562,14 +562,14 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.031095838, y: 0.70642275, z: -0.70641655, w: 0.031236302}
   m_LocalPosition: {x: -0.07086617, y: 0, z: -0.07894184}
-  m_LocalScale: {x: -0.020608043, y: -0.0053319987, z: -0.007977821}
+  m_LocalScale: {x: -0.020608043, y: -0.0053320015, z: -0.007977821}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 736924271500433937}
   - {fileID: 736924271500409397}
   - {fileID: 736924271500338499}
   - {fileID: 736924271500391263}
-  m_Father: {fileID: 3160189844333504443}
+  m_Father: {fileID: 671020927419026176}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: -174.936}
 --- !u!33 &3942918476849321060
 MeshFilter:
@@ -621,7 +621,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!95 &7106977560045280546
+--- !u!95 &1607082148378267389
 Animator:
   serializedVersion: 5
   m_ObjectHideFlags: 0
@@ -736,7 +736,6 @@ GameObject:
   - component: {fileID: 3160189844333504443}
   - component: {fileID: 5443269333180019423}
   - component: {fileID: 2210912054750197469}
-  - component: {fileID: 6707461232146833156}
   - component: {fileID: 571547132622789526}
   m_Layer: 0
   m_Name: Gun
@@ -758,9 +757,9 @@ Transform:
   m_LocalScale: {x: 0.1016, y: 0.26850984, z: 0.40409485}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 3942918476847914278}
-  - {fileID: 1421365831201641528}
+  - {fileID: 671020927419026176}
   - {fileID: 736924271500364459}
+  - {fileID: 1421365831201641528}
   - {fileID: 7239734447424372226}
   m_Father: {fileID: 7412545929988773002}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -814,27 +813,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &6707461232146833156
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4796865455772282478}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!95 &571547132622789526
 Animator:
   serializedVersion: 5
@@ -952,7 +930,6 @@ GameObject:
   - component: {fileID: 2154388942914029476}
   - component: {fileID: 7986346938742606404}
   - component: {fileID: 4121248731457140905}
-  - component: {fileID: 4110203082815826069}
   m_Layer: 0
   m_Name: Gun
   m_TagString: Untagged
@@ -1054,9 +1031,10 @@ MonoBehaviour:
   reloadAnim: reload
   rightIKTarget: {fileID: 7239734447424372226}
   leftIKTarget: {fileID: 1421365831201641528}
-  viewmodel: {fileID: 3942918476847914278}
+  viewmodel: {fileID: 671020927419026176}
   worldmodel: {fileID: 736924271500364459}
-  animator: {fileID: 571547132622789526}
+  worldAnimator: {fileID: 571547132622789526}
+  viewAnimator: {fileID: 1607082148378267389}
 --- !u!114 &4121248731457140905
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1071,27 +1049,38 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TransitionStateInfoList: []
   m_Animator: {fileID: 571547132622789526}
---- !u!65 &4110203082815826069
-BoxCollider:
+--- !u!1 &6526048846037818765
+GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5503677066899917106}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.1, y: 0.1, z: 0.1}
-  m_Center: {x: 0, y: 0, z: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 671020927419026176}
+  m_Layer: 0
+  m_Name: ViewModel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &671020927419026176
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6526048846037818765}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.239, y: -0.0594, z: 0.1758}
+  m_LocalScale: {x: 0.1, y: 0.2, z: 0.2}
+  m_ConstrainProportionsScale: 1
+  m_Children:
+  - {fileID: 3942918476847914278}
+  m_Father: {fileID: 3160189844333504443}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7873128639642028206
 GameObject:
   m_ObjectHideFlags: 0

@@ -57,6 +57,6 @@ public class NewDriver : NetworkBehaviour
 
     public void DestroySelf()
     {
-        GetComponent<NetworkObject>().Despawn(true);
+        Destroy(this.gameObject);
     }
 }

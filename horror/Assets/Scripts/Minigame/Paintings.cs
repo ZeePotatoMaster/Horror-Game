@@ -63,7 +63,6 @@ public class Paintings : MinigameManager
         pb.lockPosition = elevatorSpawns[i].position;
         pb.Invoke(nameof(pb.removeLockPosition), 2f);
 
-        p.TryRemoveParent(true);
         p.GetComponent<CharacterController>().enabled = true;
     }
 

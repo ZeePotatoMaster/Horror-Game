@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -10,6 +11,8 @@ public class ItemInSlot : MonoBehaviour
     [HideInInspector] public InventoryItem item;
     private Image image;
     [SerializeField] private Image decayImage;
+    [SerializeField] private TMP_Text numberText;
+    [HideInInspector] public int number = -1;
     private InventoryManager inventoryManager;
     private int thisSlot;
 
@@ -18,7 +21,8 @@ public class ItemInSlot : MonoBehaviour
     private bool isDecaying;
     public bool canDrop = true;
 
-    private void Awake() {
+    private void Awake()
+    {
         image = GetComponent<Image>();
     }
 
@@ -26,10 +30,12 @@ public class ItemInSlot : MonoBehaviour
     {
         if (currentDecay >= decayTime) inventoryManager.DestroyItem(thisSlot);
 
+        if (number != -1) numberText.text = number.ToString();
+
         if (!isDecaying) return;
 
         currentDecay += Time.deltaTime;
-        decayImage.fillAmount = currentDecay/decayTime;
+        decayImage.fillAmount = currentDecay / decayTime;
     }
 
     public void InitializeItem(InventoryItem i, InventoryManager m, int s)

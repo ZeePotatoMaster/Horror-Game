@@ -57,11 +57,7 @@ public class TheOvergame : NetworkBehaviour
         NetworkManager.Singleton.SceneManager.OnSceneEvent += SC_OnSceneEvent;
         NetworkManager.Singleton.SceneManager.SetClientSynchronizationMode(LoadSceneMode.Single);
 
-        /*foreach (ulong i in NetworkManager.Singleton.ConnectedClients.Keys) {
-            NetworkObject newPlayer = Instantiate(playerPrefab);
-            newPlayer.SpawnAsPlayerObject(i, true);
-        }*/
-        if (IsOwner) SpawnPlayerServerRpc(NetworkManager.Singleton.LocalClientId);
+        //if (IsOwner) SpawnPlayerServerRpc(NetworkManager.Singleton.LocalClientId);
 
         instance = this;
     }

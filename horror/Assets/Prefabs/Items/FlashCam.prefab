@@ -2622,6 +2622,7 @@ GameObject:
   - component: {fileID: 6249668466495295649}
   - component: {fileID: 6477786004999535839}
   - component: {fileID: 8217673812381425843}
+  - component: {fileID: 3501786143603647221}
   m_Layer: 0
   m_Name: FlashCam
   m_TagString: Untagged
@@ -2717,6 +2718,20 @@ MonoBehaviour:
   InLocalSpace: 0
   Interpolate: 1
   SlerpPosition: 0
+--- !u!114 &3501786143603647221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7910310730483850054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c10b9879bacfd24cb666ce0274e3643, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TransitionStateInfoList: []
+  m_Animator: {fileID: 2959179467016196781}
 --- !u!1 &7918156310080891292
 GameObject:
   m_ObjectHideFlags: 0

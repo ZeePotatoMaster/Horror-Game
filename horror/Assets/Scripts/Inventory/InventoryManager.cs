@@ -45,7 +45,7 @@ public class InventoryManager : NetworkBehaviour
         if (!itemObjects.ContainsKey(selectedSlot)) return;
         if (!inventorySlots[selectedSlot].GetComponentInChildren<ItemInSlot>().canDrop) return;
 
-        SpawnWorldItemServerRpc(NetworkManager.LocalClientId, inventorySlots[selectedSlot].GetComponentInChildren<ItemInSlot>().item.itemId, itemObjects[selectedSlot]);
+        SpawnWorldItemServerRpc(NetworkManager.Singleton.LocalClientId, inventorySlots[selectedSlot].GetComponentInChildren<ItemInSlot>().item.itemId, itemObjects[selectedSlot]);
         DestroyItem(selectedSlot);
     }
 
@@ -113,7 +113,7 @@ public class InventoryManager : NetworkBehaviour
         if (refItem.TryGet(out NetworkObject item)) item.gameObject.SetActive(enable);
     }
 
-    [ServerRpc (RequireOwnership = false)]
+    [ServerRpc(RequireOwnership = false)]
     private void SpawnWorldItemServerRpc(ulong id, int itemId, NetworkObjectReference reference)
     {
         InventoryItem item = null;
@@ -124,13 +124,7 @@ public class InventoryManager : NetworkBehaviour
 
         NetworkObject worldItem = Instantiate(item.worldItemObject, NetworkManager.ConnectedClients[id].PlayerObject.gameObject.transform.position, Quaternion.identity);
         worldItem.SpawnWithOwnership(id, true);
-        SetupWorldItemClientRpc(worldItem, new ClientRpcParams { Send = new ClientRpcSendParams {TargetClientIds = new List<ulong> {id}}});
-    }
-
-    [ClientRpc]
-    private void SetupWorldItemClientRpc(NetworkObjectReference reference, ClientRpcParams clientRpcParams)
-    {
-        if (reference.TryGet(out NetworkObject worldItem)) worldItem.GetComponent<WorldItem>().SetupWorldItem(itemObjects[selectedSlot]);
+        if (reference.TryGet(out NetworkObject itemObj)) worldItem.GetComponent<WorldItem>().SetupWorldItemClientRpc(itemObj, new ClientRpcParams { Send = new ClientRpcSendParams { TargetClientIds = new List<ulong> { id } } });
     }
 
     [ServerRpc(RequireOwnership = false)]
