@@ -6,11 +6,11 @@ TagManager:
   tags:
   - Door
   - Corpse
-  - Energy
   - test
   - Breakable
   - Painting
   - Elevator
+  - Generator
   layers:
   - Default
   - TransparentFX
@@ -22,8 +22,8 @@ TagManager:
   - WhatIsGround
   - WhatIsPlayer
   - IgnoreNavMesh
-  - 
-  - 
+  - Map
+  - MapIcons
   - 
   - 
   - 

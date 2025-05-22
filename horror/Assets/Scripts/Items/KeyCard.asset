@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: faa8f8a7935f8354c801de0a6c00698c, type: 3}
-  m_Name: Rifle
+  m_Name: KeyCard
   m_EditorClassIdentifier: 
-  image: {fileID: 21300000, guid: 89001ebd8666cde4baf107b03f07733d, type: 3}
-  itemObject: {fileID: 8569849173791071465, guid: 10fd6c7df6f8c624d8e572a137d8d4b3, type: 3}
-  worldItemObject: {fileID: 3758986848842310534, guid: 9e3c9cddb5cd4df498e010deaa06b9f8, type: 3}
-  itemId: 1
+  image: {fileID: 21300000, guid: f63b7975c20362e47a9487bf64a33c4f, type: 3}
+  itemObject: {fileID: 2085944317760220984, guid: ebfa7b89abd51b44aba2dfe4a5cee2cc, type: 3}
+  worldItemObject: {fileID: 8702253907493268180, guid: de8eb922f5ee3d24ead9987461ab5826, type: 3}
+  itemId: 6

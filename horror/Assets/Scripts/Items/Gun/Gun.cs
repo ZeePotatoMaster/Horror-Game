@@ -112,7 +112,7 @@ public class Gun : NetworkBehaviour
         viewmodel.gameObject.SetActive(false);
     }
 
-    void OnNetworkDestroy ()
+    void OnNetworkDestroy()
     {
         Destroy(viewmodel.gameObject);
     }
