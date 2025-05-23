@@ -12,8 +12,14 @@ public class GrenadeItem : WorldItem
 
     public override void SetupWorldItem(NetworkObject item)
     {
-        amount = item.GetComponent<Grenade>().GetGrenadeAmount();
+        SetAmountRpc(item.GetComponent<Grenade>().GetGrenadeAmount());
         if (amount <= 0) DestroySelfServerRpc();
+    }
+
+    [Rpc(SendTo.Everyone)]
+    void SetAmountRpc(int a)
+    {
+        amount = a;
     }
     
     [ServerRpc]

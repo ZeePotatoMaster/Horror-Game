@@ -16,12 +16,13 @@ public class ArmoryDoor : DoorScript
         generatorsDone++;
         if (generatorsDone == generatorsNeeded)
         {
-            ActivateDoor();
+            ActivateDoorRpc();
             TextRpc();
         }
     }
 
-    void ActivateDoor()
+    [Rpc(SendTo.Everyone)]
+    void ActivateDoorRpc()
     {
         activated = true;
         //anims here

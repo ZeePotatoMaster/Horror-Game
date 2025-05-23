@@ -8,13 +8,11 @@ using UnityEngine;
 public class InventoryManager : NetworkBehaviour
 {
     [HideInInspector] public List<InventorySlot> inventorySlots = new List<InventorySlot>();
-    private InventoryItem[] inventoryItems;
     private Dictionary<int, NetworkObject> itemObjects = new Dictionary<int, NetworkObject>();
     [SerializeField] private GameObject inventoryItemPrefab;
     [HideInInspector] public int selectedSlot = -1;
 
     public override void OnNetworkSpawn() {
-        inventoryItems = GameObject.Find("ItemHolder").GetComponent<ItemHolder>().inventoryItems;
         if (!IsOwner) return;
 
         GameObject canvas = GameObject.Find("Canvas");
@@ -116,11 +114,7 @@ public class InventoryManager : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void SpawnWorldItemServerRpc(ulong id, int itemId, NetworkObjectReference reference)
     {
-        InventoryItem item = null;
-        for (int i = 0; i < inventoryItems.Length; i++)
-        {
-            if (inventoryItems[i].itemId == itemId) item = inventoryItems[i];
-        }
+        InventoryItem item = ItemHolder.instance.inventoryItems[itemId];
 
         NetworkObject worldItem = Instantiate(item.worldItemObject, NetworkManager.ConnectedClients[id].PlayerObject.gameObject.transform.position, Quaternion.identity);
         worldItem.SpawnWithOwnership(id, true);

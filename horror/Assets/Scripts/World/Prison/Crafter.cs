@@ -1,21 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class WifiTask : Interactable
+public class Crafter : Interactable
 {
     [SerializeField] private Camera cam;
     [SerializeField] private GameObject canvas;
     [SerializeField] private Transform camTransform;
-    [SerializeField] private GameObject staticTV;
-    [SerializeField] private Material staticMaterial;
-    [SerializeField] private Slider s;
-    [SerializeField] private Material winMaterial;
-    [SerializeField] private SecurityMonitor sm;
-
+    [SerializeField] private Transform itemSpawnTransform;
     private float camTimer = 0f;
     private Transform playerCamTransform;
 
@@ -26,14 +22,19 @@ public class WifiTask : Interactable
 
     private GameObject mainCanvas;
 
-    float correctValue;
+    [SerializeField] private InventoryItem[] items;
+    [SerializeField] private int[] scrapNeeded;
+    private int selectedItem = 0;
+    private NetworkVariable<int> scrap = new NetworkVariable<int>(0);
+
+    [SerializeField] private Image itemImage;
+    [SerializeField] private TMP_Text scrapText;
 
     void Start()
     {
         cam.enabled = false;
-        correctValue = Random.Range(0f, 1f);
-        s.value = Random.Range(0f, 1f);
-        OnValueChanged(s.value);
+        ChangeSelectedItem(0);
+        canvas.SetActive(false);
     }
     public override void FinishInteract(GameObject player)
     {
@@ -56,6 +57,7 @@ public class WifiTask : Interactable
         Cursor.visible = true;
 
         canvas.SetActive(true);
+        ChangeSelectedItem(0);
 
         mainCanvas = GameObject.Find("Canvas");
         mainCanvas.SetActive(false);
@@ -96,32 +98,38 @@ public class WifiTask : Interactable
             cam.enabled = false;
 
             pi.ActivateInput();
-
-            if (Mathf.Abs(s.value - correctValue) < 0.05f)
-            {
-                sm.BoxRpc();
-                ActivateWifiBoxRpc();
-            }
         }
 
-        float randY = Random.Range(0f, 0.2f);
-        float randX = Random.Range(0f, 0.2f);
-
-        if (canvas.activeSelf) staticMaterial.mainTextureOffset = new Vector2(randX, randY);
     }
 
-    [Rpc(SendTo.Everyone)]
-    void ActivateWifiBoxRpc()
+    public void ChangeSelectedItem(int change)
     {
-        GetComponent<MeshRenderer>().material = winMaterial;
-        canUse = false;
+        if (selectedItem + change >= items.Length || selectedItem + change < 0) return;
+
+        selectedItem += change;
+        itemImage.sprite = items[selectedItem].image;
+        scrapText.text = "Scrap needed: " + scrapNeeded[selectedItem] + " scrap: " + scrap.Value;
     }
 
-    public void OnValueChanged(float f)
+    public void Craft()
     {
-        SpriteRenderer sp = staticTV.GetComponent<SpriteRenderer>();
-        Color c = sp.color;
-        c.a = Mathf.Abs(f - correctValue);
-        staticTV.GetComponent<SpriteRenderer>().color = c;
+        if (scrap.Value < scrapNeeded[selectedItem]) return;
+
+        CreateItemRpc(scrapNeeded[selectedItem], items[selectedItem].itemId);
+        OnLeave();
+    }
+
+    [Rpc(SendTo.Server)]
+    void CreateItemRpc(int s, int itemId)
+    {
+        scrap.Value -= s;
+        NetworkObject i = Instantiate(ItemHolder.instance.inventoryItems[itemId].worldItemObject, itemSpawnTransform.position, itemSpawnTransform.rotation);
+        i.Spawn(true);
+    }
+
+    [Rpc(SendTo.Server)]
+    public void AddScrapRpc(int amount)
+    {
+        scrap.Value += amount;
     }
 }
