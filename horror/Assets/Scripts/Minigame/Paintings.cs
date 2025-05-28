@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Paintings : MinigameManager
 {
@@ -60,8 +59,7 @@ public class Paintings : MinigameManager
         p.transform.position = elevatorSpawns[i].position + new Vector3(0, 2, 0);
 
         PlayerBase pb = p.GetComponent<PlayerBase>();
-        pb.lockPosition = elevatorSpawns[i].position;
-        pb.Invoke(nameof(pb.removeLockPosition), 2f);
+        pb.SetLockPositionRpc(elevatorSpawns[i].position, 2f);
 
         p.GetComponent<CharacterController>().enabled = true;
     }
@@ -161,7 +159,7 @@ public class Paintings : MinigameManager
         {
             p.GetComponent<PlayerHealth>().invulnerable = false;
             p.gameObject.layer = playerLayer;
-            p.TrySetParent(TheOvergame.instance.elevators[p.OwnerClientId].transform);
+            //p.TrySetParent(TheOvergame.instance.elevators[p.OwnerClientId].transform);
         }
         
         TheOvergame o = TheOvergame.instance;

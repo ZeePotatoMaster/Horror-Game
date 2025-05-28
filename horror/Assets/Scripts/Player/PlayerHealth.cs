@@ -59,7 +59,7 @@ public class PlayerHealth : NetworkBehaviour
             m.inventorySlots[i].Deselect();
             m.DropItem();
         }
-        SummonRagdollServerRpc(this.transform.position, this.OwnerClientId);
+        if (MinigameManager.instance.dieNormally) SummonRagdollServerRpc(this.transform.position, this.OwnerClientId);
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -70,7 +70,7 @@ public class PlayerHealth : NetworkBehaviour
     }
 
     [ServerRpc]
-    private void SummonRagdollServerRpc(Vector3 pos, ulong id)
+    public void SummonRagdollServerRpc(Vector3 pos, ulong id)
     {
         GameObject doll = Instantiate(ragDoll, pos, Quaternion.identity);
         doll.GetComponent<NetworkObject>().Spawn(true);

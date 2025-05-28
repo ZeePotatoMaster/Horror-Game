@@ -6,11 +6,12 @@ TagManager:
   tags:
   - Door
   - Corpse
-  - test
   - Breakable
   - Painting
   - Elevator
   - Generator
+  - test
+  - Downed
   layers:
   - Default
   - TransparentFX

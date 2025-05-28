@@ -20,6 +20,8 @@ public class PlayerBase : NetworkBehaviour
     public float lookSpeed = 2.0f;
     [SerializeField] private float lookXLimit = 90.0f;
 
+    private float speedMultiplier = 1f;
+
     private CharacterController characterController;
     [HideInInspector] public Vector3 moveDirection = Vector3.zero;
     private float rotationX = 0;
@@ -36,7 +38,7 @@ public class PlayerBase : NetworkBehaviour
     private float knockbackTimer;
 
     public bool canMove = true;
-    public Vector3 lockPosition = Vector3.zero;
+    private Vector3 lockPosition = Vector3.zero;
 
     private Vector2 movementInput = Vector2.zero;
     private Vector2 lookInput = Vector2.zero;
@@ -190,7 +192,7 @@ public class PlayerBase : NetworkBehaviour
     {
         if (!IsOwner) return;
 
-        currentSpeed = isSprinting ? sprintSpeed : walkingSpeed;
+        currentSpeed = isSprinting ? sprintSpeed * speedMultiplier : walkingSpeed * speedMultiplier;
 
         // We are grounded, so recalculate move direction based on axes
         Vector3 forward = transform.TransformDirection(Vector3.forward);
@@ -407,5 +409,23 @@ public class PlayerBase : NetworkBehaviour
         if (!hit.collider.transform.CompareTag("Elevator")) return;
         if (MinigameManager.instance == null) return;
         if (hit.collider.GetComponent<Elevator>().ownerid == OwnerClientId) MinigameManager.instance.OnPlayerEnterElevator(OwnerClientId);
+    }
+
+    [Rpc(SendTo.Owner)]
+    public void SetLockPositionRpc(Vector3 pos, float time)
+    {
+        lockPosition = pos;
+        if (time != -1f) Invoke(nameof(ResetLockPosition), time);
+    }
+
+    void ResetLockPosition()
+    {
+        lockPosition = Vector3.zero;
+    }
+    
+    [Rpc(SendTo.Owner)]
+    public void SetSpeedMultiplerRpc(float a)
+    {
+        speedMultiplier = a;
     }
 }

@@ -14,7 +14,7 @@ public class FlashCamItem : WorldItem
     IEnumerator ReturnItem(NetworkObject item)
     {
         while (item != null) yield return null;
-        PickupItemRpc(RpcTarget.Single(NetworkManager.Singleton.LocalClientId, RpcTargetUse.Temp));
+        this.PickupItemRpc(RpcTarget.Single(NetworkManager.Singleton.LocalClientId, RpcTargetUse.Temp));
         DestroySelfServerRpc();
     }
 
@@ -22,11 +22,5 @@ public class FlashCamItem : WorldItem
     private void DestroySelfServerRpc()
     {
         GetComponent<NetworkObject>().Despawn(true);
-    }
-
-    [Rpc(SendTo.SpecifiedInParams)]
-    public void PickupItemRpc(RpcParams rpcParams = default)
-    {
-        GetComponent<WorldItem>().FinishInteract(NetworkManager.LocalClient.PlayerObject.gameObject);
     }
 }

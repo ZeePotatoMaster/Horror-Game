@@ -6,6 +6,7 @@ using UnityEngine;
 public abstract class MinigameManager : NetworkBehaviour
 {
     public static MinigameManager instance;
+    [HideInInspector] public bool dieNormally = true;
 
     public void Awake()
     {

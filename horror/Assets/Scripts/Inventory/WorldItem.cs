@@ -74,10 +74,16 @@ public class WorldItem : Interactable
     {
 
     }
-    
+
     [ClientRpc]
     public void SetupWorldItemClientRpc(NetworkObjectReference reference2, ClientRpcParams clientRpcParams)
     {
         if (reference2.TryGet(out NetworkObject localItem)) SetupWorldItem(localItem);
+    }
+    
+    [Rpc(SendTo.SpecifiedInParams)]
+    public void PickupItemRpc(RpcParams rpcParams = default)
+    {
+        GetComponent<WorldItem>().FinishInteract(NetworkManager.LocalClient.PlayerObject.gameObject);
     }
 }
