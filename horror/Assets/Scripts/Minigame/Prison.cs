@@ -233,6 +233,7 @@ public class Prison : MinigameManager
         }
 
         TheOvergame o = TheOvergame.instance;
+        o.gameStarted = false;
         int rand = Random.Range(0, o.levels.Length);
         o.LoadLevel(o.levels[rand]);
     }

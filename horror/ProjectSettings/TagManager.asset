@@ -12,6 +12,7 @@ TagManager:
   - Generator
   - test
   - Downed
+  - CamButton
   layers:
   - Default
   - TransparentFX
