@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class DefaultBot : MonoBehaviour
 {
-    private BotPosition currentPosition;
-    [SerializeField] private BotPosition startingPosition;
+    [HideInInspector] public BotPosition currentPosition;
+    public BotPosition startingPosition;
 
     private float timeUntilMove;
     private float spotTimer;
@@ -14,7 +14,7 @@ public class DefaultBot : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Move(startingPosition);
+        if (startingPosition != null) Move(startingPosition);
     }
 
     // Update is called once per frame
@@ -51,14 +51,28 @@ public class DefaultBot : MonoBehaviour
         float chance = 0f;
         int positionToMove = -1;
 
+        float chanceMultipler = 1f;
+        List<int> occupiedValues = new List<int>();
+
         for (int i = 0; i < currentPosition.chances.Length; i++)
         {
-            chance += currentPosition.chances[i];
+            if (occupiedValues.Contains(i)) continue;
+
+            chance += currentPosition.chances[i] / chanceMultipler;
             if (roll <= chance && currentPosition.positions[i] != null)
             {
                 if (currentPosition.positions[i].killSpot) positionToMove = i;
                 else if (!currentPosition.positions[i].occupied) positionToMove = i;
-                break;
+
+                if (positionToMove != -1) break;
+                else
+                {
+                    chanceMultipler -= currentPosition.chances[i];
+                    chance = 0f;
+
+                    occupiedValues.Add(i);
+                    i = 0;
+                }
             }
         }
 
@@ -66,7 +80,7 @@ public class DefaultBot : MonoBehaviour
         return currentPosition.positions[positionToMove];
     }
 
-    void Move(BotPosition b)
+    public void Move(BotPosition b)
     {
         if (currentPosition != null) currentPosition.occupied = false;
         b.occupied = true;

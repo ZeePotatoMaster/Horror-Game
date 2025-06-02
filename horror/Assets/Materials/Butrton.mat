@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Red
+  m_Name: Butrton
   m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -79,6 +79,6 @@ Material:
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 0.5, g: 0.091981106, b: 0.091981106, a: 1}
-    - _EmissionColor: {r: 0.2830189, g: 0, b: 0, a: 1}
+    - _Color: {r: 0.91665447, g: 1, b: 0, a: 1}
+    - _EmissionColor: {r: 0.2735849, g: 0.25286585, b: 0.04774831, a: 1}
   m_BuildTextureStacks: []
