@@ -14,11 +14,31 @@ public class BotPosition : MonoBehaviour
 
     public bool killSpot;
 
-    [HideInInspector] public bool occupied = false;
+    private bool occupied = false;
     [HideInInspector] public bool spotted = false;
+    
+    [SerializeField] private BotPosition[] linkedPoses;
 
     void Update()
     {
         if (spotted && !occupied) spotted = false;
+    }
+
+    public bool Occupied
+    {
+        get
+        {
+            return occupied;
+        }
+        set
+        {
+            if (value == occupied) return;
+            occupied = value;
+
+            foreach (BotPosition bp in linkedPoses)
+            {
+                if (bp.Occupied != occupied) bp.Occupied = occupied;
+            }
+        }
     }
 }

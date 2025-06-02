@@ -8,13 +8,13 @@ public class ChuteButton : ConsoleButton
 
     protected override void Start()
     {
-        chutePosition.occupied = true;
+        chutePosition.Occupied = true;
         base.Start();
     }
 
     public override void Activate()
     {
-        chutePosition.occupied = false;
+        chutePosition.Occupied = false;
         StartCoroutine(CloseChute());
     }
 
@@ -22,8 +22,8 @@ public class ChuteButton : ConsoleButton
     {
         yield return new WaitForSeconds(60);
 
-        if (chutePosition.occupied) yield return null;
+        if (chutePosition.Occupied) yield return null;
 
-        chutePosition.occupied = true;
+        chutePosition.Occupied = true;
     }
 }

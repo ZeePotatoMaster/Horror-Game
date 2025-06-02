@@ -12,6 +12,10 @@ public class Console : Interactable
     [SerializeField] private Material selectColor;
     [SerializeField] private Material deselectColor;
 
+    private bool activating = false;
+    private float activateTick = 0f;
+    [SerializeField] private float activateTime;
+
     // Update is called once per frame
     void Update()
     {
@@ -19,6 +23,12 @@ public class Console : Interactable
         {
             if (monitor.enabled) monitor.enabled = false;
             return;
+        }
+        if (activating) activateTick += Time.deltaTime;
+        if (activateTick >= activateTime)
+        {
+            activeButton.Activate();
+            ResetActivate();
         }
     }
 
@@ -30,17 +40,19 @@ public class Console : Interactable
         if (activeButton != null) activeButton.Select(false);
 
         activeButton = cs;
+        ResetActivate();
     }
 
     public override void FinishInteract(GameObject player)
     {
-        activeButton.Activate();
+        activating = true;
         this.GetComponent<MeshRenderer>().material = selectColor;
-        Invoke(nameof(Reset), 2f);
     }
 
-    void Reset()
+    void ResetActivate()
     {
         this.GetComponent<MeshRenderer>().material = deselectColor;
+        activating = false;
+        activateTick = 0f;
     } 
 }

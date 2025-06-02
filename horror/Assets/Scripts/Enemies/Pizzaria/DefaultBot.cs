@@ -28,14 +28,14 @@ public class DefaultBot : MonoBehaviour
             if (bp == null) Move(currentPosition);
 
             else if (!bp.killSpot) Move(bp);
-            else if (!bp.occupied) Pizzaria.instance.GetComponent<Pizzaria>().Kill(this.transform);
+            else if (!bp.Occupied) Pizzaria.instance.GetComponent<Pizzaria>().Kill(this.transform);
             else Move(startingPosition);
         }
 
         if (currentPosition.spotted)
         {
             if (timeUntilSpotKill == -1f) timeUntilSpotKill = Random.Range(0f, 5f) + 5f;
-            if (!GetRandomPosition().occupied) spotTimer += Time.deltaTime;
+            if (!GetRandomPosition().Occupied) spotTimer += Time.deltaTime;
             if (spotTimer >= timeUntilSpotKill) Pizzaria.instance.GetComponent<Pizzaria>().Kill(this.transform);
         }
         else if (spotTimer > 0f)
@@ -62,7 +62,7 @@ public class DefaultBot : MonoBehaviour
             if (roll <= chance && currentPosition.positions[i] != null)
             {
                 if (currentPosition.positions[i].killSpot) positionToMove = i;
-                else if (!currentPosition.positions[i].occupied) positionToMove = i;
+                else if (!currentPosition.positions[i].Occupied) positionToMove = i;
 
                 if (positionToMove != -1) break;
                 else
@@ -82,8 +82,8 @@ public class DefaultBot : MonoBehaviour
 
     public void Move(BotPosition b)
     {
-        if (currentPosition != null) currentPosition.occupied = false;
-        b.occupied = true;
+        if (currentPosition != null) currentPosition.Occupied = false;
+        b.Occupied = true;
 
         this.transform.SetPositionAndRotation(b.transform.position, b.transform.rotation);
         //if (currentAnimation != b.animation) play(b.animation)

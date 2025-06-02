@@ -25,7 +25,7 @@ public class PowerLight : Interactable
         ps.ChangeDrain(1);
 
         //if (shinePosition.occupied) playsound;
-        if (shinePosition.occupied) shinePosition.spotted = true;
+        if (shinePosition.Occupied) shinePosition.spotted = true;
     }
 
     void Update()

@@ -18,7 +18,7 @@ public class PowerDoor : Interactable
         {
             this.GetComponent<Animator>().Play("Close");
             ps.ChangeDrain(2);
-            deathPosition.occupied = true;
+            deathPosition.Occupied = true;
 
             isOpen = false;
         }
@@ -26,7 +26,7 @@ public class PowerDoor : Interactable
         {
             this.GetComponent<Animator>().Play("Open");
             ps.ChangeDrain(-2);
-            deathPosition.occupied = false;
+            deathPosition.Occupied = false;
 
             isOpen = true;
         }
@@ -39,7 +39,7 @@ public class PowerDoor : Interactable
         {
             this.GetComponent<Animator>().Play("Open");
             ps.ChangeDrain(-2);
-            deathPosition.occupied = false;
+            deathPosition.Occupied = false;
 
             isOpen = true;
         }
