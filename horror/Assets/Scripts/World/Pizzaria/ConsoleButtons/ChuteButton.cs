@@ -20,7 +20,7 @@ public class ChuteButton : ConsoleButton
 
     IEnumerator CloseChute()
     {
-        yield return new WaitForSeconds(60);
+        yield return new WaitForSeconds(10);
 
         if (chutePosition.Occupied) yield return null;
 

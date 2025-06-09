@@ -20,6 +20,7 @@ public class ChicaScript : MonoBehaviour
     void Update()
     {
         if (eatPosition.Occupied) currentEat += Time.deltaTime;
+        else if (currentEat > 0f) currentEat = 0f;
 
         if (currentEat >= eatingTime && !cupcakeSpawned) SpawnCupcake();
         else if (currentEat >= eatingTime && cupcakeSpawned) SpeedUpCupcake();
