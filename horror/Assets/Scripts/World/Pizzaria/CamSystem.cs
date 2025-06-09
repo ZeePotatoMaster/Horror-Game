@@ -8,6 +8,7 @@ public class CamSystem : MonoBehaviour
 
     [SerializeField] private PowerScript ps;
     [SerializeField] private Canvas monitor;
+    [SerializeField] private SealButton sb;
 
     // Update is called once per frame
     void Update()
@@ -22,10 +23,25 @@ public class CamSystem : MonoBehaviour
     public void ChangeCams(CamButton camButton)
     {
         if (currentActiveButton == camButton) return;
-        camButton.Select(true);
 
         if (currentActiveButton != null) currentActiveButton.Select(false);
 
+        camButton.Select(true);
+
         currentActiveButton = camButton;
+
+        sb.ChangeColor(false);
+        if (sb.sealing) sb.StopSeal();
+        if (currentActiveButton == sb.sealCam) sb.ChangeColor(true);
+    }
+
+    public void SealCam()
+    {
+        if (sb.sealCam == currentActiveButton) return;
+        if (!currentActiveButton.canSeal) return;
+
+        sb.UnSeal();
+        sb.sealCam = currentActiveButton;
+        sb.StartSeal();
     }
 }

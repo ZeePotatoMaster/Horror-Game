@@ -24,9 +24,7 @@ public class Foxy : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        float r = Random.Range(-changeRandom, changeRandom);
-        changeTime = phaseChangeTime + r;
-        normalMask = camWatching.cullingMask;
+        Reset();
     }
 
     // Update is called once per frame
@@ -44,7 +42,7 @@ public class Foxy : MonoBehaviour
     void ChangePhases()
     {
         currentPhase++;
-        this.GetComponent<Animator>().Play("Phase" + currentPhase);
+        if (currentPhase < 6) this.GetComponent<Animator>().Play("Phase" + currentPhase);
 
         currentchange = 0f;
         float r = Random.Range(-changeRandom, changeRandom);
@@ -75,6 +73,8 @@ public class Foxy : MonoBehaviour
 
     void AttackHall()
     {
+        attacking = false;
+
         hallCam.cullingMask = foxyMask;
         this.GetComponent<Animator>().Play("AttackHall");
         Invoke(nameof(CheckKill), 3f);
@@ -82,13 +82,19 @@ public class Foxy : MonoBehaviour
 
     void AttackMain()
     {
+        attacking = false;
+
         mainHallCam.cullingMask = foxyMask;
         this.GetComponent<Animator>().Play("AttackMain");
+        Invoke(nameof(CheckKill), 3f);
     }
 
     void CheckKill()
     {
+        if (currentPhase == 0) return;
+
         hallCam.cullingMask = normalMask;
+
         if (pd.isOpen) Pizzaria.instance.GetComponent<Pizzaria>().Kill(this.transform);
         else Reset();
     }
