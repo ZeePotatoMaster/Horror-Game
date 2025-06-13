@@ -10,6 +10,8 @@ public class CamSystem : MonoBehaviour
     [SerializeField] private Canvas monitor;
     [SerializeField] private SealButton sb;
 
+    [SerializeField] private AudioBot[] audioBots;
+
     // Update is called once per frame
     void Update()
     {
@@ -43,5 +45,16 @@ public class CamSystem : MonoBehaviour
         sb.UnSeal();
         sb.sealCam = currentActiveButton;
         sb.StartSeal();
+    }
+
+    public void StartLure()
+    {
+        foreach (AudioBot b in audioBots)
+        {
+            foreach (BotPosition p in currentActiveButton.audioPoses)
+            {
+                b.StartCoroutine(b.AudioLure(p));
+            }
+        }
     }
 }

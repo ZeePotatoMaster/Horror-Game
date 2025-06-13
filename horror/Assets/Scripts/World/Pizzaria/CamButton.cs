@@ -12,6 +12,8 @@ public class CamButton : Interactable
     [SerializeField] private Material deselectColor;
     [SerializeField] private Canvas usedCanvas;
 
+    public BotPosition[] audioPoses;
+
     public bool canSeal;
     public BotPosition sealPosition;
 
